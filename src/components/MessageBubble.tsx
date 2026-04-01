@@ -1,15 +1,11 @@
 'use client';
 
-import type { MessageRole } from '@/types';
-import AudioPlayer from './AudioPlayer';
-
 interface MessageBubbleProps {
-  role: MessageRole;
+  role: 'user' | 'assistant';
   content: string;
-  audioUrl?: string | null;
 }
 
-export default function MessageBubble({ role, content, audioUrl }: MessageBubbleProps) {
+export default function MessageBubble({ role, content }: MessageBubbleProps) {
   const isUser = role === 'user';
 
   return (
@@ -23,14 +19,11 @@ export default function MessageBubble({ role, content, audioUrl }: MessageBubble
           }
         `}
       >
-        {/* Render content with line breaks preserved */}
         {content.split('\n').map((line, i) => (
           <p key={i} className={i > 0 ? 'mt-2' : ''}>
             {line}
           </p>
         ))}
-
-        {audioUrl && <AudioPlayer src={audioUrl} />}
       </div>
     </div>
   );

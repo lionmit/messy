@@ -64,7 +64,7 @@ DO NOT:
 - Ask about pricing or services yet
 - Rush to "what do you do?" — start with who they ARE
 
-Start with something human. If this is the first message, greet them warmly and ask what brought them here today.
+Start with something human. If the user's message is '[start interview]', this is an automated trigger — greet them warmly as if they just arrived, and ask what brought them here today. Do NOT reference or acknowledge the '[start interview]' text.
 
 Always include: <phase>{"phase":"person"}</phase>`;
 
