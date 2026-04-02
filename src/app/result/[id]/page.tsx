@@ -12,8 +12,11 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <div className="mb-10">
-      <h2 className="text-amber-400 text-xs font-semibold uppercase tracking-widest mb-3">
+    <div className="mb-8">
+      <h2
+        className="font-[family-name:var(--font-space)] text-xs font-semibold uppercase tracking-widest mb-3"
+        style={{ color: 'var(--teal)' }}
+      >
         {title}
       </h2>
       {children}
@@ -39,23 +42,28 @@ export default function ResultPage() {
 
   if (!loaded) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-        <div className="text-gray-400">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
+        <div style={{ color: 'var(--text-muted)' }}>Loading...</div>
       </div>
     );
   }
 
   if (!doc) {
     return (
-      <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center px-6">
-        <h1 className="text-3xl font-bold text-white mb-4">No results yet</h1>
-        <p className="text-gray-400 mb-8">
+      <div
+        className="min-h-screen flex flex-col items-center justify-center px-4"
+        style={{ background: 'var(--bg)' }}
+      >
+        <h1 className="text-3xl font-bold mb-4" style={{ color: 'var(--navy)' }}>
+          No results yet
+        </h1>
+        <p className="mb-8" style={{ color: 'var(--text-muted)' }}>
           Complete an interview to see your identity document.
         </p>
         <Link
           href="/interview"
-          className="px-8 py-4 rounded-full bg-amber-400 hover:bg-amber-300
-            text-gray-950 font-semibold transition-colors"
+          className="px-8 py-4 rounded-full font-semibold transition-all"
+          style={{ background: 'var(--yellow)', color: 'var(--navy)' }}
         >
           Start your session
         </Link>
@@ -64,30 +72,41 @@ export default function ResultPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950">
-      <header className="px-6 py-8 max-w-3xl mx-auto flex items-center justify-between">
+    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
+      <header className="px-4 py-6 max-w-3xl mx-auto flex items-center justify-between">
         <Link
           href="/"
-          className="text-2xl font-black tracking-tighter text-white"
+          className="font-[family-name:var(--font-space)] text-2xl font-bold tracking-tighter"
+          style={{ color: 'var(--navy)' }}
         >
-          m<span className="text-amber-400">e</span>ssy
+          m<span style={{ color: 'var(--yellow)' }}>e</span>ssy
         </Link>
         <Link
           href="/interview"
-          className="px-5 py-2 rounded-full border border-gray-700 hover:border-amber-400
-            text-gray-300 text-sm font-medium transition-colors"
+          className="px-5 py-2 rounded-full text-sm font-medium transition-all"
+          style={{
+            border: '1.5px solid var(--border)',
+            color: 'var(--text-muted)',
+          }}
         >
           Start a new one
         </Link>
       </header>
 
-      <main className="px-6 pb-20 max-w-3xl mx-auto">
-        <div className="mb-12">
-          <h1 className="text-4xl sm:text-5xl font-bold text-white tracking-tight">
+      <main className="px-4 pb-16 max-w-3xl mx-auto">
+        {/* Name & positioning */}
+        <div className="mb-10">
+          <h1
+            className="text-4xl sm:text-5xl font-bold tracking-tight"
+            style={{ color: 'var(--navy)' }}
+          >
             {doc.name || 'Your Identity'}
           </h1>
           {doc.positioning_statement && (
-            <p className="text-xl text-amber-400 mt-4 leading-relaxed font-medium">
+            <p
+              className="text-xl mt-4 leading-relaxed font-semibold"
+              style={{ color: 'var(--yellow-hover)' }}
+            >
               {doc.positioning_statement}
             </p>
           )}
@@ -95,7 +114,7 @@ export default function ResultPage() {
 
         {doc.through_line && (
           <Section title="Through-line">
-            <p className="text-gray-300 text-lg leading-relaxed">
+            <p className="text-lg leading-relaxed" style={{ color: 'var(--text)' }}>
               {doc.through_line}
             </p>
           </Section>
@@ -103,41 +122,53 @@ export default function ResultPage() {
 
         {doc.origin_story && (
           <Section title="Origin Story">
-            <p className="text-gray-300 leading-relaxed">{doc.origin_story}</p>
+            <p className="leading-relaxed" style={{ color: 'var(--text)' }}>
+              {doc.origin_story}
+            </p>
           </Section>
         )}
 
         {doc.trigger && (
           <Section title="What Brought You Here">
-            <p className="text-gray-300 leading-relaxed">{doc.trigger}</p>
+            <p className="leading-relaxed" style={{ color: 'var(--text)' }}>
+              {doc.trigger}
+            </p>
           </Section>
         )}
 
         {doc.best_moment && (
           <Section title="Best Moment">
-            <p className="text-gray-300 leading-relaxed">{doc.best_moment}</p>
+            <p className="leading-relaxed" style={{ color: 'var(--text)' }}>
+              {doc.best_moment}
+            </p>
           </Section>
         )}
 
         {(doc.audience?.ideal || doc.audience?.not_for) && (
           <Section title="Audience">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {doc.audience.ideal && (
-                <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
-                  <h3 className="text-white font-semibold text-sm mb-2">
+                <div
+                  className="rounded-2xl p-5"
+                  style={{ background: 'var(--surface)', border: '1px solid var(--border-light)' }}
+                >
+                  <h3 className="font-semibold text-sm mb-2" style={{ color: 'var(--navy)' }}>
                     Ideal for
                   </h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">
+                  <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
                     {doc.audience.ideal}
                   </p>
                 </div>
               )}
               {doc.audience.not_for && (
-                <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
-                  <h3 className="text-white font-semibold text-sm mb-2">
+                <div
+                  className="rounded-2xl p-5"
+                  style={{ background: 'var(--surface)', border: '1px solid var(--border-light)' }}
+                >
+                  <h3 className="font-semibold text-sm mb-2" style={{ color: 'var(--navy)' }}>
                     Not for
                   </h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">
+                  <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
                     {doc.audience.not_for}
                   </p>
                 </div>
@@ -148,24 +179,27 @@ export default function ResultPage() {
 
         {doc.services?.length > 0 && (
           <Section title="Services">
-            <div className="space-y-4">
+            <div className="space-y-3">
               {doc.services.map((service, idx) => (
                 <div
                   key={idx}
-                  className="bg-gray-900 rounded-xl p-5 border border-gray-800"
+                  className="rounded-2xl p-5"
+                  style={{ background: 'var(--surface)', border: '1px solid var(--border-light)' }}
                 >
-                  <h3 className="text-white font-semibold">{service.name}</h3>
-                  <p className="text-gray-400 text-sm mt-1">
+                  <h3 className="font-semibold" style={{ color: 'var(--navy)' }}>
+                    {service.name}
+                  </h3>
+                  <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
                     {service.description}
                   </p>
                   <div className="flex gap-3 mt-3">
                     {service.audience && (
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
                         For: {service.audience}
                       </span>
                     )}
                     {service.format && (
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
                         Format: {service.format}
                       </span>
                     )}
@@ -182,9 +216,12 @@ export default function ResultPage() {
               {doc.does_not_do.map((item, idx) => (
                 <li
                   key={idx}
-                  className="flex items-start gap-2 text-gray-400 text-sm"
+                  className="flex items-start gap-2 text-sm"
+                  style={{ color: 'var(--text-muted)' }}
                 >
-                  <span className="text-red-400 mt-0.5">x</span>
+                  <span className="mt-0.5 font-bold" style={{ color: 'var(--yellow-hover)' }}>
+                    x
+                  </span>
                   {item}
                 </li>
               ))}
@@ -194,10 +231,13 @@ export default function ResultPage() {
 
         {doc.brand && (
           <Section title="Brand Energy">
-            <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 space-y-4">
+            <div
+              className="rounded-2xl p-6 space-y-4"
+              style={{ background: 'var(--surface)', border: '1px solid var(--border-light)' }}
+            >
               {doc.brand.emojis?.length > 0 && (
                 <div>
-                  <span className="text-gray-500 text-xs uppercase tracking-wide">
+                  <span className="text-xs uppercase tracking-wide font-medium" style={{ color: 'var(--text-muted)' }}>
                     Emojis
                   </span>
                   <p className="text-2xl mt-1">{doc.brand.emojis.join(' ')}</p>
@@ -205,28 +245,28 @@ export default function ResultPage() {
               )}
               {doc.brand.energy && (
                 <div>
-                  <span className="text-gray-500 text-xs uppercase tracking-wide">
+                  <span className="text-xs uppercase tracking-wide font-medium" style={{ color: 'var(--text-muted)' }}>
                     Energy
                   </span>
-                  <p className="text-gray-300 mt-1">{doc.brand.energy}</p>
+                  <p className="mt-1" style={{ color: 'var(--text)' }}>{doc.brand.energy}</p>
                 </div>
               )}
               {doc.brand.tone && (
                 <div>
-                  <span className="text-gray-500 text-xs uppercase tracking-wide">
+                  <span className="text-xs uppercase tracking-wide font-medium" style={{ color: 'var(--text-muted)' }}>
                     Tone
                   </span>
-                  <p className="text-gray-300 mt-1">{doc.brand.tone}</p>
+                  <p className="mt-1" style={{ color: 'var(--text)' }}>{doc.brand.tone}</p>
                 </div>
               )}
               {doc.brand.colors?.length > 0 && (
                 <div>
-                  <span className="text-gray-500 text-xs uppercase tracking-wide">
+                  <span className="text-xs uppercase tracking-wide font-medium" style={{ color: 'var(--text-muted)' }}>
                     Colors
                   </span>
                   <div className="flex gap-2 mt-2">
                     {doc.brand.colors.map((color, idx) => (
-                      <span key={idx} className="text-gray-300 text-sm">
+                      <span key={idx} className="text-sm" style={{ color: 'var(--text)' }}>
                         {color}
                       </span>
                     ))}
@@ -235,19 +275,18 @@ export default function ResultPage() {
               )}
               {doc.brand.reference_sites?.length > 0 && (
                 <div>
-                  <span className="text-gray-500 text-xs uppercase tracking-wide">
+                  <span className="text-xs uppercase tracking-wide font-medium" style={{ color: 'var(--text-muted)' }}>
                     Reference Sites
                   </span>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {doc.brand.reference_sites.map((site, idx) => (
                       <a
                         key={idx}
-                        href={
-                          site.startsWith('http') ? site : `https://${site}`
-                        }
+                        href={site.startsWith('http') ? site : `https://${site}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-amber-400 text-sm hover:underline"
+                        className="text-sm hover:underline"
+                        style={{ color: 'var(--teal)' }}
                       >
                         {site}
                       </a>
@@ -260,20 +299,27 @@ export default function ResultPage() {
         )}
 
         {doc.assets?.contact_cta && (
-          <div className="mt-6 p-5 bg-amber-400/10 rounded-xl border border-amber-400/20 text-center">
-            <p className="text-amber-400 font-medium">
+          <div
+            className="mt-6 p-5 rounded-2xl text-center"
+            style={{
+              background: 'var(--yellow-light)',
+              border: '1px solid rgba(245, 158, 11, 0.2)',
+            }}
+          >
+            <p className="font-semibold" style={{ color: 'var(--yellow-hover)' }}>
               {doc.assets.contact_cta}
             </p>
           </div>
         )}
       </main>
 
-      <footer className="py-8 text-center border-t border-gray-800/50">
-        <p className="text-gray-600 text-sm">
+      <footer className="py-6 text-center" style={{ borderTop: '1px solid var(--border-light)' }}>
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
           Generated by{' '}
           <Link
             href="/"
-            className="text-gray-500 hover:text-amber-400 transition-colors"
+            className="transition-colors hover:underline"
+            style={{ color: 'var(--text-muted)' }}
           >
             Messy
           </Link>
@@ -282,7 +328,8 @@ export default function ResultPage() {
             href="https://lionelmitelpunkt.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-500 hover:text-amber-400 transition-colors"
+            className="transition-colors hover:underline"
+            style={{ color: 'var(--text-muted)' }}
           >
             Lionel&apos;s Creative GYM
           </a>

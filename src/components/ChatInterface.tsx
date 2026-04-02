@@ -158,7 +158,7 @@ export default function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-white">
+    <div className="flex flex-col h-screen" style={{ background: 'var(--cream-light)' }}>
       <PhaseIndicator currentPhase={phase} />
 
       <div className="flex-1 overflow-y-auto px-4 py-6 max-w-2xl mx-auto w-full">
@@ -168,19 +168,22 @@ export default function ChatInterface() {
 
         {isLoading && (
           <div className="flex justify-start mb-4">
-            <div className="bg-gray-100 rounded-2xl rounded-bl-md px-4 py-3">
-              <div className="flex gap-1">
+            <div
+              className="rounded-2xl px-4 py-3"
+              style={{ background: 'var(--cream)', borderBottomLeftRadius: '6px' }}
+            >
+              <div className="flex gap-1.5">
                 <span
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                  style={{ animationDelay: '0ms' }}
+                  className="w-2 h-2 rounded-full animate-bounce"
+                  style={{ background: 'var(--border)', animationDelay: '0ms' }}
                 />
                 <span
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                  style={{ animationDelay: '150ms' }}
+                  className="w-2 h-2 rounded-full animate-bounce"
+                  style={{ background: 'var(--border)', animationDelay: '150ms' }}
                 />
                 <span
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                  style={{ animationDelay: '300ms' }}
+                  className="w-2 h-2 rounded-full animate-bounce"
+                  style={{ background: 'var(--border)', animationDelay: '300ms' }}
                 />
               </div>
             </div>
@@ -191,14 +194,23 @@ export default function ChatInterface() {
       </div>
 
       {isComplete && identityDoc && (
-        <div className="bg-amber-50 border-t border-amber-200 px-4 py-4 text-center">
-          <p className="text-amber-800 font-medium">
+        <div
+          className="px-4 py-4 text-center"
+          style={{
+            background: 'var(--yellow-light)',
+            borderTop: '1px solid var(--yellow)',
+          }}
+        >
+          <p className="font-semibold" style={{ color: 'var(--yellow-hover)' }}>
             Your identity document is ready.
           </p>
           <a
             href="/result/view"
-            className="inline-block mt-2 px-6 py-2 rounded-full bg-amber-400
-              hover:bg-amber-300 text-gray-950 text-sm font-semibold transition-colors"
+            className="inline-block mt-2 px-6 py-2 rounded-full text-sm font-semibold transition-all"
+            style={{
+              background: 'var(--yellow)',
+              color: 'var(--navy)',
+            }}
           >
             View your identity
           </a>
@@ -206,7 +218,7 @@ export default function ChatInterface() {
       )}
 
       {!isComplete && (
-        <div className="border-t border-gray-100 px-4 py-3 bg-white">
+        <div className="px-4 py-3" style={{ background: 'var(--surface)', borderTop: '1px solid var(--border-light)' }}>
           <form
             onSubmit={handleSubmit}
             className="flex items-end gap-2 max-w-2xl mx-auto"
@@ -218,16 +230,23 @@ export default function ChatInterface() {
               placeholder="Type your message..."
               rows={1}
               disabled={isLoading}
-              className="flex-1 resize-none rounded-2xl border border-gray-200 px-4 py-2.5 text-sm
-                focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-300
-                disabled:opacity-50 max-h-32"
+              className="flex-1 resize-none rounded-2xl px-4 py-2.5 text-sm
+                focus:outline-none focus:ring-2 disabled:opacity-50 max-h-32"
+              style={{
+                border: '1.5px solid var(--border)',
+                background: 'var(--cream-light)',
+                color: 'var(--text)',
+              }}
             />
             <button
               type="submit"
               disabled={isLoading || !inputText.trim()}
               className="flex items-center justify-center w-10 h-10 rounded-full
-                bg-amber-400 hover:bg-amber-500 text-white transition-colors
-                disabled:opacity-50 disabled:cursor-not-allowed"
+                transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              style={{
+                background: 'var(--yellow)',
+                color: 'var(--navy)',
+              }}
               aria-label="Send message"
             >
               <svg

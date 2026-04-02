@@ -1,10 +1,15 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Heebo, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 
-const inter = Inter({
+const heebo = Heebo({
+  subsets: ['latin', 'hebrew'],
+  variable: '--font-heebo',
+});
+
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-space',
 });
 
 export const metadata: Metadata = {
@@ -24,8 +29,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+    <html lang="en" className={`${heebo.variable} ${spaceGrotesk.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col font-[family-name:var(--font-heebo)]">
+        {children}
+      </body>
     </html>
   );
 }
