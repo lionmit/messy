@@ -7,61 +7,38 @@ export const metadata = {
 
 export default function GalleryPage() {
   return (
-    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
-      <header className="px-4 py-6 max-w-6xl mx-auto">
-        <div className="flex items-center justify-between">
-          <Link
-            href="/"
-            className="font-[family-name:var(--font-space)] text-2xl font-bold tracking-tighter"
-            style={{ color: 'var(--navy)' }}
-          >
-            m<span style={{ color: 'var(--yellow)' }}>e</span>ssy
-          </Link>
-          <Link
-            href="/interview"
-            className="px-5 py-2 rounded-full text-sm font-semibold transition-all"
-            style={{ background: 'var(--yellow)', color: 'var(--navy)' }}
-          >
-            Get yours
-          </Link>
-        </div>
-      </header>
-
-      <main className="px-4 pb-16 max-w-6xl mx-auto text-center py-20">
-        <h1
-          className="text-4xl sm:text-5xl font-bold tracking-tight"
-          style={{ color: 'var(--navy)' }}
+    <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, var(--bg) 0%, var(--bg-warm) 100%)' }}>
+      <nav className="flex items-center justify-between px-6 py-4 max-w-[1100px] mx-auto w-full">
+        <Link
+          href="/"
+          className="font-[family-name:var(--font-space)] text-xl font-bold tracking-tight"
+          style={{ color: 'var(--navy)', textDecoration: 'none' }}
         >
-          Gallery{' '}
-          <span style={{ color: 'var(--yellow)' }}>Coming Soon</span>
+          m<span style={{ color: 'var(--yellow)' }}>e</span>ssy
+        </Link>
+        <Link href="/interview" className="btn-cta" style={{ padding: '0.6rem 1.5rem', fontSize: '0.9rem' }}>
+          Get yours
+        </Link>
+      </nav>
+
+      <main className="px-6 max-w-[1100px] mx-auto text-center" style={{ paddingTop: '6rem', paddingBottom: '6rem' }}>
+        <h1 className="font-bold tracking-tight" style={{ color: 'var(--navy)', fontSize: 'clamp(2.2rem, 5vw, 3.5rem)' }}>
+          Gallery <span style={{ color: 'var(--yellow)' }}>Coming Soon</span>
         </h1>
-        <p className="mt-4 text-lg max-w-md mx-auto" style={{ color: 'var(--text-muted)' }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', marginTop: '1rem', maxWidth: '440px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.6 }}>
           People who went through the Messy conversation and found their voice.
           The first entries are being built now.
         </p>
-        <Link
-          href="/interview"
-          className="inline-block mt-8 px-8 py-4 rounded-full font-semibold text-lg transition-all hover:scale-[1.02]"
-          style={{
-            background: 'var(--yellow)',
-            color: 'var(--navy)',
-            boxShadow: '0 4px 20px rgba(245, 158, 11, 0.25)',
-          }}
-        >
+        <Link href="/interview" className="btn-cta" style={{ marginTop: '2rem', display: 'inline-flex' }}>
           Be the first
         </Link>
       </main>
 
-      <footer className="py-6 text-center" style={{ borderTop: '1px solid var(--border-light)' }}>
-        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+      <footer className="py-5 text-center" style={{ borderTop: '1px solid var(--border-light)' }}>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
           Built by{' '}
-          <a
-            href="https://lionelmitelpunkt.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="transition-colors hover:underline"
-            style={{ color: 'var(--text-muted)' }}
-          >
+          <a href="https://lionelmitelpunkt.com" target="_blank" rel="noopener noreferrer"
+            style={{ color: 'var(--text-muted)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
             Lionel&apos;s Creative GYM
           </a>
         </p>

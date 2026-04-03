@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import type { InterviewPhase, ChatMessage, ChatResponse, IdentityDocument } from '@/types';
 import MessageBubble from './MessageBubble';
 import PhaseIndicator from './PhaseIndicator';
@@ -21,6 +22,7 @@ export default function ChatInterface() {
   const [identityDoc, setIdentityDoc] = useState<IdentityDocument | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const hasInitialized = useRef(false);
 
   useEffect(() => {
@@ -40,7 +42,6 @@ export default function ChatInterface() {
     []
   );
 
-  // Initial greeting on mount
   useEffect(() => {
     if (hasInitialized.current) return;
     hasInitialized.current = true;
@@ -67,12 +68,12 @@ export default function ChatInterface() {
           {
             id: 'error-init',
             role: 'assistant',
-            content:
-              "Hey! I'm having trouble starting up. Please refresh and try again.",
+            content: "Hey! I'm having trouble starting up. Please refresh and try again.",
           },
         ]);
       } finally {
         setIsLoading(false);
+        textareaRef.current?.focus();
       }
     })();
   }, [callChat]);
@@ -93,40 +94,27 @@ export default function ChatInterface() {
 
     try {
       const data = await callChat(newHistory, phase);
-      const assistantMsg: ChatMessage = {
-        role: 'assistant',
-        content: data.message,
-      };
+      const assistantMsg: ChatMessage = { role: 'assistant', content: data.message };
       const updatedHistory = [...newHistory, assistantMsg];
 
       setConversationHistory(updatedHistory);
       setPhase(data.phase);
       setDisplayMessages((prev) => [
         ...prev,
-        {
-          id: `assistant-${Date.now()}`,
-          role: 'assistant',
-          content: data.message,
-        },
+        { id: `assistant-${Date.now()}`, role: 'assistant', content: data.message },
       ]);
 
       if (data.status === 'completed' && data.identity_document) {
         setIsComplete(true);
         setIdentityDoc(data.identity_document);
-        sessionStorage.setItem(
-          'messy-result',
-          JSON.stringify(data.identity_document)
-        );
+        sessionStorage.setItem('messy-result', JSON.stringify(data.identity_document));
 
-        // Backup to Sheets (fire and forget)
         fetch('/api/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             identity_document: data.identity_document,
-            messages: updatedHistory.filter(
-              (m) => m.content !== '[start interview]'
-            ),
+            messages: updatedHistory.filter((m) => m.content !== '[start interview]'),
           }),
         }).catch((err) => console.error('Sheets backup failed:', err));
       }
@@ -134,14 +122,11 @@ export default function ChatInterface() {
       console.error('Chat error:', err);
       setDisplayMessages((prev) => [
         ...prev,
-        {
-          id: `error-${Date.now()}`,
-          role: 'assistant',
-          content: 'Something went wrong. Please try again.',
-        },
+        { id: `error-${Date.now()}`, role: 'assistant', content: 'Something went wrong. Please try again.' },
       ]);
     } finally {
       setIsLoading(false);
+      textareaRef.current?.focus();
     }
   };
 
@@ -158,33 +143,49 @@ export default function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-screen" style={{ background: 'var(--cream-light)' }}>
-      <PhaseIndicator currentPhase={phase} />
+    <div className="flex flex-col h-screen" style={{ background: 'var(--bg)' }}>
+      {/* Header */}
+      <div
+        className="flex items-center justify-between px-5 py-3"
+        style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border-light)', boxShadow: 'var(--shadow-sm)' }}
+      >
+        <Link
+          href="/"
+          className="font-[family-name:var(--font-space)] text-lg font-bold tracking-tight"
+          style={{ color: 'var(--navy)', textDecoration: 'none' }}
+        >
+          m<span style={{ color: 'var(--yellow)' }}>e</span>ssy
+        </Link>
+        <PhaseIndicator currentPhase={phase} />
+      </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-6 max-w-2xl mx-auto w-full">
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto px-4 py-5 max-w-2xl mx-auto w-full">
         {displayMessages.map((msg) => (
           <MessageBubble key={msg.id} role={msg.role} content={msg.content} />
         ))}
 
         {isLoading && (
-          <div className="flex justify-start mb-4">
+          <div className="flex justify-start mb-3 msg-assistant">
             <div
-              className="rounded-2xl px-4 py-3"
-              style={{ background: 'var(--cream)', borderBottomLeftRadius: '6px' }}
+              className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center mr-2 mt-1 font-[family-name:var(--font-space)] text-xs font-bold"
+              style={{ background: 'var(--yellow-light)', color: 'var(--yellow-dark)' }}
             >
-              <div className="flex gap-1.5">
-                <span
-                  className="w-2 h-2 rounded-full animate-bounce"
-                  style={{ background: 'var(--border)', animationDelay: '0ms' }}
-                />
-                <span
-                  className="w-2 h-2 rounded-full animate-bounce"
-                  style={{ background: 'var(--border)', animationDelay: '150ms' }}
-                />
-                <span
-                  className="w-2 h-2 rounded-full animate-bounce"
-                  style={{ background: 'var(--border)', animationDelay: '300ms' }}
-                />
+              M
+            </div>
+            <div
+              className="px-5 py-3.5"
+              style={{
+                background: 'var(--surface)',
+                borderRadius: '20px 20px 20px 6px',
+                boxShadow: 'var(--shadow-sm)',
+                border: '1px solid var(--border-light)',
+              }}
+            >
+              <div className="flex gap-2">
+                <span className="loading-dot" />
+                <span className="loading-dot" />
+                <span className="loading-dot" />
               </div>
             </div>
           </div>
@@ -193,74 +194,38 @@ export default function ChatInterface() {
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Completion */}
       {isComplete && identityDoc && (
         <div
-          className="px-4 py-4 text-center"
-          style={{
-            background: 'var(--yellow-light)',
-            borderTop: '1px solid var(--yellow)',
-          }}
+          className="px-5 py-4 text-center"
+          style={{ background: 'var(--yellow-light)', borderTop: '2px solid var(--yellow)' }}
         >
-          <p className="font-semibold" style={{ color: 'var(--yellow-hover)' }}>
+          <p className="font-semibold text-base" style={{ color: 'var(--navy)' }}>
             Your identity document is ready.
           </p>
-          <a
-            href="/result/view"
-            className="inline-block mt-2 px-6 py-2 rounded-full text-sm font-semibold transition-all"
-            style={{
-              background: 'var(--yellow)',
-              color: 'var(--navy)',
-            }}
-          >
+          <a href="/result/view" className="btn-cta" style={{ marginTop: '0.75rem', padding: '0.65rem 1.5rem', fontSize: '0.95rem' }}>
             View your identity
           </a>
         </div>
       )}
 
+      {/* Input */}
       {!isComplete && (
-        <div className="px-4 py-3" style={{ background: 'var(--surface)', borderTop: '1px solid var(--border-light)' }}>
-          <form
-            onSubmit={handleSubmit}
-            className="flex items-end gap-2 max-w-2xl mx-auto"
-          >
+        <div className="px-4 py-3" style={{ background: 'var(--surface)', borderTop: '1px solid var(--border-light)', boxShadow: '0 -2px 12px rgba(26,26,46,0.04)' }}>
+          <form onSubmit={handleSubmit} className="flex items-end gap-2.5 max-w-2xl mx-auto">
             <textarea
+              ref={textareaRef}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Type your message..."
               rows={1}
               disabled={isLoading}
-              className="flex-1 resize-none rounded-2xl px-4 py-2.5 text-sm
-                focus:outline-none focus:ring-2 disabled:opacity-50 max-h-32"
-              style={{
-                border: '1.5px solid var(--border)',
-                background: 'var(--cream-light)',
-                color: 'var(--text)',
-              }}
+              className="chat-input flex-1 resize-none px-4 py-3 text-[0.95rem] max-h-32"
             />
-            <button
-              type="submit"
-              disabled={isLoading || !inputText.trim()}
-              className="flex items-center justify-center w-10 h-10 rounded-full
-                transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-              style={{
-                background: 'var(--yellow)',
-                color: 'var(--navy)',
-              }}
-              aria-label="Send message"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 19V5m0 0l-7 7m7-7l7 7"
-                />
+            <button type="submit" disabled={isLoading || !inputText.trim()} className="send-btn" aria-label="Send message">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" />
               </svg>
             </button>
           </form>
