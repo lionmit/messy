@@ -1,7 +1,7 @@
 /**
  * Hebrew strings the interview shows. Deck keys are named where a string comes
- * from messy-sites/board/copy-deck.md. Strings marked NEW are drafts for the
- * Hebrew panel.
+ * from messy-sites/board/copy-deck.md. The NEW strings were read by the Hebrew
+ * panel on 2026-10-11 (messy-sites/board/v3/06-hebrew-panel.md).
  *
  * Launch gate: the "questions are built on the way I listen" line (decision AI,
  * panel-soul §3.6) must NOT appear anywhere public until Lionel approves his
@@ -31,8 +31,8 @@ export const CONSENT = {
   skipLine: 'אפשר לדלג על כל שאלה או לעצור מתי שרוצים.',
   privacyHeading: 'לפני שמתחילים',
   readingLine: `${READING_LINE}.`,
-  /** NEW (D15: say the conversation is processed by an AI provider) */
-  providerLine: 'מה שנכתב כאן עובר לעיבוד אצל Anthropic, החברה שמפעילה את ה־AI.',
+  /** D15: say the conversation is processed by an AI provider. Hebrew panel 2026-10-11 (Anthropic builds the model, it does not "operate" it here). */
+  providerLine: 'מה שנכתב כאן נשלח לעיבוד אצל Anthropic, החברה שמאחורי ה־AI.',
   privacyLinkSlot: '[ממתין: קישור לעמוד הפרטיות]',
   nameLabel: 'איך קוראים לך?',
   genderLegend: 'באיזו לשון נוח לך שאפנה?',
@@ -42,9 +42,9 @@ export const CONSENT = {
   agree: 'קראתי את מה שכתוב כאן, ואני רוצה להתחיל.',
   start: 'להתחיל',
   errors: {
-    name: 'צריך שם, עד 40 אותיות.',
+    name: 'צריך לכתוב שם, עד 40 אותיות.',
     gender: 'צריך לבחור לשון פנייה.',
-    agree: 'בלי הסכמה לא מתחילים.',
+    agree: 'כדי להתחיל, צריך לסמן את התיבה.',
     generic: 'משהו לא עבד. אפשר לנסות שוב בעוד רגע.',
     rate: 'יותר מדי ניסיונות. אפשר לנסות שוב מאוחר יותר.',
   },
@@ -74,21 +74,21 @@ export const CHAT = {
   tooLong: (max: number) => `אפשר עד ${max} תווים בהודעה.`,
   error: 'משהו לא עבד. אפשר לנסות שוב.',
   slowDown: 'רגע, אפשר לשלוח שוב בעוד כמה שניות.',
-  /** NEW: shown instead of any reply that leaks the instructions. Gender-invariant. */
-  deflection: 'את זה הכלי לא משתף. נחזור לשאלה האחרונה, ואפשר לענות עליה במילים שלך.',
+  /** Shown instead of any reply that leaks the instructions. Gender-invariant. Hebrew panel 2026-10-11: משתף -> חושף. */
+  deflection: 'את זה הכלי לא חושף. נחזור לשאלה האחרונה, ואפשר לענות עליה במילים שלך.',
 };
 
 export const FINISH = {
   /** NEW */
   heading: 'לפני המסמך',
   /** Gender-invariant ("רוצה" is both forms). */
-  previewQuestion: 'רוצה לקבל במייל תצוגה מקדימה של אתר שנבנה מהמסמך? אפשר להשאיר כתובת. לא חובה.',
+  previewQuestion: 'רוצה לקבל במייל תצוגה מקדימה של האתר שייבנה מהמסמך? אפשר להשאיר כתובת. לא חובה.',
   /** s4_email_reason, first sentence only (the reminders it mentions aren't built yet) */
   emailReason: 'צריך כתובת מייל כדי לשלוח את הקישור לאתר.',
   emailLabel: 'מייל (לא חובה)',
   emailInvalid: 'הכתובת לא נראית תקינה.',
   create: 'ליצור את המסמך',
-  working: 'המסמך נכתב, זה לוקח עד דקה.',
+  working: 'המסמך בהכנה. זה לוקח עד דקה.',
 };
 
 export const DONE = {

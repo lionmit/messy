@@ -26,12 +26,15 @@ export const SAHAR = {
   whatsapp: { label: 'לוואטסאפ', href: 'https://wa.me/972559571399' },
 };
 
-/** Lionel's own line (Q27). Hebrew wording is a draft for him to approve. */
+/**
+ * Lionel's own line (Q27: "חוזר תוך יום עבודה"). Hebrew panel 2026-10-11: identical to the deck's
+ * s4_distress_lionel, so S4 and the bot make the same promise in the same words, signed.
+ */
 export const LIONEL_LINE = {
   text: (gender: Gender) =>
     gender === 'f'
-      ? 'אפשר גם לכתוב לי, ליונל. אחזור אלייך תוך יום עסקים.'
-      : 'אפשר גם לכתוב לי, ליונל. אחזור אליך תוך יום עסקים.',
+      ? 'אפשר גם לכתוב לי. אחזור אלייך תוך יום עבודה אחד. ליונל'
+      : 'אפשר גם לכתוב לי. אחזור אליך תוך יום עבודה אחד. ליונל',
   /** Visible slot until Lionel decides the channel. */
   contactSlot: '[ממתין להחלטת ליונל: איך כותבים לו, קישור]',
 };
