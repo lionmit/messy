@@ -1,56 +1,32 @@
-export type InterviewPhase = 'person' | 'offering' | 'brand' | 'assets' | 'complete';
+export type { InterviewDocument, ServiceItem } from '@/lib/doc';
+export type { Gender, TranscriptMessage as ChatMessage } from '@/lib/session';
 
-export interface ServiceCard {
-  name: string;
-  description: string;
-  audience: string;
-  format: string;
+/** POST /api/session response */
+export interface SessionResponse {
+  token: string;
+  messages: { role: 'user' | 'assistant'; content: string }[];
+  mac: string;
+  limits: { max_user_message_chars: number; max_user_turns: number };
 }
 
-export interface BrandProfile {
-  emojis: string[];
-  colors: string[];
-  energy: string;
-  tone: string;
-  reference_sites: string[];
-  language_notes: string;
-}
-
-export interface IdentityDocument {
-  name: string;
-  positioning_statement: string;
-  through_line: string;
-  origin_story: string;
-  trigger: string;
-  best_moment: string;
-  audience: {
-    ideal: string;
-    not_for: string;
-  };
-  services: ServiceCard[];
-  does_not_do: string[];
-  brand: BrandProfile;
-  assets: {
-    links: string[];
-    testimonials: string[];
-    photos: string[];
-    contact_cta: string;
-  };
-}
-
-export interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: string;
-}
-
-export interface ChatRequest {
-  messages: ChatMessage[];
-  phase: InterviewPhase;
-}
-
+/** POST /api/chat response */
 export interface ChatResponse {
-  message: string;
-  phase: InterviewPhase;
-  status: 'active' | 'completed';
-  identity_document: IdentityDocument | null;
+  message?: string;
+  user_message?: string;
+  mac?: string;
+  ready?: boolean;
+  turns_left?: number;
+  distress?: boolean;
+  error?: string;
+}
+
+/** POST /api/finish response */
+export interface FinishResponse {
+  document?: import('@/lib/doc').InterviewDocument;
+  expires_at?: string;
+  delete_url?: string | null;
+  delete_is_demo?: boolean;
+  distress?: boolean;
+  error?: string;
+  field?: string;
 }
