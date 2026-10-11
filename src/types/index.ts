@@ -1,4 +1,4 @@
-export type { InterviewDocument, ServiceItem } from '@/lib/doc';
+export type { InterviewDocument, ServiceItem, ClientJourney } from '@/lib/doc';
 export type { Gender, TranscriptMessage as ChatMessage } from '@/lib/session';
 
 /** POST /api/session response */

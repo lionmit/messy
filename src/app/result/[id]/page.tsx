@@ -101,6 +101,18 @@ export default function ResultPage() {
           </Section>
         )}
 
+        {(doc.client_journey?.before || doc.client_journey?.after) && (
+          <Section title="What changes for people">
+            {doc.client_journey.before && <P>{doc.client_journey.before}</P>}
+            {doc.client_journey.after && (
+              <P>
+                {doc.client_journey.after}
+                {doc.client_journey.after_tense === 'wish' ? ' (wish)' : ''}
+              </P>
+            )}
+          </Section>
+        )}
+
         {doc.services.length > 0 && (
           <Section title="Services">
             <div className="space-y-3">

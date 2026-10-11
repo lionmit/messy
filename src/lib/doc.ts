@@ -17,6 +17,13 @@ export interface ServiceItem {
   tense: 'now' | 'wish' | '';
 }
 
+/** What a person goes through: how they arrive, and what changes after. Absent in old documents. */
+export interface ClientJourney {
+  before: string;
+  after: string;
+  after_tense: 'seen' | 'wish' | '';
+}
+
 export interface InterviewDocument {
   schema_version: 2;
   name: string;
@@ -25,6 +32,7 @@ export interface InterviewDocument {
   positioning_statement: string;
   through_line: string;
   audience: { ideal: string; not_for: string };
+  client_journey: ClientJourney;
   services: ServiceItem[];
   does_not_do: string[];
   their_words: string[];
@@ -72,6 +80,7 @@ export function normalizeDocument(raw: unknown, person: { name: string; gender: 
   const audience = obj(o.audience);
   const room = obj(o.room);
   const assets = obj(o.assets);
+  const journey = obj(o.client_journey);
   return {
     schema_version: 2,
     name: person.name,
@@ -80,6 +89,11 @@ export function normalizeDocument(raw: unknown, person: { name: string; gender: 
     positioning_statement: str(o.positioning_statement),
     through_line: str(o.through_line),
     audience: { ideal: str(audience.ideal), not_for: str(audience.not_for) },
+    client_journey: {
+      before: str(journey.before),
+      after: str(journey.after),
+      after_tense: journey.after_tense === 'seen' || journey.after_tense === 'wish' ? journey.after_tense : '',
+    },
     services: (Array.isArray(rawServices) ? rawServices : [])
       .map(service)
       .filter((s): s is ServiceItem => s !== null)

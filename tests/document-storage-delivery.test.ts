@@ -18,6 +18,18 @@ afterEach(() => {
 const person = { name: 'דנה', gender: 'f' as const };
 
 describe('document', () => {
+  it('accepts documents with and without client_journey', () => {
+    const old = normalizeDocument({ before_sentence: 'אני מעצבת' }, person);
+    expect(old.client_journey).toEqual({ before: '', after: '', after_tense: '' });
+    const withJourney = normalizeDocument(
+      { client_journey: { before: 'מגיעים תקועים', after: '<b>מדברים</b> אחרת', after_tense: 'seen' } },
+      person
+    );
+    expect(withJourney.client_journey).toEqual({ before: 'מגיעים תקועים', after: 'מדברים אחרת', after_tense: 'seen' });
+    expect(normalizeDocument({ client_journey: 'junk' }, person).client_journey.after_tense).toBe('');
+    expect(normalizeDocument({ client_journey: { after_tense: 'bogus' } }, person).client_journey.after_tense).toBe('');
+  });
+
   it('counts offerings when the model names the list "offerings" (the services_count = 0 bug)', () => {
     const doc = normalizeDocument({ offerings: [{ name: 'סדנה' }, 'ליווי עסקי'] }, person);
     expect(doc.services.map((s) => s.name)).toEqual(['סדנה', 'ליווי עסקי']);

@@ -52,6 +52,10 @@ describe('first screen copy', () => {
     expect(roomQuestion('m')).toBe('מה יש בחדר שבו אתה עובד, ואיזה צבע יש בו?');
     expect(personBlock('דנה', 'f')).toContain(roomQuestion('f'));
     expect(STATIC_SYSTEM_PROMPT).toContain('room_question');
+    expect(STATIC_SYSTEM_PROMPT).toContain('3. What changes for someone after working with them');
+    expect(STATIC_SYSTEM_PROMPT).toContain('"client_journey"');
+    expect(STATIC_SYSTEM_PROMPT).toContain('8. Consent before the document');
+    expect(STATIC_SYSTEM_PROMPT).not.toContain('step 7');
   });
 
   it('support: ער"ן 1201 first, then the verified סה"ר details', () => {
