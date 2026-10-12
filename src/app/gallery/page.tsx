@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function GalleryPage() {
   return (
-    <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, var(--bg) 0%, var(--bg-warm) 100%)' }}>
+    <div lang="en" dir="ltr" className="min-h-screen" style={{ background: 'linear-gradient(180deg, var(--bg) 0%, var(--bg-warm) 100%)' }}>
       <nav className="flex items-center justify-between px-6 py-4 max-w-[1100px] mx-auto w-full">
         <Link
           href="/"

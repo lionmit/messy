@@ -84,6 +84,18 @@ body {
 .loading-dot:nth-child(2) { animation-delay: 0.2s; }
 .loading-dot:nth-child(3) { animation-delay: 0.4s; }
 
+/* ─── Reduced motion (legal cover v1.1; the accessibility statement promises it) ───
+   Animations end at their last frame at once, so nothing is left hidden; the loading dots stay still. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .loading-dot { animation: none !important; }
+}
+
 /* ─── Premium Input ─── */
 .chat-input {
   background: var(--surface);

@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen" style={{ background: 'linear-gradient(180deg, var(--bg) 0%, var(--bg-warm) 100%)' }}>
+    <div lang="en" dir="ltr" className="flex flex-col min-h-screen" style={{ background: 'linear-gradient(180deg, var(--bg) 0%, var(--bg-warm) 100%)' }}>
       {/* Nav */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-[1100px] mx-auto w-full">
         <div

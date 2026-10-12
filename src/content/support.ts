@@ -6,10 +6,9 @@
  * - סה"ר: messy-sites/board/verified/sahar-2026-10-10.md, verbatim from
  *   https://sahar.org.il on 2026-10-10. The official name's hyphen is shown as a
  *   middle dot (house rule against dashes in Hebrew). Re-check the hours before launch.
- * - Lionel's line: Q27 ("I'll get back to you within a business day"). How people
- *   reach him is still open, so it stays a visible slot.
+ * - Lionel's line: legal cover v1.1 §ז (it replaced Q27's business-day promise). How
+ *   people reach him is still open, so it stays a visible slot.
  */
-import type { Gender } from '@/lib/session';
 
 export const ERAN = {
   title: (name: string) => `${name}, השיחה נעצרה כאן.`,
@@ -27,14 +26,16 @@ export const SAHAR = {
 };
 
 /**
- * Lionel's own line (Q27: "חוזר תוך יום עבודה"). Hebrew panel 2026-10-11: identical to the deck's
- * s4_distress_lionel, so S4 and the bot make the same promise in the same words, signed.
+ * Lionel's own line. Legal cover v1.1 (messy-sites/board/legal/01-texts.md §ז), verbatim: it replaces
+ * Q27's "אחזור אלייך תוך יום עבודה אחד", says it is not an emergency line, and reads the same for any
+ * gender. S4's deck key s4_distress_lionel should follow it.
  */
 export const LIONEL_LINE = {
-  text: (gender: Gender) =>
-    gender === 'f'
-      ? 'אפשר גם לכתוב לי. אחזור אלייך תוך יום עבודה אחד. ליונל'
-      : 'אפשר גם לכתוב לי. אחזור אליך תוך יום עבודה אחד. ליונל',
-  /** Visible slot until Lionel decides the channel. */
+  text: 'אפשר לכתוב לי. אני קורא פניות מכאן פעמיים ביום ועונה בעצמי. זה לא קו חירום: במצב דחוף, ער"ן 1201 זמין עכשיו.',
+  /**
+   * Visible slot until Lionel decides the channel. §ז's technical side (a message from here is
+   * tagged `distress`, gets no AI draft, and reaches him in a separate email) needs that channel
+   * and a Make route he approves, so it is not wired yet.
+   */
   contactSlot: '[ממתין להחלטת ליונל: איך כותבים לו, קישור]',
 };

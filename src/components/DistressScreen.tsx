@@ -8,7 +8,7 @@ import type { Gender } from '@/types';
  * Shows human support first. No price, no document, no share, no link to anything
  * Lionel sells, and nothing the model wrote. The trigger text is never shown.
  */
-export default function DistressScreen({ name, gender }: { name: string; gender: Gender }) {
+export default function DistressScreen({ name }: { name: string; gender: Gender }) {
   return (
     <main className="flex-1 overflow-y-auto px-5 py-8" data-testid="distress-screen">
       <div className="max-w-xl mx-auto space-y-4">
@@ -46,7 +46,7 @@ export default function DistressScreen({ name, gender }: { name: string; gender:
         </section>
 
         <section className="card">
-          <p>{LIONEL_LINE.text(gender)}</p>
+          <p>{LIONEL_LINE.text}</p>
           <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>{LIONEL_LINE.contactSlot}</p>
         </section>
       </div>

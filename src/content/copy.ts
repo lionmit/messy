@@ -33,13 +33,18 @@ export const CONSENT = {
   readingLine: `${READING_LINE}.`,
   /** D15: say the conversation is processed by an AI provider. Hebrew panel 2026-10-11 (Anthropic builds the model, it does not "operate" it here). */
   providerLine: 'מה שנכתב כאן נשלח לעיבוד אצל Anthropic, החברה שמאחורי ה־AI.',
-  privacyLinkSlot: '[ממתין: קישור לעמוד הפרטיות]',
+  /** Legal cover v1.1 (messy-sites/board/legal/01-texts.md §ב), verbatim. */
+  ageLine: 'השיחה מיועדת לגיל 18 ומעלה.',
+  sensitiveLine: 'אין חובה לכתוב מידע אישי רגיש. בבקשה לא לכתוב שמות של לקוחות או של אנשים אחרים.',
+  abroadLine: 'השירותים שהכלי נשען עליהם פועלים מחוץ לישראל.',
+  /** §ב: the link to the privacy page, in place of the old slot. */
+  privacyLink: { label: 'מה נשמר ולכמה זמן', href: '/privacy' },
   nameLabel: 'איך קוראים לך?',
   genderLegend: 'באיזו לשון נוח לך שאפנה?',
   genderF: 'נקבה',
   genderM: 'זכר',
-  /** NEW: the active agreement. Past tense + "רוצה" work for any gender. */
-  agree: 'קראתי את מה שכתוב כאן, ואני רוצה להתחיל.',
+  /** §ב: one box for the age and the transfer abroad (the legal cover's recommendation). Any gender. */
+  agree: 'קראתי את מה שכתוב כאן, כולל ההעברה לשירותים מחוץ לישראל. מלאו לי 18, ואני רוצה להתחיל.',
   start: 'להתחיל',
   errors: {
     name: 'צריך לכתוב שם, עד 40 אותיות.',
@@ -99,6 +104,18 @@ export const DONE = {
   stop: 'אפשר לעצור כאן. המסמך שלם ושלך.',
   deleteLink: 'למחיקת השיחה והמסמך',
   deleteDemoMarker: '[תצוגה בלבד: המחיקה עוד לא מחוברת לאחסון קבוע]',
+};
+
+/**
+ * The footer on every page (legal cover v1.1, review decision 12). The labels are the pages' own
+ * titles; "ביטול עסקה" opens an email, which the terms (§ג "ביטול והחזר") name as a way to ask.
+ */
+export const FOOTER = {
+  privacy: 'פרטיות',
+  terms: 'תנאים והחזרים',
+  accessibility: 'הצהרת נגישות',
+  cancel: 'ביטול עסקה',
+  cancelHref: `mailto:lionmit@gmail.com?subject=${encodeURIComponent('ביטול עסקה')}`,
 };
 
 export const DELETE_PAGE = {

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import { CONSENT, priceLine } from '@/content/copy';
 import type { Gender, SessionResponse } from '@/types';
@@ -67,7 +68,14 @@ export default function ConsentScreen({ onStarted }: Props) {
           </h2>
           <p className="mt-2" data-testid="reading-line">{CONSENT.readingLine}</p>
           <p className="mt-2">{CONSENT.providerLine}</p>
-          <p className="mt-2 text-sm" style={{ color: 'var(--text-muted)' }}>{CONSENT.privacyLinkSlot}</p>
+          <p className="mt-2" data-testid="age-line">{CONSENT.ageLine}</p>
+          <p className="mt-2">{CONSENT.sensitiveLine}</p>
+          <p className="mt-2">
+            {CONSENT.abroadLine}{' '}
+            <Link href={CONSENT.privacyLink.href} className="underline font-semibold" target="_blank">
+              {CONSENT.privacyLink.label}
+            </Link>
+          </p>
         </section>
 
         <form onSubmit={start} className="mt-6 space-y-5" noValidate>
