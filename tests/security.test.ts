@@ -3,6 +3,8 @@ import { chatTurn, resetForTests, startSession } from '@/lib/interview';
 import { MinIntervalLimiter, SlidingWindowLimiter } from '@/lib/rate-limit';
 import {
   cleanForDisplay,
+  hasGenderSlip,
+  hasPraise,
   hasScriptGlitch,
   neutralizeUserText,
   stripForeignScript,
@@ -153,6 +155,19 @@ describe('HTML and glitch stripping', () => {
     const r = await chatTurn({ token: s.token, mac: s.mac, messages: [...s.messages, { role: 'user', content: 'מעצבת' }] }, freshIp(), deps);
     expect(callModel).toHaveBeenCalledTimes(2);
     expect(r.body.message).toBe('ומה את עושה בבוקר?');
+  });
+
+  it('her own words quoted back (a client\'s "אתה", her "מרגש") do not send the turn back to the model', async () => {
+    // P1-C1 test run 2026-10-12: a quoted client line made two of Michal's turns twice as slow.
+    const s = await newSession('f');
+    const quoted = '"אני רוצה שאתה תגיד לי סליחה", ו"זה היה מרגש". מה יש בחדר שבו את עובדת?';
+    const { deps, callModel } = makeDeps([quoted, 'should not be used']);
+    const r = await chatTurn({ token: s.token, mac: s.mac, messages: [...s.messages, { role: 'user', content: 'מטפלת זוגית' }] }, freshIp(), deps);
+    expect(callModel).toHaveBeenCalledTimes(1);
+    expect(r.body.message).toBe(quoted);
+    // outside the quotes the checks still fire
+    expect(hasGenderSlip('ומה אתה עושה? "אתה" אמרו לך', 'f')).toBe(true);
+    expect(hasPraise('"זה מרגש" אמרת, וזה מדהים')).toBe(true);
   });
 });
 

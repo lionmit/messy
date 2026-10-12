@@ -29,6 +29,13 @@ const PATTERNS: RegExp[] = [
   /(?:פוגע|פוגעת)\s+בעצמי/u,
   /(?:לחתוך|חותך|חותכת)\s+(?:את\s+)?עצמי/u,
   /לגמור\s+(?:עם\s+)?(?:החיים|הכל)\s+(?:שלי)?/u,
+  // "Everyone would be better off without me" (P1-C1 test, 2026-10-12: only layer 2 caught it).
+  // Tied to "easier/better/preferable" so "if I'm not here tomorrow" doesn't stop a conversation.
+  /(?:יותר\s+(?:קל|טוב)|עדיף)\s+(?:ל\S+\s+)?(?:אם|כש)\s*(?:פשוט\s+|כבר\s+)?(?:אני\s+)?(?:לא\s+אהיה|אעלם|אמות)/u,
+  /(?:יותר\s+(?:קל|טוב)|עדיף)\s+(?:ל\S+\s+)?בלעדיי?(?:$|[^א-ת])/u,
+  // Only at the end of a sentence: "...להיות פה יותר, בהייטק" is about work, not distress.
+  /לא\s+(?:רוצה|רוצים|רוצות)\s+להיות\s+(?:פה|כאן)\s+יותר(?=\s*(?:$|[.!?…]))/u,
+  /לא\s+(?:רוצה|רוצים|רוצות)\s+להיות\s+(?:בחיים|בעולם\s+הזה)/u,
   // English
   /\bsuicid(?:e|al)\b/i,
   /\bkill(?:ing)?\s+myself\b/i,

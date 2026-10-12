@@ -39,10 +39,20 @@ export function stripForeignScript(text: string): string {
   return text.replace(FOREIGN_SCRIPT_G, '');
 }
 
+/**
+ * The bot's own words, without what it quotes back from the person. A quoted
+ * line keeps the person's words as written (a client's "אתה", their own "מרגש"),
+ * so the quality checks below must not count it: in the P1-C1 test run of
+ * 2026-10-12 a quoted "אתה" sent two good turns back to the model.
+ */
+export function withoutQuotes(text: string): string {
+  return text.replace(/"[^"\n]*"|“[^”\n]*”|„[^“”\n]*[“”]|«[^»\n]*»/g, ' ');
+}
+
 /** A masculine "you" sent to a person who chose feminine forms. */
 export function hasGenderSlip(text: string, gender: 'f' | 'm'): boolean {
   if (gender !== 'f') return false;
-  return /(^|[\s"'(,.:;!?\-])אתה($|[\s"'),.:;!?\-])/u.test(text);
+  return /(^|[\s"'(,.:;!?\-])אתה($|[\s"'),.:;!?\-])/u.test(withoutQuotes(text));
 }
 
 /** Praise ban list (D14 item 4). The tool doesn't gush. */
@@ -66,7 +76,7 @@ export const PRAISE_BANNED = [
 ];
 
 export function hasPraise(text: string): boolean {
-  const lower = text.toLowerCase();
+  const lower = withoutQuotes(text).toLowerCase();
   return PRAISE_BANNED.some((w) => lower.includes(w));
 }
 

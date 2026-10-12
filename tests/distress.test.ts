@@ -82,6 +82,11 @@ describe('distress protocol', () => {
       'אין לי סיבה לחיות',
       'בא לי לפגוע בעצמי',
       'לפעמים אני חותכת את עצמי',
+      // P1-C1 test run 2026-10-12: layer 1 missed the first one
+      'לפעמים אני חושבת שלכולם יהיה יותר קל אם פשוט לא אהיה פה.',
+      'לכולם יהיה יותר טוב בלעדיי',
+      'אני לא רוצה להיות פה יותר.',
+      'אני לא רוצה להיות בחיים',
       'I want to die',
       "I don't want to live anymore",
       'thinking about suicide',
@@ -96,6 +101,11 @@ describe('distress protocol', () => {
       'אם לא אענה מהר, תאבד את הלקוח',
       'אני אף פעם לא אמצא לקוחות',
       'נמאס לי מהשיווק',
+      'אם לא אהיה פה מחר, אחזור אלייך בערב',
+      'אני לא רוצה להיות פה יותר, בהייטק. רוצה לעבור לטיפול',
+      'זה מוצר בלעדי שלי',
+      // left to layer 2 on purpose: on its own it is usually about the work
+      'אין טעם להמשיך עם הקמפיין הזה',
     ]) {
       expect(detectDistress(t), t).toBe(false);
     }
