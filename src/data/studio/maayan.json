@@ -1,0 +1,20 @@
+{
+  "slug": "maayan",
+  "name": "מעין",
+  "gender": "f",
+  "publicUrl": "https://messy-site-maayan.vercel.app/",
+  "ownerUrl": "https://messy-site-maayan.vercel.app/owner-6c43925ca8a7bb26630d67fc.html",
+  "round": 1,
+  "roundsIncluded": 2,
+  "heroLine": "להחזיר את מה שלא שלך למי שזה שייך.",
+  "sections": [
+    { "id": "hero", "title": "הפתיחה" },
+    { "id": "journey", "title": "לפני, בדרך ואחרי" },
+    { "id": "concepts", "title": "המושגים" },
+    { "id": "offer", "title": "שתי דלתות" },
+    { "id": "about", "title": "נעים להכיר" },
+    { "id": "faq", "title": "שאלות" },
+    { "id": "contact", "title": "לדבר איתי" }
+  ],
+  "lionelWhatsapp": ""
+}

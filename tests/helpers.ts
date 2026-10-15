@@ -1,5 +1,6 @@
 import { vi } from 'vitest';
 import { startSession, type Deps } from '@/lib/interview';
+import type { DeliveryKind } from '@/lib/delivery';
 import type { ModelRequest } from '@/lib/model';
 import { MemoryStore } from '@/lib/storage';
 import type { TranscriptMessage } from '@/lib/session';
@@ -22,7 +23,7 @@ export function makeDeps(outputs: (string | Error)[] = []) {
     if (next instanceof Error) throw next;
     return { text: next ?? '', stopReason: 'end_turn' };
   });
-  const deliver = vi.fn(async (kind: 'interview' | 'distress', payload: Record<string, unknown>) => {
+  const deliver = vi.fn(async (kind: DeliveryKind, payload: Record<string, unknown>) => {
     delivered.push({ kind, payload });
     return 'dry-run' as const;
   });

@@ -10,8 +10,11 @@ import { logError, logEvent } from './log';
 
 export type Fetcher = (url: string, init: RequestInit) => Promise<{ ok: boolean; status: number }>;
 
+/** What the webhook receives: an interview document, a distress stop, or a studio review round. */
+export type DeliveryKind = 'interview' | 'distress' | 'studio_round';
+
 export async function deliver(
-  kind: 'interview' | 'distress',
+  kind: DeliveryKind,
   payload: Record<string, unknown>,
   fetcher: Fetcher = fetch
 ): Promise<'sent' | 'dry-run' | 'failed' | 'not-configured'> {
