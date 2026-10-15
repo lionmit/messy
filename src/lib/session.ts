@@ -35,7 +35,7 @@ let devKey: Buffer | null = null;
 export function getSigningKey(): Buffer {
   const s = process.env.SESSION_SECRET;
   if (s && s.length >= 32) return Buffer.from(s, 'utf8');
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = (process.env.ANTHROPIC_API_KEY || process.env.GEMINI_API_KEY)?.trim();
   if (apiKey) {
     return createHmac('sha256', apiKey).update('messy-signing-key-v1').digest();
   }

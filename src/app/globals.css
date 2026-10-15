@@ -93,7 +93,7 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .loading-dot { animation: none !important; }
+  .loading-dot, .mic-btn-active { animation: none !important; }
 }
 
 /* ─── Premium Input ─── */
@@ -194,3 +194,40 @@ body {
   transform: scale(1.05);
 }
 .send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ─── Mic Button ─── */
+.mic-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+.mic-btn:hover:not(:disabled) {
+  border-color: var(--yellow);
+  color: var(--navy);
+  transform: scale(1.05);
+}
+.mic-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.mic-btn-active {
+  background: #FEF2F2 !important;
+  color: #DC2626 !important;
+  border-color: #F87171 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2), 0 0 12px rgba(239, 68, 68, 0.25) !important;
+  animation: micPulse 1.5s infinite ease-in-out;
+}
+
+@keyframes micPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+

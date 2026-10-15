@@ -14,7 +14,7 @@ import { buildDistressPayload, detectDistress, modelSignalledDistress } from './
 import { buildInterviewPayload, extractDocumentJson, normalizeDocument } from './doc';
 import { deliver as realDeliver } from './delivery';
 import { logError, logEvent } from './log';
-import { ModelNotConfiguredError, buildModelRequest, callAnthropic, type ModelCaller } from './model';
+import { ModelNotConfiguredError, buildModelRequest, callAnthropic, callModel, type ModelCaller } from './model';
 import { leaksSystemPrompt } from './prompt/guard';
 import { MinIntervalLimiter, SlidingWindowLimiter } from './rate-limit';
 import {
@@ -49,7 +49,7 @@ export interface Deps {
 }
 
 function defaultDeps(): Deps {
-  return { callModel: callAnthropic, store: getStore(), deliver: realDeliver };
+  return { callModel, store: getStore(), deliver: realDeliver };
 }
 
 const limiters = {
