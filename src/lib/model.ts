@@ -200,18 +200,12 @@ export function getActiveProvider(mode?: 'chat' | 'finish'): 'anthropic' | 'gemi
   if (explicit === 'anthropic' || explicit === 'gemini') return explicit;
 
   const hasAnthropic = Boolean(process.env.ANTHROPIC_API_KEY?.trim());
-  const hasGemini = Boolean(process.env.GEMINI_API_KEY?.trim());
-
-  // Smart Hybrid Routing:
-  // When both keys exist:
-  // - Finish (identity document synthesis) uses Claude Sonnet (Anthropic) for supreme creative quality / "Maayan" level
-  // - Chat (interview dialogue turns) uses Gemini Flash for fast (~1.5s), free conversational turns
-  if (hasAnthropic && hasGemini) {
-    return mode === 'finish' ? 'anthropic' : 'gemini';
-  }
   if (hasAnthropic) return 'anthropic';
+
+  const hasGemini = Boolean(process.env.GEMINI_API_KEY?.trim());
   if (hasGemini) return 'gemini';
-  return 'gemini';
+
+  return 'anthropic';
 }
 
 export const callModel: ModelCaller = async (req) => {
