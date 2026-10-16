@@ -4,9 +4,6 @@ import {
   CHIPS,
   DEFAULT_FIRST_LINE,
   DEFAULT_REPLY_LINE,
-  STEP_COUNT,
-  STUDIO_STEPS,
-  applyPatch,
   buildWaLink,
   displayIsraeliPhone,
   findIsraeliPhone,
@@ -16,8 +13,9 @@ import {
   parseStudioReply,
   thankYouMessage,
   validateStudioState,
+  type StudioState,
 } from '@/lib/studio/steps';
-import { buildStudioRequest, studioChatTurn, validateStudioMessages, resetStudioChatForTests } from '@/lib/studio/chat';
+import { studioChatTurn, resetStudioChatForTests } from '@/lib/studio/chat';
 import {
   buildStudioPayload,
   resetStudioSubmitForTests,
@@ -48,7 +46,7 @@ describe('Studio config (§2.1)', () => {
 
   it('publicStudioConfig fills lionelWhatsapp from environment', () => {
     const base = getStudioConfig('maayan')!;
-    const pub = publicStudioConfig(base, { LIONEL_WHATSAPP: '054-9998877' } as NodeJS.ProcessEnv);
+    const pub = publicStudioConfig(base, { LIONEL_WHATSAPP: '054-9998877' } as unknown as NodeJS.ProcessEnv);
     expect(pub.lionelWhatsapp).toBe('0549998877');
   });
 });
@@ -181,7 +179,7 @@ describe('Studio submit and payload contract (§2.5)', () => {
 
   it('buildStudioPayload generates exact contract keys expected by pipeline §3.2', () => {
     const config = getStudioConfig('maayan')!;
-    const state: any = {
+    const state: StudioState = {
       ...initialState(),
       step: 7,
       edits: [{ section: 'hero', from: 'from-text', to: 'to-text' }],
@@ -276,7 +274,13 @@ describe('Studio chat turn e2e execution (§2.3)', () => {
     expect(res.status).toBe(200);
     expect(mockCallModel).toHaveBeenCalledTimes(1);
 
-    const bodyRes = res.body as any;
+    interface StudioTurnSuccess {
+      step: number;
+      reply: string;
+      state: StudioState;
+      waPreview?: { number: string } | null;
+    }
+    const bodyRes = res.body as unknown as StudioTurnSuccess;
     expect(bodyRes.step).toBe(3);
     expect(bodyRes.reply).toContain('המספר נקלט מצוין');
     expect(bodyRes.state.whatsapp).toBe('972501234567');

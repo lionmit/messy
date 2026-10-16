@@ -62,7 +62,7 @@ export default function StudioClient({ config }: { config: StudioConfig }) {
   const store = getStudioStore(storeKey);
   const persisted = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getServerSnapshot);
 
-  const [activeTab, setActiveTab] = useState<'site' | 'chat'>('chat');
+  const [activeTab, setActiveTab] = useState<'site' | 'chat'>('site');
   const [frame, setFrame] = useState<'phone' | 'desktop'>('phone');
   const [view, setView] = useState<'owner' | 'public'>('owner');
   const [input, setInput] = useState('');
@@ -356,18 +356,18 @@ export default function StudioClient({ config }: { config: StudioConfig }) {
         </div>
 
         {/* Mobile Tabs (<1024px) */}
-        <div className="flex lg:hidden items-center bg-[#F4F1EA] p-0.5 rounded-lg text-xs">
+        <div className="flex lg:hidden items-center bg-[#F4F1EA] p-1 rounded-xl text-xs gap-1">
           <button
             type="button"
             onClick={() => setActiveTab('site')}
-            className={`px-3 py-1.5 rounded-md transition-all ${activeTab === 'site' ? 'bg-white shadow-xs font-semibold text-[#2C332D]' : 'text-[#7A7870]'}`}
+            className={`px-3.5 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-lg transition-all ${activeTab === 'site' ? 'bg-white shadow-xs font-semibold text-[#2C332D]' : 'text-[#7A7870]'}`}
           >
             👁️ האתר
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('chat')}
-            className={`px-3 py-1.5 rounded-md transition-all ${activeTab === 'chat' ? 'bg-white shadow-xs font-semibold text-[#2C332D]' : 'text-[#7A7870]'}`}
+            className={`px-3.5 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-lg transition-all ${activeTab === 'chat' ? 'bg-white shadow-xs font-semibold text-[#2C332D]' : 'text-[#7A7870]'}`}
           >
             💬 שיחה
           </button>
@@ -452,14 +452,14 @@ export default function StudioClient({ config }: { config: StudioConfig }) {
 
                 {/* Chips */}
                 {m.chips && m.chips.length > 0 && !isSubmitted && (
-                  <div className="flex flex-wrap gap-1.5 mt-2.5 max-w-[90%]">
+                  <div className="flex flex-wrap gap-2 mt-2.5 max-w-[90%]">
                     {m.chips.map((chip) => (
                       <button
                         key={chip}
                         type="button"
                         onClick={() => handleSend(chip)}
                         disabled={loading}
-                        className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
+                        className={`text-xs px-3.5 py-2.5 min-h-[44px] inline-flex items-center justify-center rounded-full border transition-all ${
                           chip === CHIPS.goLive
                             ? 'bg-[#C26747] text-white border-[#C26747] hover:bg-[#A9583B] font-medium'
                             : 'bg-white text-[#2C332D] border-[#DCD5C7] hover:border-[#5B6E58] hover:bg-[#FAF8F5]'
@@ -527,7 +527,7 @@ export default function StudioClient({ config }: { config: StudioConfig }) {
                   type="button"
                   onClick={toggleRecording}
                   title={isRecording ? 'הפסקת הקלטה' : 'הקלטה קולית'}
-                  className={`p-2.5 rounded-xl border transition-all ${
+                  className={`p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl border transition-all ${
                     isRecording
                       ? 'bg-red-500 text-white border-red-500 animate-pulse'
                       : 'bg-[#FAF8F5] text-[#5B6E58] border-[#DCD5C7] hover:border-[#5B6E58]'
@@ -540,7 +540,7 @@ export default function StudioClient({ config }: { config: StudioConfig }) {
                 <button
                   type="submit"
                   disabled={loading || !input.trim()}
-                  className="px-4 py-2.5 bg-[#5B6E58] text-white rounded-xl text-sm font-semibold hover:bg-[#4A5D47] disabled:opacity-40 transition-all shrink-0"
+                  className="px-4 py-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center bg-[#5B6E58] text-white rounded-xl text-sm font-semibold hover:bg-[#4A5D47] disabled:opacity-40 transition-all shrink-0"
                 >
                   שליחה
                 </button>
@@ -551,7 +551,7 @@ export default function StudioClient({ config }: { config: StudioConfig }) {
 
         {/* Site Preview Area: Desktop right flex-1 */}
         <div
-          className={`flex-1 h-full bg-[#EFE9DF] p-2 lg:p-6 flex items-center justify-center min-h-0 min-w-0 ${
+          className={`flex-1 h-full bg-[#EFE9DF] p-0 sm:p-2 lg:p-6 flex items-center justify-center min-h-0 min-w-0 ${
             activeTab === 'site' ? 'flex' : 'hidden lg:flex'
           }`}
         >

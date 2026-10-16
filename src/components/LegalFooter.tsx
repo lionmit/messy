@@ -3,7 +3,7 @@ import { FOOTER } from '@/content/copy';
 
 /** On every page (legal cover v1.1): privacy, terms, accessibility and "ביטול עסקה". Links hold 44 px. */
 export default function LegalFooter() {
-  const link = 'inline-flex items-center min-h-[44px] underline';
+  const link = 'inline-flex items-center justify-center min-h-[44px] min-w-[44px] underline';
   return (
     <footer lang="he" dir="rtl" className="px-5 py-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
       <div className="max-w-xl mx-auto flex flex-wrap gap-x-5">
