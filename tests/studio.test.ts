@@ -285,7 +285,7 @@ describe('Studio chat turn e2e execution (§2.3)', () => {
     expect(bodyRes.reply).toContain('המספר נקלט מצוין');
     expect(bodyRes.state.whatsapp).toBe('972501234567');
     expect(bodyRes.waPreview).not.toBeNull();
-    expect(bodyRes.waPreview.number).toBe('050-1234567');
+    expect(bodyRes.waPreview?.number).toBe('050-1234567');
   });
 });
 
