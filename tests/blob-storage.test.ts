@@ -103,7 +103,7 @@ describe('BlobStore (private Vercel Blob, mocked SDK)', () => {
 
     expect(await store.delete(rec.id)).toBe(true);
     expect(objects.has(recordPath(rec.id))).toBe(false);
-    expect(tombstoneOf(objects, rec.id)).toEqual({ id: rec.id, deletedAt: T0.toISOString(), reason: 'person' });
+    expect(tombstoneOf(objects, rec.id)).toEqual({ id: rec.id, deletedAt: T0.toISOString(), reason: 'person', email: 'dana@example.com' });
 
     expect(await store.delete(rec.id)).toBe(false);
     expect(await store.delete('not-an-id')).toBe(false);
@@ -125,7 +125,7 @@ describe('BlobStore (private Vercel Blob, mocked SDK)', () => {
     expect(await store.get(rec.id, new Date('2027-01-07T00:00:00Z'))).not.toBeNull();
     expect(await store.get(rec.id, T_EXPIRED)).toBeNull();
     expect(objects.has(recordPath(rec.id))).toBe(false);
-    expect(tombstoneOf(objects, rec.id)).toEqual({ id: rec.id, deletedAt: T_EXPIRED.toISOString(), reason: 'expiry' });
+    expect(tombstoneOf(objects, rec.id)).toEqual({ id: rec.id, deletedAt: T_EXPIRED.toISOString(), reason: 'expiry', email: 'dana@example.com' });
   });
 
   it('purgeExpired walks every page, removes only expired records and tombstones each one', async () => {

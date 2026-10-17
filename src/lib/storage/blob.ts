@@ -45,6 +45,12 @@ export interface Tombstone {
   id: string;
   deletedAt: string;
   reason: DeletionReason;
+  /**
+   * The address the person left, when the record had one. The pipeline needs it to delete the person's row in
+   * Lionel's sheet (the one copy outside this store); it deletes the tombstone right after, so the address outlives
+   * the record by one runner cycle at most.
+   */
+  email?: string;
 }
 
 /** The slice of the Vercel Blob SDK the store uses. Pathnames are exact. */
@@ -150,13 +156,15 @@ export class BlobStore implements InterviewStore {
     if (!isRecordId(id)) return false;
     const existed = await this.run('head_failed', () => this.api.exists(recordPath(id)));
     if (!existed) return false;
-    await this.remove(id, reason, new Date());
+    const text = await this.run('get_failed', () => this.api.getText(recordPath(id)));
+    const record = text === null ? null : parseRecord(text);
+    await this.remove(id, reason, new Date(), record?.email ?? null);
     return true;
   }
 
   /** Tombstone first, then the record: if the delete fails, a retry still finds the record. */
-  private async remove(id: string, reason: DeletionReason, now: Date): Promise<void> {
-    const tombstone: Tombstone = { id, deletedAt: now.toISOString(), reason };
+  private async remove(id: string, reason: DeletionReason, now: Date, email: string | null = null): Promise<void> {
+    const tombstone: Tombstone = { id, deletedAt: now.toISOString(), reason, ...(email ? { email } : {}) };
     await this.run('tombstone_failed', () => this.api.putJson(tombstonePath(id), JSON.stringify(tombstone)));
     await this.run('delete_failed', () => this.api.del([recordPath(id)]));
   }
@@ -174,7 +182,7 @@ export class BlobStore implements InterviewStore {
         const record = parseRecord(text);
         // Unreadable records expire too: nothing else could ever read them.
         if (record === null || isExpired(record, now)) {
-          await this.remove(id, 'expiry', now);
+          await this.remove(id, 'expiry', now, record?.email ?? null);
           n++;
         }
       }
