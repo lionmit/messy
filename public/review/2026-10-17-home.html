@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>MESSY · אישור עמוד הבית והעלאה לאוויר · 17.10.2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F9F6F0;
+    --surface: #FFFFFF;
+    --surface-card: #FCFAF7;
+    --ink: #2C2420;
+    --ink2: #5D544F;
+    --ink-muted: #8C827A;
+    --border: #E8E2D8;
+    --sig: #973B3C;
+    --sig-hover: #7D2D2E;
+    --accent: #5B6E58;
+    --accent-bg: #EEF3ED;
+    --warn: #C26747;
+    --warn-bg: #FBF0EB;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Assistant', 'Heebo', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    direction: rtl;
+    line-height: 1.6;
+    padding-bottom: 80px;
+  }
+  .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px;
+  }
+  header.review-head {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 0;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+  }
+  .review-head .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .badge-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+  }
+  h1 { font-size: 1.85rem; font-weight: 800; color: var(--ink); }
+  .subhead { color: var(--ink2); font-size: 1.05rem; }
+  .toolbar-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  .btn-primary { background: var(--sig); color: #FFF; }
+  .btn-primary:hover { background: var(--sig-hover); }
+  .btn-outline { background: var(--surface); color: var(--ink); border: 1.5px solid var(--border); }
+  .btn-outline:hover { border-color: var(--sig); color: var(--sig); }
+  .btn-accent { background: var(--accent); color: #FFF; }
+  .btn-accent:hover { opacity: 0.9; }
+
+  .sec-title {
+    font-size: 1.45rem;
+    font-weight: 800;
+    margin: 40px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sec-title span.num {
+    background: var(--sig);
+    color: #FFF;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+  }
+
+  /* Screenshots Section */
+  .shots-grid {
+    display: grid;
+    grid-template-columns: 390px 1fr;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 900px) {
+    .shots-grid { grid-template-columns: 1fr; }
+  }
+  .shot-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+  .shot-card-head {
+    padding: 12px 16px;
+    background: var(--surface-card);
+    border-bottom: 1px solid var(--border);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--ink2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .shot-img-wrap {
+    max-height: 600px;
+    overflow-y: auto;
+    background: #4A403A;
+    display: flex;
+    justify-content: center;
+  }
+  .shot-img-wrap img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Review Items Cards */
+  .items-list {
+    display: grid;
+    gap: 18px;
+  }
+  .item-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: all 0.2s ease;
+  }
+  .item-card.is-approved {
+    border-color: var(--accent);
+    background: #FAFDF9;
+  }
+  .item-card.is-modified {
+    border-color: var(--warn);
+    background: #FFFDFB;
+  }
+  .item-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .item-num-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .item-pill {
+    background: var(--sig);
+    color: #FFF;
+    font-weight: 800;
+    font-size: 0.9rem;
+    padding: 2px 10px;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+  .item-card.is-approved .item-pill { background: var(--accent); }
+  .item-card.is-modified .item-pill { background: var(--warn); }
+  .item-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .item-context {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+  }
+  .item-quote {
+    background: var(--surface-card);
+    border-right: 4px solid var(--sig);
+    padding: 12px 16px;
+    border-radius: 4px;
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin-bottom: 14px;
+    white-space: pre-wrap;
+  }
+  .item-controls {
+    display: grid;
+    gap: 10px;
+  }
+  .status-radios {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  .status-radios label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+  .radio-approve { color: var(--accent); }
+  .radio-modify { color: var(--warn); }
+  .item-edit-area {
+    display: none;
+    width: 100%;
+    min-height: 70px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--warn);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--ink);
+    background: #FFF;
+    resize: vertical;
+    direction: rtl;
+  }
+  .item-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  /* Structure Order */
+  .order-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .order-list {
+    list-style: decimal inside;
+    display: grid;
+    gap: 8px;
+    padding-right: 8px;
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  .order-list li {
+    padding: 6px 8px;
+    border-radius: 6px;
+  }
+  .order-list li:hover { background: var(--surface-card); }
+
+  /* Master Approve Box */
+  .master-box {
+    background: linear-gradient(135deg, #FAFDF9 0%, #EEF5ED 100%);
+    border: 2px solid var(--accent);
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+    margin-top: 48px;
+    box-shadow: 0 8px 32px rgba(91, 110, 88, 0.12);
+  }
+  .master-box h2 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .master-box p {
+    font-size: 1.1rem;
+    color: var(--ink2);
+    max-width: 650px;
+    margin: 0 auto 24px;
+  }
+  .master-btn {
+    font-size: 1.25rem;
+    padding: 16px 36px;
+    border-radius: 12px;
+    background: var(--accent);
+    color: #FFF;
+    border: none;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(91, 110, 88, 0.35);
+    transition: all 0.2s ease;
+  }
+  .master-btn:hover {
+    background: #475845;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(91, 110, 88, 0.45);
+  }
+
+  /* Toast Notification */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--ink);
+    color: #FFF;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.25s ease;
+    z-index: 1000;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<header class="review-head">
+  <div class="wrap">
+    <div>
+      <span class="badge-tag">MESSY · תצוגת אישור ופרודקשן</span>
+      <h1>עמוד הבית החדש — אישור נוסחים והעלאה לאוויר</h1>
+      <p class="subhead">כל הטקסטים והאיורים של הלילה (17.10.2026) מרוכזים כאן לאישור ליונל. כלום לא עולה לפרודקשן בלי אישורך.</p>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn btn-primary" id="btn-copy-all">📋 העתק את כל ההערות והאישורים</button>
+      <a class="btn btn-outline" href="https://messy-6mjkp674g-lionmit-7489s-projects.vercel.app" target="_blank" rel="noopener">🌐 פתח Preview חי (Vercel)</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- Section 1: Screenshots -->
+  <h2 class="sec-title"><span class="num">1</span> צילומי מסך מהשטח (Headless Chrome 390px & 1440px)</h2>
+  <div class="shots-grid">
+    <div class="shot-card">
+      <div class="shot-card-head">
+        <span>📱 מובייל 390px (רוחב טלפון)</span>
+        <small>0 גלישה · כפתורים בשורה אחת</small>
+      </div>
+      <div class="shot-img-wrap">
+        <img src="/review/home-390.webp" alt="צילום מסך מובייל 390">
+      </div>
+    </div>
+    <div class="shot-card">
+      <div class="shot-card-head">
+        <span>💻 דסקטופ 1440px (רוחב מחשב מלא)</span>
+        <small>קונטרסט ≥ 4.5:1 · פלטת חול וטרקוטה</small>
+      </div>
+      <div class="shot-img-wrap">
+        <img src="/review/home-1440.webp" alt="צילום מסך דסקטופ 1440">
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Every Hebrew Line Pending Approval -->
+  <h2 class="sec-title"><span class="num">2</span> שורות תוכן וניסוחים לאישור (14 שורות ממוספרות)</h2>
+  <p style="color:var(--ink2); margin-bottom: 20px;">כל שורה כאן ניתנת לאישור ישיר או לעריכה. לחיצה על "שלח במייל" פותחת טיוטה מיידית לליונל, ובסיום ניתן להעתיק את הכל בלחיצה אחת:</p>
+
+  <div class="items-list" id="items-container">
+    <!-- Lines generated via script and template -->
+  </div>
+
+  <!-- Section 3: Structure and Section Order -->
+  <h2 class="sec-title"><span class="num">3</span> סדר המקטעים וסדר השאלות הנפוצות</h2>
+  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+    <div class="order-card">
+      <h3 style="margin-bottom:12px; font-weight:700;">סדר המקטעים בעמוד הבית (10 מקטעים):</h3>
+      <ol class="order-list">
+        <li><b>הדר ופתיח:</b> לוגו MESSY וכפתור "להתחיל שיחה"</li>
+        <li><b>גיבור (Hero):</b> כותרת ראשית, הבטחה ברורה ואיור משיחה לאתר</li>
+        <li><b>למי זה מתאים:</b> שלושה חיצים ממוקדים לעצמאיות ועצמאיים</li>
+        <li><b>למה שיחה (WHY):</b> שלוש סיבות עמוקות למה שיחה עובדת + דיוקן ליונל</li>
+        <li><b>לפני ואחרי:</b> איור בחדר מול החוצה וההבדל בין השיחה להצגה</li>
+        <li><b>איך זה עובד:</b> רצועת 3 השלבים (שיחה -> תצוגה -> אוויר) ורכבת התהליך</li>
+        <li><b>מה מקבלים ומחיר:</b> כרטיס 99 ₪ עם פירוט החבילה וזמן העלייה לאוויר</li>
+        <li><b>פרטיות ומחיקה:</b> התחייבות להצפנה מלאה וקישור למחיקה עצמית</li>
+        <li><b>שאלות נפוצות (FAQ):</b> 3 השאלות המהותיות (עריכה, דומיין, והקאץ')</li>
+        <li><b>סגירה וקריאה לפעולה:</b> איור הלקוחה מוצאת אותה וכפתור שיחה</li>
+      </ol>
+    </div>
+    <div class="order-card">
+      <h3 style="margin-bottom:12px; font-weight:700;">סדר השאלות הנפוצות (FAQ):</h3>
+      <ol class="order-list">
+        <li><b>אפשר לשנות טקסטים אחרי שהאתר עלה?</b> (תשובה: בעמוד הבעלים, 2 סבבים כלולים)</li>
+        <li><b>יש לי כבר דומיין. אפשר לחבר אותו?</b> (תשובה: הפניה עצמית לפי מדריך או ליונל)</li>
+        <li><b>מה הקאץ'? למה המחיר כזה ומה קורה בהמשך?</b> (תשובה: מחיר מייסדים + זמני עלייה)</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Section 4: Master Box -->
+  <div class="master-box" id="master-box">
+    <h2>🎯 אישור כולל להעלאה לפרודקשן</h2>
+    <p>בלחיצה על הכפתור למטה, נשלח אישור מלא להעלאת ה-Preview הנבדק לכתובת הרשמית <b>messy.lionelmitelpunkt.com</b> עם בדיקות Smoke מלאות.</p>
+    <button class="master-btn" id="btn-master-approve">✅ מאשר הכל, להעלות לאוויר!</button>
+  </div>
+
+</main>
+
+<div class="toast" id="toast">הועתק ללוח בהצלחה ✓</div>
+
+<script>
+  var itemsData = [
+    {
+      id: 1,
+      title: "כותרת עמוד ראשית (<title>)",
+      context: "מופיעה בלשונית הדפדפן ובתוצאות חיפוש",
+      text: "MESSY · שיחה · אתר · דיוק"
+    },
+    {
+      id: 2,
+      title: "תיאור העמוד (Meta Description)",
+      context: "תקציר העמוד עבור מנועי חיפוש ושיתוף קישורים",
+      text: "שיחה אחת של 20 עד 40 דקות, בלי לכתוב שורת קוד. האתר של העסק שלך באוויר."
+    },
+    {
+      id: 3,
+      title: "שלוש שורות הלמה (WHY) במקטע השיחה",
+      context: "המילים המובילות ליד דיוקנו של ליונל",
+      text: "1. לבנות לבד זה להיתקע מול מסך ריק. שיחה מחלצת את מה שבאמת יש לך להגיד.\n2. אתר צריך להביא פניות מאנשים שמתאימים לך, לא להתפזר על כל העולם.\n3. הדיוק קורה תוך כדי עבודה, מול גרסה אמיתית שעומדת באוויר."
+    },
+    {
+      id: 4,
+      title: "שורת הפרטיות והמחיקה מתחת לפתיח / WHY",
+      context: "הבטחת הפרטיות במבט ראשון",
+      text: "השיחה נשמרת באופן מוצפן ולא מועברת לשום גורם מסחרי. אפשר למחוק את כל המידע בכל רגע בלחיצה אחת."
+    },
+    {
+      id: 5,
+      title: "שורות זמן השיחה (20 עד 40 דקות)",
+      context: "מופיעות בתגית מעל הגיבור ובפירוט השלבים",
+      text: "שיחה אחת, בערך 20 עד 40 דקות. בלי שאלונים ארוכים ובלי לנסח בעצמך."
+    },
+    {
+      id: 6,
+      title: "ספייס שלב 2 ברכבת השלבים (Step-2 Splice)",
+      context: "ההבטחה לשלב התצוגה המקדימה",
+      text: "תוך יומיים מגיעה תצוגה מקדימה מלאה של האתר שלך לקריאה, לאישור ולסבבי דיוק."
+    },
+    {
+      id: 7,
+      title: "שורת חידוש אחסון (49 ₪ לשנה)",
+      context: "בכרטיס המחיר תחת פירוט האחסון הכלול",
+      text: "האחסון כלול לשנה שלמה. חידוש אחסון לשנה נוספת: 49 ₪ בלבד (ללא התחייבות)."
+    },
+    {
+      id: 8,
+      title: "תשובת FAQ: עריכת טקסטים אחרי עלייה לאוויר",
+      context: "מענה על שינויים וסבבי דיוק",
+      text: "עריכת טקסטים נעשית בעמוד הבעלים האישי שלך, לצד כל חלק או בצ'אט. שני סבבי תיקון כלולים בחבילה גם אחרי שהאתר באוויר. סבב שלישי ומעלה הוא מפגש דיוק."
+    },
+    {
+      id: 9,
+      title: "תשובת FAQ: חיבור דומיין עצמאי",
+      context: "המענה למי שכבר רכש דומיין פרטי",
+      text: "כן. מפנים אותו לכתובת של האתר לפי מדריך קצר, ואם מסתבכים כותבים לליונל והוא מחבר."
+    },
+    {
+      id: 10,
+      title: "שורת זמן העלייה לאוויר (Paid Timing)",
+      context: "החלטת ליונל: מופיעה בכרטיס התשלום ובתשובת הקאץ'",
+      text: "אחרי התשלום ליונל מאשר, ובדרך כלל האתר באוויר תוך שעות. לכל היותר 48 שעות."
+    },
+    {
+      id: 11,
+      title: "שורת מפגש דיוק נוסף (450 ₪)",
+      context: "שורה שקטה בכרטיס התשלום",
+      text: "מפגש דיוק אישי של שעה וחצי עם ליונל לעבודה עמוקה על ההצעה והמסרים: 450 ₪ (אופציונלי)."
+    },
+    {
+      id: 12,
+      title: "נוסח עמוד מחיקה עצמית (/delete)",
+      context: "הצהרת השירות העצמי למחיקה מלאה",
+      text: "מחיקת כל הנתונים והשיחות שלך משרתי MESSY לצמיתות. המחיקה בלתי הפיכה."
+    },
+    {
+      id: 13,
+      title: "נוסח אישור וקבלה על מחיקה (Receipt)",
+      context: "האישור שמוצג אחרי ביצוע מחיקה",
+      text: "אישור מחיקה: כל הנתונים, השיחה והאתר נמחקו לצמיתות ממאגרי המערכת."
+    },
+    {
+      id: 14,
+      title: "טקסטים חלופיים (Alt Texts) לאיורים החדשים",
+      context: "איורי המוצר והדיוקן",
+      text: "• משיחה לאתר: המילים שלך הופכות לדף ברור שמביא פניות\n• בחדר מול החוצה: מה שמובן מאליו בפגישה מקבל מקום ברור באתר\n• שלושת השלבים: שיחה, תצוגה מקדימה, ועלייה לאוויר\n• עריכה ודיוק בשיחה: תיקון מילים ושינויים ישירות מתוך הדף\n• מה מקבלים: אתר מלא, טקסטים מדויקים, קבצים ואחסון לשנה\n• לשלוח קישור בביטחון: דף שמדבר בדיוק כמוך\n• הלקוחה מוצאת אותה: פנייה מאדם שמבין בדיוק מה מקבלים\n• ליונל מיטלפונקט, בונה MESSY"
+    }
+  ];
+
+  var container = document.getElementById('items-container');
+  var toast = document.getElementById('toast');
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(function () { toast.classList.remove('show'); }, 2500);
+  }
+
+  itemsData.forEach(function (item) {
+    var card = document.createElement('div');
+    card.className = 'item-card is-approved';
+    card.id = 'item-card-' + item.id;
+
+    card.innerHTML = 
+      '<div class="item-header">' +
+        '<div class="item-num-title">' +
+          '<span class="item-pill" id="pill-' + item.id + '">#' + item.id + '</span>' +
+          '<div>' +
+            '<div class="item-title">' + item.title + '</div>' +
+            '<div class="item-context">' + item.context + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="status-radios">' +
+          '<label class="radio-approve">' +
+            '<input type="radio" name="status-' + item.id + '" value="approve" checked onchange="toggleItem(' + item.id + ', false)">' +
+            'מאשר ✓' +
+          '</label>' +
+          '<label class="radio-modify">' +
+            '<input type="radio" name="status-' + item.id + '" value="modify" onchange="toggleItem(' + item.id + ', true)">' +
+            'לתקן ✏️' +
+          '</label>' +
+        '</div>' +
+      '</div>' +
+      '<div class="item-quote">' + item.text + '</div>' +
+      '<div class="item-controls">' +
+        '<textarea class="item-edit-area" id="edit-' + item.id + '" placeholder="הקלד כאן את התיקון המדויק לשורה זו...">' + item.text + '</textarea>' +
+        '<div class="item-actions">' +
+          '<button class="btn btn-outline" style="font-size:0.85rem; padding:6px 12px;" onclick="sendMailItem(' + item.id + ')">✉️ שלח הערה זו במייל</button>' +
+        '</div>' +
+      '</div>';
+
+    container.appendChild(card);
+  });
+
+  window.toggleItem = function (id, isModify) {
+    var card = document.getElementById('item-card-' + id);
+    var editArea = document.getElementById('edit-' + id);
+    if (isModify) {
+      card.classList.remove('is-approved');
+      card.classList.add('is-modified');
+      editArea.style.display = 'block';
+    } else {
+      card.classList.remove('is-modified');
+      card.classList.add('is-approved');
+      editArea.style.display = 'none';
+    }
+  };
+
+  window.sendMailItem = function (id) {
+    var item = itemsData.find(function (x) { return x.id === id; });
+    var editArea = document.getElementById('edit-' + id);
+    var isMod = document.querySelector('input[name="status-' + id + '"]:checked').value === 'modify';
+    var textVal = isMod ? editArea.value : 'מאושר כלשונו: ' + item.text;
+    var subject = encodeURIComponent('הערה שורה #' + id + ' · ' + item.title);
+    var body = encodeURIComponent(textVal);
+    window.location.href = 'mailto:lionmit@gmail.com?subject=' + subject + '&body=' + body;
+  };
+
+  function buildAllSummary() {
+    var summary = ['=== אישור עמוד הבית MESSY · 17.10.2026 ===\n'];
+    itemsData.forEach(function (item) {
+      var isMod = document.querySelector('input[name="status-' + item.id + '"]:checked').value === 'modify';
+      var editArea = document.getElementById('edit-' + item.id);
+      if (isMod) {
+        summary.push('❌ שורה #' + item.id + ' (' + item.title + ') — לתקן:');
+        summary.push(editArea.value + '\n');
+      } else {
+        summary.push('✅ שורה #' + item.id + ' (' + item.title + ') — מאושר');
+      }
+    });
+    summary.push('\nסדר מקטעים: מאושר');
+    summary.push('סדר FAQ: מאושר');
+    return summary.join('\n');
+  }
+
+  document.getElementById('btn-copy-all').addEventListener('click', function () {
+    var full = buildAllSummary();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(full).then(function () {
+        showToast('כל ההערות והאישורים הועתקו ללוח ✓');
+      });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = full;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('כל ההערות והאישורים הועתקו ללוח ✓');
+    }
+  });
+
+  document.getElementById('btn-master-approve').addEventListener('click', function () {
+    var full = buildAllSummary() + '\n\nמאשר הכל, להעלות לאוויר!';
+    var subject = encodeURIComponent('מאשר הכל, להעלות לאוויר · MESSY 17.10.2026');
+    var body = encodeURIComponent(full);
+    window.location.href = 'mailto:lionmit@gmail.com?subject=' + subject + '&body=' + body;
+  });
+</script>
+
+</body>
+</html>
