@@ -25,12 +25,9 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Assistant } from 'next/font/google';
 import { AI_LINE_TRUE_TODAY, CONSENT, FINISH, READING_LINE, priceLine } from '@/content/copy';
 import { PRICES, goLivePrice } from '@/content/prices';
 import './landing.css';
-
-const assistant = Assistant({ subsets: ['hebrew', 'latin'], weight: ['400', '600', '700'], variable: '--font-assistant' });
 
 type Lang = 'he' | 'en';
 
@@ -363,7 +360,7 @@ export default function LandingPageContent() {
   const isHe = lang === 'he';
 
   return (
-    <div className={`lp ${assistant.variable}`} dir={isHe ? 'rtl' : 'ltr'} lang={lang}>
+    <div className="lp" dir={isHe ? 'rtl' : 'ltr'} lang={lang}>
       <header className="hdr">
         <div className="wrap hdr-in">
           <Link href="/" className="brand" aria-label="MESSY">
