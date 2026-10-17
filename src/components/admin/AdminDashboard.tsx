@@ -42,6 +42,12 @@ function canRelease(p: PersonView): boolean {
   return !p.pendingCommands.some((c) => c.action === 'release');
 }
 
+/** "התקבל תשלום": once per person, never for a deleted one, disabled once the slug shows a payment. */
+function canMarkPaid(p: PersonView): boolean {
+  if (p.tombstoned || p.paid) return false;
+  return !p.pendingCommands.some((c) => c.action === 'paid');
+}
+
 async function readError(res: Response): Promise<string> {
   if (res.status === 401) return ADMIN.unauthorized;
   if (res.status === 503) return ADMIN.noStore;
@@ -179,6 +185,7 @@ function PersonCard({ person }: { person: PersonView }) {
 
   const busy = row.kind === 'busy';
   const releaseOk = canRelease(person) && !pending.includes('release');
+  const paidOk = canMarkPaid(person) && !pending.includes('paid');
   const classes = ['admin-card', person.tombstoned ? 'is-tombstoned' : '', person.held ? 'is-held' : ''].filter(Boolean).join(' ');
 
   return (
@@ -255,6 +262,9 @@ function PersonCard({ person }: { person: PersonView }) {
       <div className="admin-actions">
         <button type="button" className="admin-btn admin-btn-primary" disabled={!releaseOk || busy} onClick={() => void send('release')}>
           {busy && row.action === 'release' ? t.busy : t.release}
+        </button>
+        <button type="button" className="admin-btn" disabled={!paidOk || busy} onClick={() => void send('paid')}>
+          {busy && row.action === 'paid' ? t.busy : t.markPaid}
         </button>
         <button
           type="button"

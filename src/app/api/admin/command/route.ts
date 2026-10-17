@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 const noStore = { 'Cache-Control': 'no-store' };
 
 /**
- * POST /api/admin/command {action: "release" | "purge", slug}
+ * POST /api/admin/command {action: "release" | "purge" | "paid", slug}
  * Writes pipeline/_commands/<time>-<action>-<slug>.json for the runner. 20 per IP per 10 minutes.
  * The slug is never logged.
  */

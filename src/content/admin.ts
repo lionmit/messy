@@ -53,6 +53,7 @@ export const ADMIN = {
       none: 'לא נשלח',
     },
     release: 'לשחרר',
+    markPaid: 'התקבל תשלום',
     purge: 'למחוק',
     confirmPurge: (name: string) => `למחוק את כל מה שיש על ${name}? זה כולל את האתר, הקבצים והרשומה. אי אפשר לבטל.`,
     confirmYes: 'כן, למחוק',
@@ -62,6 +63,7 @@ export const ADMIN = {
     pendingTag: {
       release: 'שחרור ממתין',
       purge: 'מחיקה ממתינה',
+      paid: 'רישום התשלום ממתין',
     },
     busy: 'רושם',
   },

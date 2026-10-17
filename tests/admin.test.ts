@@ -280,6 +280,19 @@ describe('POST /api/admin/command', () => {
     expect(file).not.toContain(':');
   });
 
+  it('"paid" (התקבל תשלום) writes the same file shape as release, and the overview lists it as pending', async () => {
+    const { api, objects } = fixtureStore();
+    setAdminBlobApiForTests(api);
+    const res = await post({ action: 'paid', slug: SLUG_A });
+    expect(res.status).toBe(200);
+    const file = `pipeline/_commands/2026-10-17T09-30-00.000Z-paid-${SLUG_A}.json`;
+    expect(await res.json()).toEqual({ ok: true, file });
+    expect(JSON.parse(objects.get(file)!)).toEqual({ action: 'paid', slug: SLUG_A, id: ID_A, requestedAt: '2026-10-17T09:30:00.000Z', by: 'admin' });
+    expect(parseCommandPathname(file)).toEqual({ requestedAt: '2026-10-17T09:30:00.000Z', action: 'paid', slug: SLUG_A });
+    const o = await buildOverview(api, T0);
+    expect(o.people[0].pendingCommands.map((c) => c.action)).toEqual(['release', 'paid']);
+  });
+
   it('rejects a bad action, a bad slug and a non-object body', async () => {
     const { api, objects } = fixtureStore();
     setAdminBlobApiForTests(api);
