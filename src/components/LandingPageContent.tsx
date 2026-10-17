@@ -7,7 +7,7 @@
  * Section order (2026-10-17, after three persona walks: Dana the phone reader suspicious of AI,
  * Noa who built her own Wix site, Yoav who asks who reads what): what is this · is it for me ·
  * why, in Lionel's voice · what you get (the demo) · how long and what it asks · what it costs
- * and when · who reads what and how to delete · the three questions left · close.
+ * and when · who reads what and how to delete · the five questions left (technical, the catch, when live, editing, domain) · close.
  * The FAQ holds only questions the page does not answer on its own.
  *
  * Copy sources, line by line, are marked in the `t` object:
@@ -18,7 +18,8 @@
  * The gated sentence about the questions being built on the way Lionel listens is not here (not allowed yet).
  * Every line is gender-neutral (infinitives, "מי ש", past tense); no dashes, no dot-forms, no superlatives.
  *
- * Images: MESSY's own illustrations (watercolour and ink: the mountain, the base camp, the path), 2026-10-17.
+ * Images: MESSY's own illustrations, set 2 (2026-10-17): the product from the user's side, her chat becoming a
+ * document, the document becoming her page, editing by chat, the link being sent, a client finding her site.
  * Lionel's sticker figure appears once, in a small portrait frame beside the maker line in the WHY block.
  */
 import { useState } from 'react';
@@ -41,6 +42,7 @@ interface FaqItem {
   a: readonly string[];
   list?: readonly string[];
   link?: { label: string; href: string; before?: string };
+  img?: { src: string; width: number; height: number };
 }
 interface Copy {
   header: { maker: string; cta: string; langHe: string; langEn: string };
@@ -57,14 +59,14 @@ interface Copy {
   how: { heading: string; steps: readonly { t: string; b: string }[] };
   offer: {
     heading: string; freeHeading: string; free: readonly string[]; paidHeading: string; outcome: string; includedTitle: string;
-    paid: readonly string[]; priceHeading: string; amount: string; golive: string; renewal: string; founding: string | null; cta: string;
+    paid: readonly string[]; priceHeading: string; amount: string; golive: string; liveWhen: string; renewal: string; founding: string | null; cta: string;
     refund: string; money: { before: string; link: string; after: string }; invoice: string;
   };
   privacy: { heading: string; lines: readonly string[]; link: { label: string; href: string } };
   faq: { heading: string; items: readonly FaqItem[]; qLink: { before: string; label: string; href: string } };
   close: { cta: string; priceLine: string; lane2: { label: string; tail: string } };
   foot: string;
-  art: { hero: string; room: string; together: string; before: string; after: string; stages: string; lantern: string };
+  art: { hero: string; roomOutside: string; stages: string; editing: string; whatYouGet: string; sending: string; client: string };
 }
 
 const t: Record<Lang, Copy> = {
@@ -150,6 +152,7 @@ const t: Record<Lang, Copy> = {
       priceHeading: 'כמה זה עולה?', // deck:s1_price_heading
       amount: `${goLivePrice()} ₪`,
       golive: `להעלות את האתר לאוויר, רק אם רוצים: ${goLivePrice()} ₪ כולל מע"מ בתשלום אחד, עם שנה של אחסון.`, // deck:s4_golive_line
+      liveWhen: 'אחרי התשלום ליונל מאשר, ובדרך כלל האתר באוויר תוך שעות. לכל היותר 48 שעות.', // Lionel 2026-10-17, approved
       renewal: 'אחר כך 49 ₪ לשנה כולל מע"מ, או לקחת את הקבצים.', // deck:s1_hosting_line (r5b), without its first sentence
       founding: PRICES.founding_open
         ? `מחיר השקה ל־20 האתרים הראשונים, בתמורה למשוב כתוב. אחר כך ${PRICES.golive_list_price} ₪ כולל מע"מ.` // deck:s1_founding_line (r5b)
@@ -191,11 +194,23 @@ const t: Record<Lang, Copy> = {
           ],
         },
         {
+          q: 'שילמתי. מתי האתר באוויר?', // deck:s1_faq_q 5
+          a: ['אחרי התשלום ליונל מאשר, ובדרך כלל האתר באוויר תוך שעות. לכל היותר 48 שעות.'], // Lionel 2026-10-17, approved
+        },
+        {
           q: 'אפשר לשנות טקסטים אחרי שהאתר עלה?', // deck:s1_faq_q 7
+          // Lionel 2026-10-17: deck:a_edit (11.10) is no longer true. The owner page takes comments beside each part or in
+          // the chat, two rounds are included, also after go-live; a third round is the דיוק session.
           a: [
-            'עוד אי אפשר לערוך את הטקסטים לבד. זה בהכנה ועדיין לא חלק ממה שמשלמים עליו.', // deck:a_edit
-            'מה שכן: רואים את האתר בתצוגה מקדימה פרטית לפני שמשלמים, ואפשר לבקש סבב תיקונים.', // NEW (from deck:how3_b + deck:refund_line)
+            'כן. השינויים נעשים בדף האישי של האתר: אם משהו לא נכון או לא נשמע כמוך, כותבים אותו שם, בתיבה שליד אותו חלק או בצ\'אט.', // NEW: hebrew.py preview mail line, neutral form, plus the chat
+            'יש שני סבבי הערות. אחרי כל סבב תעלה גרסה מתוקנת, גם אחרי שהאתר כבר באוויר. סבב שלישי לא כלול.', // hebrew.py rounds + no_more lines, with "גם אחרי שהאתר כבר באוויר" NEW
+            'אם רוצים עוד שינויים אחרי זה, אפשר לעבוד על זה יחד עם ליונל בפגישת דיוק, אחד על אחד.', // NEW: hebrew.py "fixed" mail line, neutral form, with the session's name
           ],
+          img: { src: '/editing-by-chat.webp', width: 1200, height: 896 },
+        },
+        {
+          q: 'יש לי כבר דומיין. אפשר לחבר אותו?', // Lionel 2026-10-17, approved
+          a: ['כן. מפנים אותו לכתובת של האתר לפי מדריך קצר, ואם מסתבכים כותבים לליונל והוא מחבר.'], // Lionel 2026-10-17, approved
         },
       ],
       qLink: { before: 'יש שאלה לפני? ', label: 'לכתוב לי כאן', href: mailto('שאלה על MESSY') }, // deck:s1_question_link
@@ -207,14 +222,14 @@ const t: Record<Lang, Copy> = {
     },
     foot: 'נבנה על ידי ליונל מיטלפונקט', // deck:maker_line
     art: {
-      // NEW (alt texts, short, no names). MESSY's own illustrations: the mountain, the base camp, the path.
-      hero: 'איור בצבעי מים: שתי דמויות על שביל שעולה ממחנה אוהלים אל פסגה בערפל, אחת מצביעה על הדרך.',
-      room: 'חדר טיפולים חם, נראה דרך דלת פתוחה ממסדרון בהיר.',
-      together: 'שני אנשים הולכים יחד על שביל בהרים, ומחנה בסיס לפניהם.',
-      before: 'דמות לבד ליד שולחן בלילה, קווים מסתבכים עולים מהמחשב.',
-      after: 'דמות יושבת למנוחה מתחת לרכס, ומחנה האוהלים כבר נראה למטה.',
-      stages: 'שביל מאוהל, דרך שלושה גלעדי אבנים, אל בית קטן עם דלת פתוחה.',
-      lantern: 'דמות יוצאת מהחדר עם פנס ביד, אל שביל בגינה.',
+      // NEW (alt texts, short, the product moment from the user's side). MESSY's own illustrations, set 2 (2026-10-17).
+      hero: 'אישה ליד שולחן עם טלפון ביד: בועות השיחה שלה זורמות אל דף אתר אחד במחשב.',
+      roomOutside: 'שני צדדים: בחדר, שיחה פתוחה עם מטופלת. בבית בלילה, לבד מול מסך ריק.',
+      stages: 'מימין לשמאל: שיחה בטלפון, דף מסמך, ואתר במחשב ובטלפון.',
+      editing: 'על הספה עם טאבלט: סימוני עיפרון על דף האתר ובועת צ\'אט לידו.',
+      whatYouGet: 'מלמעלה: המסמך על השולחן, ולידו טלפון עם האתר.',
+      sending: 'שתי נשים בבית קפה, אחת מראה לשנייה את האתר שלה בטלפון.',
+      client: 'באוטובוס: לקוחה מביטה באתר בטלפון, אצבע מעל הכפתור, ודלת הקליניקה נראית מהחלון.',
     },
   },
   en: {
@@ -282,6 +297,7 @@ const t: Record<Lang, Copy> = {
       priceHeading: 'How much does it cost?',
       amount: `${goLivePrice()} ₪`,
       golive: `Putting the site live, only if you want to: ${goLivePrice()} ₪ incl. VAT, one payment, with a year of hosting.`,
+      liveWhen: 'After payment Lionel approves, and the site is usually live within hours. At most 48 hours.',
       renewal: 'After that 49 ₪ a year incl. VAT, or take your files.',
       founding: PRICES.founding_open ? `Launch price for the first 20 sites, in return for written feedback. After that ${PRICES.golive_list_price} ₪ incl. VAT.` : null,
       cta: 'Start the conversation',
@@ -309,7 +325,17 @@ const t: Record<Lang, Copy> = {
           a: ['The conversation, the document and the preview are free. You pay only if you want the site live.', 'Worth knowing before you start:'],
           list: [`Includes ${PRICES.hosting_months_included} months of hosting. After that 49 ₪ a year incl. VAT, or take your files.`, 'An email address is needed to send you the link to the site.', 'The line "Built with MESSY" sits at the bottom of the site from the start. Once live, you can ask to remove it any time.'],
         },
-        { q: 'Can I change texts after the site is live?', a: ['Editing the texts yourself is not possible yet. It is in preparation and not part of what you pay for.', 'What you do get: you see the site in a private preview before paying, and you can ask for a round of fixes.'] },
+        { q: 'I paid. When is the site live?', a: ['After payment Lionel approves, and the site is usually live within hours. At most 48 hours.'] },
+        {
+          q: 'Can I change texts after the site is live?',
+          a: [
+            'Yes. Changes happen on your personal site page: if something is wrong or does not sound like you, write it there, in the box beside that part or in the chat.',
+            'Two comment rounds are included. After each round a corrected version goes up, also once the site is live. A third round is not included.',
+            'If you want more changes after that, you can work on it with Lionel in a one-to-one precision session.',
+          ],
+          img: { src: '/editing-by-chat.webp', width: 1200, height: 896 },
+        },
+        { q: 'I already have a domain. Can I connect it?', a: ['Yes. You point it at the site\'s address with a short guide, and if it gets complicated you write to Lionel and he connects it.'] },
       ],
       qLink: { before: 'A question first? ', label: 'Write me here', href: mailto('A question about MESSY') },
     },
@@ -320,13 +346,13 @@ const t: Record<Lang, Copy> = {
     },
     foot: 'Built by Lionel Mitelpunkt',
     art: {
-      hero: 'Watercolour: two figures on a path climbing from a tent camp towards a summit in mist, one pointing the way.',
-      room: 'A warm practice room seen through its open door from a pale corridor.',
-      together: 'Two people walking the same mountain trail, a base camp ahead.',
-      before: 'A figure alone at a desk at night, tangled lines rising from the laptop.',
-      after: 'A figure resting below the ridge, the tent camp already in sight.',
-      stages: 'A path from a tent, past three stone cairns, to a small house with an open door.',
-      lantern: 'A figure leaving the room with a lantern, onto a garden path.',
+      hero: 'A woman at her table, phone in hand: her chat bubbles flow into a one-page site on the laptop.',
+      roomOutside: 'Two sides: in the room, an easy conversation with a client. At home at night, alone in front of a blank screen.',
+      stages: 'Right to left: the chat on the phone, the document, the site on laptop and phone.',
+      editing: 'On the sofa with a tablet: pencil marks on the site page and a chat bubble beside it.',
+      whatYouGet: 'From above: the document on the table, and beside it a phone with the site.',
+      sending: 'Two women at a cafe, one showing the other her site on the phone.',
+      client: 'On the bus: a client looking at the site on her phone, a finger over the button, the clinic door through the window.',
     },
   },
 };
@@ -382,7 +408,7 @@ export default function LandingPageContent() {
               </div>
             </div>
             <figure className="art hero-art">
-              <Image src="/hero-basecamp.webp" alt={c.art.hero} width={1376} height={768} priority sizes="(min-width: 900px) 50vw, 100vw" />
+              <Image src="/hero-words-to-page.webp" alt={c.art.hero} width={1376} height={768} priority sizes="(min-width: 900px) 50vw, 100vw" />
             </figure>
           </div>
           <div className="wrap">
@@ -418,9 +444,6 @@ export default function LandingPageContent() {
                 </ul>
               </div>
             </div>
-            <figure className="art fit-art">
-              <Image src="/in-the-room.webp" alt={c.art.room} width={1200} height={896} sizes="(min-width: 900px) 40vw, 100vw" />
-            </figure>
           </div>
         </section>
 
@@ -449,7 +472,7 @@ export default function LandingPageContent() {
               </div>
             </div>
             <figure className="art why-art">
-              <Image src="/together-on-the-trail.webp" alt={c.art.together} width={1200} height={896} sizes="(min-width: 900px) 40vw, 100vw" />
+              <Image src="/sending-the-link.webp" alt={c.art.sending} width={1200} height={896} sizes="(min-width: 900px) 40vw, 100vw" />
             </figure>
           </div>
         </section>
@@ -463,24 +486,23 @@ export default function LandingPageContent() {
               </h2>
               <p className="muted">{c.demo.intro}</p>
             </div>
-            <div className="ba">
-              <div className="ba-half">
-                <div className="ba-pic">
-                  <Image src="/alone-at-the-desk.webp" alt={c.art.before} width={1200} height={896} sizes="(min-width: 900px) 50vw, 100vw" />
+            <div className="proof-grid">
+              <figure className="art proof-art">
+                <Image src="/in-the-room-vs-outside.webp" alt={c.art.roomOutside} width={1200} height={896} sizes="(min-width: 900px) 40vw, 100vw" />
+              </figure>
+              <div className="ba">
+                <div className="ba-half">
+                  <div className="ba-txt">
+                    <p className="ba-label">{c.demo.beforeLabel}</p>
+                    <p className="ba-before">&quot;{c.demo.before}&quot;</p>
+                  </div>
                 </div>
-                <div className="ba-txt">
-                  <p className="ba-label">{c.demo.beforeLabel}</p>
-                  <p className="ba-before">&quot;{c.demo.before}&quot;</p>
-                </div>
-              </div>
-              <div className="ba-half">
-                <div className="ba-pic">
-                  <Image src="/almost-there.webp" alt={c.art.after} width={1200} height={896} sizes="(min-width: 900px) 50vw, 100vw" />
-                </div>
-                <div className="ba-txt">
-                  <p className="ba-label">{c.demo.afterLabel}</p>
-                  <p className="ba-after">{c.demo.after}</p>
-                  <p className="ba-trace">{c.demo.trace}</p>
+                <div className="ba-half">
+                  <div className="ba-txt">
+                    <p className="ba-label">{c.demo.afterLabel}</p>
+                    <p className="ba-after">{c.demo.after}</p>
+                    <p className="ba-trace">{c.demo.trace}</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -495,7 +517,7 @@ export default function LandingPageContent() {
               <h2 id="how-h">{c.how.heading}</h2>
             </div>
             <figure className="art stages-art">
-              <Image src="/three-stages-path.webp" alt={c.art.stages} width={1200} height={670} sizes="(min-width: 900px) 1120px, 100vw" />
+              <Image src="/three-stages.webp" alt={c.art.stages} width={1296} height={470} sizes="(min-width: 900px) 1120px, 100vw" />
             </figure>
             <ol className="steps">
               {c.how.steps.map((s) => (
@@ -511,8 +533,13 @@ export default function LandingPageContent() {
         {/* 6 · what it costs and when: free card, then the paid card with the price inside it */}
         <section className="sec g-surface2" id="offer" aria-labelledby="offer-h">
           <div className="wrap">
-            <div className="sec-head">
-              <h2 id="offer-h">{c.offer.heading}</h2>
+            <div className="offer-head">
+              <div className="sec-head">
+                <h2 id="offer-h">{c.offer.heading}</h2>
+              </div>
+              <figure className="art offer-art">
+                <Image src="/what-you-get.webp" alt={c.art.whatYouGet} width={1200} height={896} sizes="(min-width: 900px) 40vw, 100vw" />
+              </figure>
             </div>
             <div className="doors">
               <div className="door">
@@ -536,6 +563,7 @@ export default function LandingPageContent() {
                   <p className="prov">{c.offer.priceHeading}</p>
                   <p className="amount">{c.offer.amount}</p>
                   <p className="lead">{c.offer.golive}</p>
+                  <p className="note">{c.offer.liveWhen}</p>
                   <p className="note">{c.offer.renewal}</p>
                   {c.offer.founding && <p className="note">{c.offer.founding}</p>}
                   <Link href="/interview" className="btn">
@@ -592,6 +620,11 @@ export default function LandingPageContent() {
                     {item.a.map((p) => (
                       <p key={p}>{p}</p>
                     ))}
+                    {item.img && (
+                      <figure className="art faq-art">
+                        <Image src={item.img.src} alt={c.art.editing} width={item.img.width} height={item.img.height} sizes="420px" />
+                      </figure>
+                    )}
                     {item.list && (
                       <ul className="list">
                         {item.list.map((x) => (
@@ -629,8 +662,8 @@ export default function LandingPageContent() {
         {/* 9 · close: the deck's closing block (button, price line, the one quiet lane-2 link) */}
         <section className="sec g-deep close" id="close" aria-labelledby="close-cta">
           <div className="wrap close-grid">
-            <figure className="art sq">
-              <Image src="/lantern-out-of-the-room.webp" alt={c.art.lantern} width={1024} height={1024} sizes="300px" />
+            <figure className="art close-art">
+              <Image src="/client-finds-her.webp" alt={c.art.client} width={1200} height={896} sizes="(min-width: 900px) 33vw, 90vw" />
             </figure>
             <div>
               <Link href="/interview" className="btn" id="close-cta">
