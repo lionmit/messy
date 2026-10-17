@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { CONSENT, priceLine } from '@/content/copy';
+import Turnstile, { TURNSTILE_SITE_KEY, type TurnstileHandle } from '@/components/Turnstile';
 import type { Gender, SessionResponse } from '@/types';
 
 interface Props {
@@ -20,9 +21,13 @@ export default function ConsentScreen({ onStarted }: Props) {
   const [agree, setAgree] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  // Cloudflare Turnstile ("verify you are human"): only when the public site key is set.
+  const [human, setHuman] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileHandle>(null);
+  const humanOk = !TURNSTILE_SITE_KEY || human !== null;
 
   const nameOk = name.trim().length > 0 && name.trim().length <= 40;
-  const canStart = nameOk && gender !== '' && agree && !busy;
+  const canStart = nameOk && gender !== '' && agree && humanOk && !busy;
 
   async function start(e: React.FormEvent) {
     e.preventDefault();
@@ -35,10 +40,15 @@ export default function ConsentScreen({ onStarted }: Props) {
       const res = await fetch('/api/session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ consent: true, name: name.trim(), gender }),
+        body: JSON.stringify({ consent: true, name: name.trim(), gender, ...(human ? { turnstile: human } : {}) }),
       });
       const data = await res.json();
       if (res.status === 429) return setError(CONSENT.errors.rate);
+      if (typeof data?.error === 'string' && data.error.startsWith('human_check_')) {
+        // The token is single-use: ask the widget for a fresh one before the next try.
+        turnstileRef.current?.reset();
+        return setError(res.status === 503 ? CONSENT.errors.humanUnavailable : CONSENT.errors.humanFailed);
+      }
       if (!res.ok) {
         return setError(data?.field === 'name' ? CONSENT.errors.name : CONSENT.errors.generic);
       }
@@ -110,15 +120,17 @@ export default function ConsentScreen({ onStarted }: Props) {
             <span>{CONSENT.agree}</span>
           </label>
 
+          <Turnstile ref={turnstileRef} onToken={setHuman} />
+
+          <button type="submit" className="btn-cta" disabled={!canStart} aria-disabled={!canStart}>
+            {CONSENT.start}
+          </button>
+
           {error && (
             <p role="alert" style={{ color: '#B42318' }}>
               {error}
             </p>
           )}
-
-          <button type="submit" className="btn-cta" disabled={!canStart} aria-disabled={!canStart}>
-            {CONSENT.start}
-          </button>
         </form>
       </div>
     </main>

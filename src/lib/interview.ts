@@ -3,7 +3,7 @@
  * Dependencies are injectable so tests run with a mocked model, store and webhook.
  *
  * Flow:
- *   POST /api/session  consent + name + form of address -> session token + opening message
+ *   POST /api/session  consent + name + form of address (+ turnstile token) -> session token + opening message
  *   POST /api/chat     signed history + one new message  -> reply (or distress stop)
  *   POST /api/finish   signed history + optional email   -> document, saved server-side
  *   POST /api/delete   delete token                      -> record removed
@@ -13,6 +13,7 @@ import { LIMITS, RATE, isProduction } from './config';
 import { buildDistressPayload, detectDistress, modelSignalledDistress } from './distress';
 import { buildInterviewPayload, extractDocumentJson, normalizeDocument } from './doc';
 import { deliver as realDeliver } from './delivery';
+import { verifyHuman, type FetchLike } from './human';
 import { logError, logEvent } from './log';
 import { ModelNotConfiguredError, buildModelRequest, callAnthropic, callModel, type ModelCaller } from './model';
 import { leaksSystemPrompt } from './prompt/guard';
@@ -80,7 +81,12 @@ const invalid = (field: string, reason?: string): Result => ({
 
 // ---------------------------------------------------------------- session
 
-export async function startSession(body: unknown, ip: string): Promise<Result> {
+export interface SessionOptions {
+  /** Injectable for tests: the fetch used to reach Cloudflare's siteverify. */
+  fetch?: FetchLike;
+}
+
+export async function startSession(body: unknown, ip: string, opts: SessionOptions = {}): Promise<Result> {
   const rl = limiters.sessionPerIp.hit(ip);
   if (!rl.ok) return tooMany(rl.retryAfterMs);
   if (!isObject(body)) return invalid('body');
@@ -90,6 +96,13 @@ export async function startSession(body: unknown, ip: string): Promise<Result> {
   if (!name.ok) return invalid(name.field);
   const gender = validateGender(body.gender);
   if (!gender.ok) return invalid(gender.field);
+
+  // Human check (Cloudflare Turnstile). A no-op unless TURNSTILE_SECRET_KEY is set.
+  const human = await verifyHuman(body.turnstile, ip, opts.fetch);
+  if (!human.ok) {
+    if (human.reason === 'unavailable') return { status: 503, body: { error: 'human_check_unavailable' } };
+    return { status: 403, body: { error: human.reason === 'required' ? 'human_check_required' : 'human_check_failed' } };
+  }
 
   const { token, claims } = issueSessionToken({ name: name.value, gender: gender.value });
   const messages: TranscriptMessage[] = [{ role: 'assistant', content: openingMessage(claims.name, claims.gender) }];

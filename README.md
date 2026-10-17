@@ -20,6 +20,17 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Environment variables
+
+Set these in `.env.local` (never committed) or in the Vercel project settings.
+
+| Variable | Where | What it does |
+|---|---|---|
+| `TURNSTILE_SECRET_KEY` | server only | Cloudflare Turnstile secret. When set, `POST /api/session` requires a `turnstile` token and verifies it with Cloudflare before an interview starts. Unset: the check is skipped (local dev and previews work as before). |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | public (inlined in the browser bundle) | Cloudflare Turnstile site key. When set, the start form shows the "verify you are human" widget and the start button waits for it. Unset: no widget. |
+
+Set both together in production. Setting only the secret blocks every start (the browser never sends a token); setting only the site key shows a widget whose token is ignored.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

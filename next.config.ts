@@ -5,17 +5,21 @@ const isDev = process.env.NODE_ENV === 'development';
 /**
  * Content Security Policy without nonces (the documented static option for
  * this Next.js version). 'unsafe-inline' for scripts is needed by Next's inline
- * hydration scripts; everything external is blocked. The page talks only to its
- * own /api routes, so connect-src is 'self'. Fonts are self-hosted by next/font.
+ * hydration scripts. The page talks to its own /api routes and, for the
+ * "verify you are human" widget on the start form, to Cloudflare Turnstile
+ * (script, iframe and XHR all on challenges.cloudflare.com). Fonts are
+ * self-hosted by next/font.
  */
+const turnstile = 'https://challenges.cloudflare.com';
+
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}`,
+  `script-src 'self' 'unsafe-inline' ${turnstile}${isDev ? " 'unsafe-eval'" : ''}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' blob: data:",
   "font-src 'self'",
-  "connect-src 'self'",
-  "frame-src 'self' https://*.vercel.app https://messy-site-maayan.vercel.app http://localhost:* http://127.0.0.1:*",
+  `connect-src 'self' ${turnstile}`,
+  `frame-src 'self' ${turnstile} https://*.vercel.app https://messy-site-maayan.vercel.app http://localhost:* http://127.0.0.1:*`,
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

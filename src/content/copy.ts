@@ -52,6 +52,9 @@ export const CONSENT = {
     agree: 'כדי להתחיל, צריך לסמן את התיבה.',
     generic: 'משהו לא עבד. אפשר לנסות שוב בעוד רגע.',
     rate: 'יותר מדי ניסיונות. אפשר לנסות שוב מאוחר יותר.',
+    /** Cloudflare Turnstile ("verify you are human") on the start form. */
+    humanFailed: 'האימות לא הצליח, אפשר לנסות שוב',
+    humanUnavailable: 'האימות לא זמין כרגע, נסו שוב בעוד רגע',
   },
 };
 
