@@ -136,6 +136,12 @@ body {
   background: var(--yellow-bright);
 }
 .btn-cta:active { transform: translateY(0); }
+.btn-cta:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 
 .btn-outline {
   display: inline-flex;

@@ -31,6 +31,27 @@ Set these in `.env.local` (never committed) or in the Vercel project settings.
 
 Set both together in production. Setting only the secret blocks every start (the browser never sends a token); setting only the site key shows a widget whose token is ignored.
 
+### Storage, deletion and cleanup
+
+| Variable | Where | What it does |
+|---|---|---|
+| `BLOB_READ_WRITE_TOKEN` | server only | Read-write token of the **private** Vercel Blob store `messy-interviews` (set by the Blob integration together with `BLOB_STORE_ID`). When set, finished interviews are saved there (`BlobStore`, durable) and the delete link on the done screen is real. Unset: an in-memory store that is gone after a cold start, and the delete link is labelled as a demo. |
+| `MESSY_PURGE_SECRET` | server only | Enables `POST /api/purge` for the pipeline or the operator: header `x-messy-purge-secret: <secret>`, body `{"id": "<24 hex>"}`. Deletes the record and writes a tombstone with reason `operator`. Unset: the route answers 404. Wrong secret: 403. Rate-limited per IP like `/api/delete`. |
+| `CRON_SECRET` | server only | Protects `GET /api/cron/purge-expired` (Vercel's cron convention: `Authorization: Bearer <CRON_SECRET>`, anything else 401). `vercel.json` schedules it daily at 03:00 UTC; it removes expired records and answers `{"purged": n}`. Vercel sets this variable itself when a cron is configured. |
+
+#### Object layout in the blob store (contract with the pipeline)
+
+The pipeline (a separate Python system) reads the same store, so the pathnames below are a contract. All objects are written with exact pathnames (`addRandomSuffix: false`, `allowOverwrite: true`), `access: 'private'`, `contentType: application/json`, `cacheControlMaxAge: 0`. Private blobs are read through the SDK with the token, never through a URL.
+
+| Pathname | Written by | Content |
+|---|---|---|
+| `interviews/<id>.json` | the bot, on finish | The `InterviewRecord`: `id` (24 hex), `sessionId`, `name`, `gender`, `email` (or `null`), `document`, `transcript`, `createdAt`, `expiresAt` (createdAt + 90 days). |
+| `stopped/<sessionId>.json` | the bot, on a distress stop | `{"at": "<ISO time>"}`. Nothing else is kept from a stopped conversation. |
+| `tombstones/<id>.json` | the bot, on every deletion | `{"id", "deletedAt", "reason": "person" \| "expiry" \| "operator"}`. The pipeline reads these to take the person's site and its own state down, then deletes the tombstone. The tombstone is written before the record is deleted, so a failed delete can be retried. |
+| `pipeline/<slug>/...` | the pipeline | Its own files. The bot never touches them. |
+
+Deletion paths: the person (`/delete`, signed token in the URL hash, reason `person`); expiry (on read, or the daily cron, reason `expiry`); the operator or the pipeline (`/api/purge`, reason `operator`). Lionel's Google Sheet (fed by the Make webhook in production) and emails already sent are separate copies that none of these touch; the `/delete` page says so and gives the address to ask for their manual deletion.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

@@ -125,11 +125,32 @@ export const FOOTER = {
   cancelHref: `mailto:lionmit@gmail.com?subject=${encodeURIComponent('ביטול עסקה')}`,
 };
 
+/**
+ * The self-service "delete my data" page (/delete). Before any button it declares
+ * what is held, what deletion removes, what it does not remove and why, and that
+ * it cannot be undone. Every form is gender-invariant.
+ */
 export const DELETE_PAGE = {
-  /** NEW */
-  title: 'מחיקת השיחה והמסמך',
-  confirm: 'למחוק',
-  done: 'נמחק.',
+  title: 'מחיקת הנתונים שלי',
+  heldHeading: 'מה שמור',
+  held: 'השיחה המלאה, המסמך שנבנה ממנה, וכתובת המייל אם השארת אותה.',
+  removesHeading: 'מה המחיקה מוחקת',
+  removes:
+    'כל אלה נמחקים מהאחסון של MESSY. אם נבנתה מהשיחה תצוגה מקדימה של אתר, גם היא יורדת מהרשת, יחד עם כל הקבצים שלה, בתוך שעה.',
+  keptHeading: 'מה לא נמחק, ולמה',
+  kept: 'העותק שליונל מקבל על כל שיחה (גיליון שמור אצלו) ומיילים שכבר נשלחו לא נמחקים אוטומטית. אפשר לבקש גם את מחיקתם במייל lionmit@gmail.com, והם יימחקו ידנית בתוך 7 ימים.',
+  keptMail: 'lionmit@gmail.com',
+  keptMailHref: `mailto:lionmit@gmail.com?subject=${encodeURIComponent('בקשת מחיקה')}`,
+  irreversible: 'אי אפשר לבטל את המחיקה.',
+  acknowledge: 'הבנתי, ואני רוצה למחוק',
+  confirm: 'למחוק את הנתונים שלי',
+  working: 'המחיקה מתבצעת.',
+  /** The receipt line. `when` is the person's local date and time. */
+  done: (when: string) => `הנתונים נמחקו. תאריך ושעה: ${when}. אפשר לצלם את המסך הזה כאישור.`,
+  /** Shown under the receipt: the same note about what comes down within the hour. */
+  doneNote: 'אם נבנתה מהשיחה תצוגה מקדימה של אתר, גם היא יורדת מהרשת, יחד עם כל הקבצים שלה, בתוך שעה.',
   notFound: 'לא נמצא מה למחוק. ייתכן שכבר נמחק.',
+  failed: 'המחיקה לא הצליחה.',
+  retry: 'לנסות שוב',
   invalid: 'הקישור לא תקין.',
 };

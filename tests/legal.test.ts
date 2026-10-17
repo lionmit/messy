@@ -10,11 +10,12 @@ const root = resolve(__dirname, '..');
 const legalSource = resolve(root, '..', 'messy-sites', 'board', 'legal', '01-texts.md');
 
 describe('legal pages (legal cover v1.1)', () => {
-  it('privacy: its title, the §א.1 interim wording, and no promise of deletion that is not built yet', () => {
+  it('privacy: its title, the §א.1 wording (2026-10-17: automatic deletion in the private store is built), and no promise beyond it', () => {
     const blocks = parseLegal(LEGAL.privacy);
     expect(blocks[0]).toEqual({ k: 'h1', text: 'פרטיות' });
-    expect(LEGAL.privacy).toContain('בשלב ההשקה, השיחה והמסמך נשמרים בגיליון פרטי שרק אני ניגש אליו.');
-    expect(LEGAL.privacy).not.toContain('השיחה המלאה נמחקת אחרי 90 יום');
+    expect(LEGAL.privacy).toContain('השיחה והמסמך נשמרים באחסון פרטי של Vercel. השיחה המלאה נמחקת אוטומטית אחרי 90 יום');
+    expect(LEGAL.privacy).toContain('עמוד המחיקה');
+    expect(LEGAL.privacy).not.toContain('השיחה המלאה נמחקת אחרי 90 יום.');
     expect(LEGAL.privacy).not.toContain('המסמך נשמר כדי שיהיה זמין בקישור');
     // editor notes and the next section stay out
     expect(LEGAL.privacy).not.toContain('א.1');

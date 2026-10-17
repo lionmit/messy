@@ -1,54 +1,24 @@
 /**
- * Storage interface for finished interviews (launch checklist #8 plugs in here).
+ * Storage for finished interviews (launch checklist #8).
  *
- * Today the app ships only the in-memory adapter below. On Vercel it lives in
- * one serverless instance and is gone after a cold start, so it is NOT a real
- * store: it exists so the flow (save, expiry, delete link, distress stop) can be
- * built and tested now. Lionel's Google Sheet, fed by the Make webhook in
- * production, is still the only lasting copy, and deleting here does not delete
- * the Sheet row. That is why the delete link is only shown when the adapter is
- * `durable`, or outside production with a "demo" marker.
+ * Two adapters:
+ * - BlobStore (./blob.ts): a PRIVATE Vercel Blob store, durable. Used whenever
+ *   BLOB_READ_WRITE_TOKEN is set (production, preview, development on Vercel, or
+ *   a local .env.local). Deleting there is real: the record is removed and a
+ *   tombstone is written so the pipeline takes the person's site down too.
+ * - MemoryStore (below): one serverless instance, gone after a cold start. Local
+ *   dev without a token, and tests. Not durable, so the delete link the person
+ *   gets is labelled as a demo (see finishInterview).
  *
- * To plug in the real store (#8): implement InterviewStore in a new adapter
- * (see RemoteStoreAdapter below), set `durable = true`, and return it from
- * getStore(). No route code changes.
+ * Lionel's Google Sheet, fed by the Make webhook in production, is a separate
+ * copy that neither adapter touches; the /delete page says so.
  */
-import { randomBytes } from 'node:crypto';
-import { RETENTION_DAYS } from '../config';
-import type { Gender, TranscriptMessage } from '../session';
-import type { InterviewDocument } from '../doc';
+import { BlobStore, vercelBlobApi } from './blob';
+import { expiryFrom, isExpired, newRecordId, type InterviewRecord, type InterviewStore } from './types';
 
-export interface InterviewRecord {
-  id: string;
-  sessionId: string;
-  name: string;
-  gender: Gender;
-  /** Only when the person asked for a preview. */
-  email: string | null;
-  document: InterviewDocument;
-  transcript: TranscriptMessage[];
-  createdAt: string;
-  /** Raw transcript expiry: createdAt + 90 days (prices.json transcript_retention_days). */
-  expiresAt: string;
-}
-
-export interface InterviewStore {
-  /** True only when records survive restarts and deletion is real. */
-  readonly durable: boolean;
-  save(input: Omit<InterviewRecord, 'id' | 'createdAt' | 'expiresAt'>, now?: Date): Promise<InterviewRecord>;
-  get(id: string, now?: Date): Promise<InterviewRecord | null>;
-  /** Called with an id taken from a verified delete token. */
-  delete(id: string): Promise<boolean>;
-  /** Removes expired records. Returns how many. */
-  purgeExpired(now?: Date): Promise<number>;
-  /** Distress: blocks the session. Stores the session id and the time only. */
-  stopSession(sessionId: string, now?: Date): Promise<void>;
-  isStopped(sessionId: string): Promise<boolean>;
-}
-
-export function expiryFrom(now: Date): Date {
-  return new Date(now.getTime() + RETENTION_DAYS * 24 * 60 * 60 * 1000);
-}
+export { expiryFrom, isExpired, isRecordId, newRecordId } from './types';
+export type { DeletionReason, InterviewRecord, InterviewStore } from './types';
+export { BlobStore } from './blob';
 
 export class MemoryStore implements InterviewStore {
   readonly durable = false;
@@ -58,7 +28,7 @@ export class MemoryStore implements InterviewStore {
   async save(input: Omit<InterviewRecord, 'id' | 'createdAt' | 'expiresAt'>, now: Date = new Date()) {
     const record: InterviewRecord = {
       ...input,
-      id: randomBytes(12).toString('hex'),
+      id: newRecordId(),
       createdAt: now.toISOString(),
       expiresAt: expiryFrom(now).toISOString(),
     };
@@ -69,7 +39,7 @@ export class MemoryStore implements InterviewStore {
   async get(id: string, now: Date = new Date()) {
     const r = this.records.get(id);
     if (!r) return null;
-    if (new Date(r.expiresAt) <= now) {
+    if (isExpired(r, now)) {
       this.records.delete(id);
       return null;
     }
@@ -83,7 +53,7 @@ export class MemoryStore implements InterviewStore {
   async purgeExpired(now: Date = new Date()) {
     let n = 0;
     for (const [id, r] of this.records) {
-      if (new Date(r.expiresAt) <= now) {
+      if (isExpired(r, now)) {
         this.records.delete(id);
         n++;
       }
@@ -100,47 +70,14 @@ export class MemoryStore implements InterviewStore {
   }
 }
 
-/**
- * STUB for the real store (#8). Not wired in. Requirements for whoever builds it:
- * - durable = true; records encrypted at rest by the provider.
- * - save(): write the record with expires_at; transcript and document may live
- *   in separate columns so the transcript can expire while the document stays
- *   (D15: the document is kept until the person asks to delete it).
- * - purgeExpired(): run daily (cron), deleting transcripts past expires_at.
- * - delete(): remove the record and everything derived from it, and tell the
- *   Sheet/Make side to remove its copy too (needs Lionel's yes on the Make change).
- * - stopSession()/isStopped(): a small table of { session_id, stopped_at } only.
- * - No transcript text in any log, metric or error message.
- */
-export class RemoteStoreAdapter implements InterviewStore {
-  readonly durable = true;
-  private fail(): never {
-    throw new Error('RemoteStoreAdapter is a stub until checklist #8');
-  }
-  async save(): Promise<InterviewRecord> {
-    return this.fail();
-  }
-  async get(): Promise<InterviewRecord | null> {
-    return this.fail();
-  }
-  async delete(): Promise<boolean> {
-    return this.fail();
-  }
-  async purgeExpired(): Promise<number> {
-    return this.fail();
-  }
-  async stopSession(): Promise<void> {
-    return this.fail();
-  }
-  async isStopped(): Promise<boolean> {
-    return this.fail();
-  }
-}
-
 let store: InterviewStore | null = null;
 
+/** BlobStore when BLOB_READ_WRITE_TOKEN is set, MemoryStore otherwise. */
 export function getStore(): InterviewStore {
-  if (!store) store = new MemoryStore();
+  if (!store) {
+    const token = process.env.BLOB_READ_WRITE_TOKEN;
+    store = token ? new BlobStore(vercelBlobApi(token)) : new MemoryStore();
+  }
   return store;
 }
 

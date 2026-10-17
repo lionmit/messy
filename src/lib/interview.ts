@@ -6,8 +6,10 @@
  *   POST /api/session  consent + name + form of address (+ turnstile token) -> session token + opening message
  *   POST /api/chat     signed history + one new message  -> reply (or distress stop)
  *   POST /api/finish   signed history + optional email   -> document, saved server-side
- *   POST /api/delete   delete token                      -> record removed
+ *   POST /api/delete   delete token                      -> record removed, tombstone "person"
+ *   POST /api/purge    operator secret + {id}            -> record removed, tombstone "operator"
  */
+import { timingSafeEqual } from 'node:crypto';
 import { CHAT, openingMessage } from '@/content/copy';
 import { LIMITS, RATE, isProduction } from './config';
 import { buildDistressPayload, detectDistress, modelSignalledDistress } from './distress';
@@ -35,7 +37,7 @@ import {
   type SessionClaims,
   type TranscriptMessage,
 } from './session';
-import { getStore, type InterviewStore } from './storage';
+import { getStore, isRecordId, type InterviewStore } from './storage';
 import { isObject, validateGender, validateHistory, validateName, validateOptionalEmail } from './validate';
 
 export interface Result {
@@ -60,6 +62,7 @@ const limiters = {
   chatInterval: new MinIntervalLimiter(RATE.chatMinIntervalMs),
   finishPerSession: new SlidingWindowLimiter(RATE.finishPerSession.limit, RATE.finishPerSession.windowMs),
   deletePerIp: new SlidingWindowLimiter(RATE.deletePerIp.limit, RATE.deletePerIp.windowMs),
+  purgePerIp: new SlidingWindowLimiter(RATE.deletePerIp.limit, RATE.deletePerIp.windowMs),
 };
 
 /** Sessions that already produced a document on this instance (best-effort double-submit guard). */
@@ -304,7 +307,39 @@ export async function deleteRecord(body: unknown, ip: string, deps: Deps = defau
   if (!isObject(body)) return invalid('body');
   const id = verifyDeleteToken(body.token);
   if (!id) return { status: 400, body: { error: 'invalid_token' } };
-  const deleted = await deps.store.delete(id);
+  const deleted = await deps.store.delete(id, 'person');
   logEvent('record.delete', { deleted });
+  return { status: 200, body: { deleted } };
+}
+
+// ---------------------------------------------------------------- operator purge
+
+function secretMatches(given: string | null, expected: string): boolean {
+  if (typeof given !== 'string') return false;
+  const a = Buffer.from(given);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
+
+/**
+ * POST /api/purge, for the pipeline or Lionel: deletes one record and writes a
+ * tombstone with reason "operator". 404 while MESSY_PURGE_SECRET is unset (the
+ * route does not exist until it is configured), 403 on a wrong secret. The id
+ * is never logged.
+ */
+export async function purgeRecord(
+  body: unknown,
+  ip: string,
+  givenSecret: string | null,
+  deps: Deps = defaultDeps()
+): Promise<Result> {
+  const rl = limiters.purgePerIp.hit(ip);
+  if (!rl.ok) return tooMany(rl.retryAfterMs);
+  const expected = process.env.MESSY_PURGE_SECRET;
+  if (!expected) return { status: 404, body: { error: 'not_found' } };
+  if (!secretMatches(givenSecret, expected)) return { status: 403, body: { error: 'forbidden' } };
+  if (!isObject(body) || !isRecordId(body.id)) return invalid('id');
+  const deleted = await deps.store.delete(body.id, 'operator');
+  logEvent('record.purge', { deleted });
   return { status: 200, body: { deleted } };
 }
