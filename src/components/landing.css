@@ -108,8 +108,8 @@
 .lp .ba { display: grid; gap: 0; border-radius: var(--radius); box-shadow: var(--card-shadow); overflow: hidden; background: var(--room); }
 .lp .ba-half { display: grid; }
 .lp .ba-half + .ba-half { border-top: 2px solid color-mix(in srgb, var(--room-ink) 12%, transparent); }
-.lp .ba-pic { aspect-ratio: 5 / 3; background: var(--surface2); }
-.lp .ba-pic img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+.lp .ba-pic { aspect-ratio: 4 / 3; background: var(--surface2); }
+.lp .ba-pic img { width: 100%; height: 100%; object-fit: cover; }
 .lp .ba-txt { padding: 18px 20px 22px; display: grid; gap: 8px; }
 .lp .ba-label { font: 600 1rem/1.4 var(--f-body); color: var(--ink2); }
 .lp .ba-before { font: 400 var(--t-lead)/1.5 var(--f-body); }
@@ -125,19 +125,17 @@
 .lp .steps p { font-size: 1.0625rem; max-width: 34rem; }
 
 /* what you get */
-.lp .doors { display: grid; gap: 18px; }
+.lp .doors { display: grid; gap: 18px; align-items: start; }
 .lp .door { padding: 20px 20px 22px; border-radius: var(--radius); box-shadow: var(--card-shadow); background: var(--room); display: grid; gap: 10px; align-content: start; }
 .lp .door h3 { font: 700 1.5rem/1.15 var(--f-body); }
 .lp .list { display: grid; gap: 8px; }
 .lp .list li { position: relative; padding-inline-start: 30px; font-size: 1.0625rem; }
 .lp .list li::before { content: ""; position: absolute; inset-inline-start: 0; top: .35em; width: 20px; height: 18px; background: var(--check) no-repeat center / contain; }
 
-/* price */
-.lp .board { position: relative; padding: 24px 22px 26px; border-radius: var(--radius); box-shadow: var(--card-shadow); background: var(--room); max-width: 44rem; display: grid; gap: 10px; }
-.lp .amount { font: 700 clamp(2.6rem, 2rem + 3vw, 4rem)/1 var(--f-body); }
-.lp .board .btn { margin-top: 10px; }
-.lp .board .note { font-size: 1.0625rem; }
-.lp .board .note + .note { margin-top: 0; }
+/* price, inside the paid door */
+.lp .amount { font: 700 clamp(2.4rem, 2rem + 2vw, 3.4rem)/1 var(--f-body); }
+.lp .price-in .btn { margin-top: 6px; }
+.lp .note { font-size: 1.0625rem; }
 
 /* for whom */
 .lp .fit-grid { display: grid; gap: 24px; }
@@ -150,12 +148,16 @@
 .lp .notfit li { position: relative; padding-inline-start: 30px; font-size: 1.0625rem; }
 .lp .notfit li::before { content: ""; position: absolute; inset-inline-start: 0; top: .5em; width: 18px; height: 18px; background: var(--cross) no-repeat center / contain; }
 
-/* who is behind this: the figure sits in a soft sand card so the cut edge is hidden */
-.lp .about-grid { display: grid; gap: 22px; align-items: center; }
-.lp .fig { justify-self: center; width: min(260px, 70vw); aspect-ratio: 4 / 5; border-radius: 18px; background: var(--surface2); box-shadow: var(--card-shadow); display: grid; align-items: end; justify-items: center; overflow: hidden; }
-.lp .fig img { width: 86%; height: auto; }
-.lp .about-txt { display: grid; gap: 14px; max-width: 40rem; }
-.lp .about-txt .quote { font: 600 var(--t-lead)/1.5 var(--f-body); }
+/* the maker's row: a small portrait frame beside the maker line (base.css .who / .ph-frame) */
+.lp .who { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.lp .ph-frame { flex: none; width: 76px; aspect-ratio: 4 / 5; border-radius: var(--radius); background: var(--surface2); box-shadow: var(--card-shadow); overflow: hidden; display: grid; align-items: end; justify-items: center; }
+.lp .ph-frame img { width: 92%; height: auto; }
+.lp .why-sentence { margin-top: 22px; max-width: 40rem; font: 600 var(--t-lead)/1.5 var(--f-body); }
+.lp .fit-art { aspect-ratio: 4 / 3; }
+.lp .stages-art { aspect-ratio: 16 / 9; margin-bottom: 28px; }
+.lp .sq { aspect-ratio: 1 / 1; width: min(300px, 80vw); justify-self: center; }
+.lp .privacy-lines { display: grid; gap: 10px; max-width: 40rem; font-size: 1.0625rem; }
+.lp .price-in { margin-top: 8px; padding-top: 16px; border-top: 2px solid color-mix(in srgb, var(--ink) 14%, transparent); display: grid; gap: 10px; }
 
 /* questions: drawers (base.css r5) */
 .lp .drawers { display: grid; gap: 12px; }
@@ -183,7 +185,7 @@
   .lp .maker { display: block; }
   .lp .hero { padding: 48px 0 56px; }
   .lp .hero-grid { grid-template-columns: 6fr 6fr; gap: 56px; align-items: center; }
-  .lp .hero-art { aspect-ratio: 16 / 10; }
+  .lp .hero-art { aspect-ratio: 16 / 9; }
   .lp .hero-act .btn { width: auto; display: inline-flex; padding-inline: 40px; }
   .lp .why-grid { grid-template-columns: 7fr 5fr; gap: 64px; }
   .lp .ba { grid-template-columns: 1fr 1fr; }
@@ -192,11 +194,10 @@
   .lp .steps::before { inset-block: 14px auto; inset-inline: 0; width: auto; height: 6px; }
   .lp .steps > li::before { inset-inline-start: 0; top: -56px; }
   .lp .doors { grid-template-columns: 1fr 1fr; gap: 28px; }
-  .lp .board { padding: 34px 40px 36px; }
-  .lp .board .btn { width: auto; display: inline-flex; justify-self: start; padding-inline: 40px; }
   .lp .fit-grid { grid-template-columns: 5fr 7fr; gap: 64px; align-items: start; }
-  .lp .about-grid { grid-template-columns: 4fr 8fr; gap: 56px; }
-  .lp .fig { width: 280px; }
+  .lp .ph-frame { width: 124px; }
+  .lp .fit-art { grid-column: 1; max-width: 460px; }
+  .lp .why-grid { align-items: start; }
   .lp .close-grid { grid-template-columns: 4fr 8fr; gap: 56px; }
   .lp .close .btn { width: auto; display: inline-flex; padding-inline: 44px; }
 }
