@@ -1,636 +1,135 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>MESSY · אישור עמוד הבית והעלאה לאוויר · 17.10.2026</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<title>MESSY · אישור עמוד הבית · 17.10.2026</title>
 <style>
-  :root {
-    --bg: #F9F6F0;
-    --surface: #FFFFFF;
-    --surface-card: #FCFAF7;
-    --ink: #2C2420;
-    --ink2: #5D544F;
-    --ink-muted: #8C827A;
-    --border: #E8E2D8;
-    --sig: #973B3C;
-    --sig-hover: #7D2D2E;
-    --accent: #5B6E58;
-    --accent-bg: #EEF3ED;
-    --warn: #C26747;
-    --warn-bg: #FBF0EB;
-    --radius: 12px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Assistant', 'Heebo', sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    direction: rtl;
-    line-height: 1.6;
-    padding-bottom: 80px;
-  }
-  .wrap {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px;
-  }
-  header.review-head {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 24px 0;
-    margin-bottom: 32px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.03);
-  }
-  .review-head .wrap {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-  .badge-tag {
-    display: inline-block;
-    padding: 4px 10px;
-    background: var(--accent-bg);
-    color: var(--accent);
-    border-radius: 999px;
-    font-weight: 700;
-    font-size: 0.85rem;
-    margin-bottom: 6px;
-  }
-  h1 { font-size: 1.85rem; font-weight: 800; color: var(--ink); }
-  .subhead { color: var(--ink2); font-size: 1.05rem; }
-  .toolbar-actions {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 18px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.15s ease;
-    font-family: inherit;
-  }
-  .btn-primary { background: var(--sig); color: #FFF; }
-  .btn-primary:hover { background: var(--sig-hover); }
-  .btn-outline { background: var(--surface); color: var(--ink); border: 1.5px solid var(--border); }
-  .btn-outline:hover { border-color: var(--sig); color: var(--sig); }
-  .btn-accent { background: var(--accent); color: #FFF; }
-  .btn-accent:hover { opacity: 0.9; }
-
-  .sec-title {
-    font-size: 1.45rem;
-    font-weight: 800;
-    margin: 40px 0 16px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .sec-title span.num {
-    background: var(--sig);
-    color: #FFF;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.95rem;
-  }
-
-  /* Screenshots Section */
-  .shots-grid {
-    display: grid;
-    grid-template-columns: 390px 1fr;
-    gap: 24px;
-    align-items: start;
-    margin-bottom: 32px;
-  }
-  @media (max-width: 900px) {
-    .shots-grid { grid-template-columns: 1fr; }
-  }
-  .shot-card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-  }
-  .shot-card-head {
-    padding: 12px 16px;
-    background: var(--surface-card);
-    border-bottom: 1px solid var(--border);
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: var(--ink2);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .shot-img-wrap {
-    max-height: 600px;
-    overflow-y: auto;
-    background: #4A403A;
-    display: flex;
-    justify-content: center;
-  }
-  .shot-img-wrap img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-  /* Review Items Cards */
-  .items-list {
-    display: grid;
-    gap: 18px;
-  }
-  .item-card {
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    transition: all 0.2s ease;
-  }
-  .item-card.is-approved {
-    border-color: var(--accent);
-    background: #FAFDF9;
-  }
-  .item-card.is-modified {
-    border-color: var(--warn);
-    background: #FFFDFB;
-  }
-  .item-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 14px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-  }
-  .item-num-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .item-pill {
-    background: var(--sig);
-    color: #FFF;
-    font-weight: 800;
-    font-size: 0.9rem;
-    padding: 2px 10px;
-    border-radius: 999px;
-    flex-shrink: 0;
-  }
-  .item-card.is-approved .item-pill { background: var(--accent); }
-  .item-card.is-modified .item-pill { background: var(--warn); }
-  .item-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--ink);
-  }
-  .item-context {
-    font-size: 0.85rem;
-    color: var(--ink-muted);
-  }
-  .item-quote {
-    background: var(--surface-card);
-    border-right: 4px solid var(--sig);
-    padding: 12px 16px;
-    border-radius: 4px;
-    font-size: 1.05rem;
-    color: var(--ink);
-    margin-bottom: 14px;
-    white-space: pre-wrap;
-  }
-  .item-controls {
-    display: grid;
-    gap: 10px;
-  }
-  .status-radios {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-  }
-  .status-radios label {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-weight: 700;
-    font-size: 0.95rem;
-    cursor: pointer;
-  }
-  .radio-approve { color: var(--accent); }
-  .radio-modify { color: var(--warn); }
-  .item-edit-area {
-    display: none;
-    width: 100%;
-    min-height: 70px;
-    padding: 10px 12px;
-    border: 1.5px solid var(--warn);
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 1rem;
-    color: var(--ink);
-    background: #FFF;
-    resize: vertical;
-    direction: rtl;
-  }
-  .item-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 8px;
-  }
-
-  /* Structure Order */
-  .order-card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    padding: 20px;
-    margin-bottom: 24px;
-  }
-  .order-list {
-    list-style: decimal inside;
-    display: grid;
-    gap: 8px;
-    padding-right: 8px;
-    font-size: 1.05rem;
-    font-weight: 600;
-  }
-  .order-list li {
-    padding: 6px 8px;
-    border-radius: 6px;
-  }
-  .order-list li:hover { background: var(--surface-card); }
-
-  /* Master Approve Box */
-  .master-box {
-    background: linear-gradient(135deg, #FAFDF9 0%, #EEF5ED 100%);
-    border: 2px solid var(--accent);
-    border-radius: 16px;
-    padding: 32px 24px;
-    text-align: center;
-    margin-top: 48px;
-    box-shadow: 0 8px 32px rgba(91, 110, 88, 0.12);
-  }
-  .master-box h2 {
-    font-size: 1.7rem;
-    font-weight: 800;
-    color: var(--accent);
-    margin-bottom: 12px;
-  }
-  .master-box p {
-    font-size: 1.1rem;
-    color: var(--ink2);
-    max-width: 650px;
-    margin: 0 auto 24px;
-  }
-  .master-btn {
-    font-size: 1.25rem;
-    padding: 16px 36px;
-    border-radius: 12px;
-    background: var(--accent);
-    color: #FFF;
-    border: none;
-    font-weight: 800;
-    cursor: pointer;
-    box-shadow: 0 4px 16px rgba(91, 110, 88, 0.35);
-    transition: all 0.2s ease;
-  }
-  .master-btn:hover {
-    background: #475845;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(91, 110, 88, 0.45);
-  }
-
-  /* Toast Notification */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: var(--ink);
-    color: #FFF;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 0.95rem;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.25s ease;
-    z-index: 1000;
-    pointer-events: none;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
+  :root { --paper:#f6f1e8; --ink:#2b2622; --quiet:#6b6259; --line:#d9cfc2; --sage:#9fae9b; --terra:#b5623c; --ok:#4f7a4a; --card:#fffdf9; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font: 400 1.0625rem/1.65 Assistant, Arial, Helvetica, sans-serif; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 24px 16px 80px; }
+  h1 { font-size: 1.6rem; line-height:1.25; margin: 0 0 6px; }
+  h2 { font-size: 1.25rem; margin: 40px 0 10px; border-top: 1px solid var(--line); padding-top: 22px; }
+  p.lead { color: var(--quiet); margin: 0 0 18px; }
+  .shots { display:grid; grid-template-columns: 1fr; gap: 16px; }
+  .shot { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px; }
+  .shot img { width:100%; height:auto; display:block; border-radius:6px; }
+  .shot figcaption { color:var(--quiet); font-size:.95rem; margin-top:6px; }
+  .item { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin: 12px 0; }
+  .item .where { color:var(--quiet); font-size:.9rem; margin-bottom:4px; }
+  .item .line { font-size:1.1rem; margin: 2px 0 10px; }
+  .item .src { color:var(--quiet); font-size:.85rem; margin-bottom:10px; }
+  .row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  label.opt { display:inline-flex; gap:6px; align-items:center; padding:6px 10px; border:1px solid var(--line); border-radius:8px; background:#fff; cursor:pointer; }
+  textarea { width:100%; min-height:56px; margin-top:10px; padding:8px 10px; border:1px solid var(--line); border-radius:8px; font:inherit; background:#fff; }
+  button, a.btn { font:inherit; font-weight:600; border:0; border-radius:8px; padding:9px 14px; cursor:pointer; text-decoration:none; display:inline-block; }
+  .send { background:var(--sage); color:#1f2a1d; }
+  .all { background:var(--terra); color:#fff; font-size:1.1rem; padding:14px 22px; }
+  .copy { background:#fff; border:1px solid var(--line); color:var(--ink); }
+  ol.order li { margin: 4px 0; }
+  .ok { color: var(--ok); font-weight:600; }
+  .note { background:#fff; border-inline-start:4px solid var(--sage); padding:10px 14px; border-radius:6px; color:var(--quiet); }
+  .sticky { position:sticky; top:0; background:var(--paper); padding:8px 0; z-index:2; border-bottom:1px solid var(--line); }
+  @media (min-width: 760px) { .shots { grid-template-columns: 1fr 2fr; align-items:start; } }
 </style>
 </head>
 <body>
+<div class="wrap">
+  <div class="sticky row"><button class="copy" onclick="copyAll()">להעתיק את כל התשובות</button><span id="count" style="color:var(--quiet)"></span></div>
 
-<header class="review-head">
-  <div class="wrap">
-    <div>
-      <span class="badge-tag">MESSY · תצוגת אישור ופרודקשן</span>
-      <h1>עמוד הבית החדש — אישור נוסחים והעלאה לאוויר</h1>
-      <p class="subhead">כל הטקסטים והאיורים של הלילה (17.10.2026) מרוכזים כאן לאישור ליונל. כלום לא עולה לפרודקשן בלי אישורך.</p>
-    </div>
-    <div class="toolbar-actions">
-      <button class="btn btn-primary" id="btn-copy-all">📋 העתק את כל ההערות והאישורים</button>
-      <a class="btn btn-outline" href="https://messy-6mjkp674g-lionmit-7489s-projects.vercel.app" target="_blank" rel="noopener">🌐 פתח Preview חי (Vercel)</a>
-    </div>
-  </div>
-</header>
+  <h1>עמוד הבית החדש של MESSY · אישור לפני עלייה לאוויר</h1>
+  <p class="lead">כל מה שבדף הזה נמצא בתצוגה המקדימה בלבד. שום דבר לא עולה לאוויר לפני תשובה שלך. כל שורה כאן היא שורה שלא נלקחה כמות שהיא ממקור שכבר אישרת; מה שכן אושר לא מופיע כאן.</p>
 
-<main class="wrap">
-
-  <!-- Section 1: Screenshots -->
-  <h2 class="sec-title"><span class="num">1</span> צילומי מסך מהשטח (Headless Chrome 390px & 1440px)</h2>
-  <div class="shots-grid">
-    <div class="shot-card">
-      <div class="shot-card-head">
-        <span>📱 מובייל 390px (רוחב טלפון)</span>
-        <small>0 גלישה · כפתורים בשורה אחת</small>
-      </div>
-      <div class="shot-img-wrap">
-        <img src="/review/home-390.webp" alt="צילום מסך מובייל 390">
-      </div>
-    </div>
-    <div class="shot-card">
-      <div class="shot-card-head">
-        <span>💻 דסקטופ 1440px (רוחב מחשב מלא)</span>
-        <small>קונטרסט ≥ 4.5:1 · פלטת חול וטרקוטה</small>
-      </div>
-      <div class="shot-img-wrap">
-        <img src="/review/home-1440.webp" alt="צילום מסך דסקטופ 1440">
-      </div>
-    </div>
+  <h2>איך זה נראה</h2>
+  <div class="shots">
+    <figure class="shot"><img src="/review/home-390.webp" alt="צילום מסך של עמוד הבית ברוחב טלפון"><figcaption>טלפון, 390 פיקסלים, כל העמוד</figcaption></figure>
+    <figure class="shot"><img src="/review/home-1440.webp" alt="צילום מסך של עמוד הבית ברוחב מחשב"><figcaption>מחשב, 1440 פיקסלים, כל העמוד</figcaption></figure>
   </div>
 
-  <!-- Section 2: Every Hebrew Line Pending Approval -->
-  <h2 class="sec-title"><span class="num">2</span> שורות תוכן וניסוחים לאישור (14 שורות ממוספרות)</h2>
-  <p style="color:var(--ink2); margin-bottom: 20px;">כל שורה כאן ניתנת לאישור ישיר או לעריכה. לחיצה על "שלח במייל" פותחת טיוטה מיידית לליונל, ובסיום ניתן להעתיק את הכל בלחיצה אחת:</p>
+  <h2>השורות לאישור</h2>
+  <p class="lead">לכל שורה: לסמן "מאשר" או "לתקן", ואם לתקן, לכתוב את הנוסח הרצוי בתיבה. "לשלוח" פותח מייל עם המספר והתשובה. אפשר גם לענות על הכל יחד בכפתור בסוף.</p>
+  <div id="items"></div>
 
-  <div class="items-list" id="items-container">
-    <!-- Lines generated via script and template -->
-  </div>
+  <h2>סדר המקטעים בעמוד</h2>
+  <ol class="order">
+    <li>פתיח: למי זה, המצב, הכותרת, איך זה עובד, כפתור, מחיר, משך, שורת הפרטיות. איור: המילים מהטלפון הופכות לדף אתר.</li>
+    <li>למי זה מתאים ולמי פחות, עם שורת הגבול "כלי AI, לא ליווי ולא טיפול".</li>
+    <li>למה (בקול שלך), עם הדיוקן המאויר, התשובה לצ'אט ולוויקס ושורת ה"עצמאי".</li>
+    <li>משפט אחד, לפני ואחרי (נועה, דמות בדויה). איור: בחדר מול הבית בלילה.</li>
+    <li>איך זה עובד: רצועת שלושת השלבים ושלוש התחנות.</li>
+    <li>מה מקבלים: כרטיס "בלי עלות" וכרטיס "כשהאתר עולה לאוויר" עם 99 ₪ ושורת הזמן.</li>
+    <li>מי קורא את מה שכתבתי ואיך מוחקים.</li>
+    <li>שאלות נפוצות, חמש.</li>
+    <li>סיום: כפתור, שורת מחיר, הקישור השקט לפגישת דיוק.</li>
+  </ol>
 
-  <!-- Section 3: Structure and Section Order -->
-  <h2 class="sec-title"><span class="num">3</span> סדר המקטעים וסדר השאלות הנפוצות</h2>
-  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
-    <div class="order-card">
-      <h3 style="margin-bottom:12px; font-weight:700;">סדר המקטעים בעמוד הבית (10 מקטעים):</h3>
-      <ol class="order-list">
-        <li><b>הדר ופתיח:</b> לוגו MESSY וכפתור "להתחיל שיחה"</li>
-        <li><b>גיבור (Hero):</b> כותרת ראשית, הבטחה ברורה ואיור משיחה לאתר</li>
-        <li><b>למי זה מתאים:</b> שלושה חיצים ממוקדים לעצמאיות ועצמאיים</li>
-        <li><b>למה שיחה (WHY):</b> שלוש סיבות עמוקות למה שיחה עובדת + דיוקן ליונל</li>
-        <li><b>לפני ואחרי:</b> איור בחדר מול החוצה וההבדל בין השיחה להצגה</li>
-        <li><b>איך זה עובד:</b> רצועת 3 השלבים (שיחה -> תצוגה -> אוויר) ורכבת התהליך</li>
-        <li><b>מה מקבלים ומחיר:</b> כרטיס 99 ₪ עם פירוט החבילה וזמן העלייה לאוויר</li>
-        <li><b>פרטיות ומחיקה:</b> התחייבות להצפנה מלאה וקישור למחיקה עצמית</li>
-        <li><b>שאלות נפוצות (FAQ):</b> 3 השאלות המהותיות (עריכה, דומיין, והקאץ')</li>
-        <li><b>סגירה וקריאה לפעולה:</b> איור הלקוחה מוצאת אותה וכפתור שיחה</li>
-      </ol>
-    </div>
-    <div class="order-card">
-      <h3 style="margin-bottom:12px; font-weight:700;">סדר השאלות הנפוצות (FAQ):</h3>
-      <ol class="order-list">
-        <li><b>אפשר לשנות טקסטים אחרי שהאתר עלה?</b> (תשובה: בעמוד הבעלים, 2 סבבים כלולים)</li>
-        <li><b>יש לי כבר דומיין. אפשר לחבר אותו?</b> (תשובה: הפניה עצמית לפי מדריך או ליונל)</li>
-        <li><b>מה הקאץ'? למה המחיר כזה ומה קורה בהמשך?</b> (תשובה: מחיר מייסדים + זמני עלייה)</li>
-      </ol>
-    </div>
-  </div>
+  <h2>סדר השאלות הנפוצות</h2>
+  <ol class="order">
+    <li>אין לי שום ידע טכני. זה מתאים לי?</li>
+    <li>למה זה כל כך זול? איפה הקאץ'?</li>
+    <li>שילמתי. מתי האתר באוויר?</li>
+    <li>אפשר לשנות טקסטים אחרי שהאתר עלה?</li>
+    <li>יש לי כבר דומיין. אפשר לחבר אותו?</li>
+  </ol>
+  <div class="item"><div class="row"><label class="opt"><input type="radio" name="order" value="מאשר"> הסדר מאשר</label><label class="opt"><input type="radio" name="order" value="לתקן"> לשנות סדר</label></div><textarea id="order-note" placeholder="אם לשנות: מה לפני מה"></textarea></div>
 
-  <!-- Section 4: Master Box -->
-  <div class="master-box" id="master-box">
-    <h2>🎯 אישור כולל להעלאה לפרודקשן</h2>
-    <p>בלחיצה על הכפתור למטה, נשלח אישור מלא להעלאת ה-Preview הנבדק לכתובת הרשמית <b>messy.lionelmitelpunkt.com</b> עם בדיקות Smoke מלאות.</p>
-    <button class="master-btn" id="btn-master-approve">✅ מאשר הכל, להעלות לאוויר!</button>
-  </div>
-
-</main>
-
-<div class="toast" id="toast">הועתק ללוח בהצלחה ✓</div>
+  <h2>אישור כולל</h2>
+  <p class="note">הכפתור פותח מייל אחד עם כל התשובות שסימנת למעלה. אחרי שהמייל מגיע, הגרסה המאושרת עולה לאוויר ונבדקת, ומתקבל דיווח קצר.</p>
+  <p><a class="btn all" id="approve-all" href="#" onclick="return sendAll()">מאשר הכל לפי הסימונים, להעלות לאוויר</a></p>
+</div>
 
 <script>
-  var itemsData = [
-    {
-      id: 1,
-      title: "כותרת עמוד ראשית (<title>)",
-      context: "מופיעה בלשונית הדפדפן ובתוצאות חיפוש",
-      text: "MESSY · שיחה · אתר · דיוק"
-    },
-    {
-      id: 2,
-      title: "תיאור העמוד (Meta Description)",
-      context: "תקציר העמוד עבור מנועי חיפוש ושיתוף קישורים",
-      text: "שיחה אחת של 20 עד 40 דקות, בלי לכתוב שורת קוד. האתר של העסק שלך באוויר."
-    },
-    {
-      id: 3,
-      title: "שלוש שורות הלמה (WHY) במקטע השיחה",
-      context: "המילים המובילות ליד דיוקנו של ליונל",
-      text: "1. לבנות לבד זה להיתקע מול מסך ריק. שיחה מחלצת את מה שבאמת יש לך להגיד.\n2. אתר צריך להביא פניות מאנשים שמתאימים לך, לא להתפזר על כל העולם.\n3. הדיוק קורה תוך כדי עבודה, מול גרסה אמיתית שעומדת באוויר."
-    },
-    {
-      id: 4,
-      title: "שורת הפרטיות והמחיקה מתחת לפתיח / WHY",
-      context: "הבטחת הפרטיות במבט ראשון",
-      text: "השיחה נשמרת באופן מוצפן ולא מועברת לשום גורם מסחרי. אפשר למחוק את כל המידע בכל רגע בלחיצה אחת."
-    },
-    {
-      id: 5,
-      title: "שורות זמן השיחה (20 עד 40 דקות)",
-      context: "מופיעות בתגית מעל הגיבור ובפירוט השלבים",
-      text: "שיחה אחת, בערך 20 עד 40 דקות. בלי שאלונים ארוכים ובלי לנסח בעצמך."
-    },
-    {
-      id: 6,
-      title: "ספייס שלב 2 ברכבת השלבים (Step-2 Splice)",
-      context: "ההבטחה לשלב התצוגה המקדימה",
-      text: "תוך יומיים מגיעה תצוגה מקדימה מלאה של האתר שלך לקריאה, לאישור ולסבבי דיוק."
-    },
-    {
-      id: 7,
-      title: "שורת חידוש אחסון (49 ₪ לשנה)",
-      context: "בכרטיס המחיר תחת פירוט האחסון הכלול",
-      text: "האחסון כלול לשנה שלמה. חידוש אחסון לשנה נוספת: 49 ₪ בלבד (ללא התחייבות)."
-    },
-    {
-      id: 8,
-      title: "תשובת FAQ: עריכת טקסטים אחרי עלייה לאוויר",
-      context: "מענה על שינויים וסבבי דיוק",
-      text: "עריכת טקסטים נעשית בעמוד הבעלים האישי שלך, לצד כל חלק או בצ'אט. שני סבבי תיקון כלולים בחבילה גם אחרי שהאתר באוויר. סבב שלישי ומעלה הוא מפגש דיוק."
-    },
-    {
-      id: 9,
-      title: "תשובת FAQ: חיבור דומיין עצמאי",
-      context: "המענה למי שכבר רכש דומיין פרטי",
-      text: "כן. מפנים אותו לכתובת של האתר לפי מדריך קצר, ואם מסתבכים כותבים לליונל והוא מחבר."
-    },
-    {
-      id: 10,
-      title: "שורת זמן העלייה לאוויר (Paid Timing)",
-      context: "החלטת ליונל: מופיעה בכרטיס התשלום ובתשובת הקאץ'",
-      text: "אחרי התשלום ליונל מאשר, ובדרך כלל האתר באוויר תוך שעות. לכל היותר 48 שעות."
-    },
-    {
-      id: 11,
-      title: "שורת מפגש דיוק נוסף (450 ₪)",
-      context: "שורה שקטה בכרטיס התשלום",
-      text: "מפגש דיוק אישי של שעה וחצי עם ליונל לעבודה עמוקה על ההצעה והמסרים: 450 ₪ (אופציונלי)."
-    },
-    {
-      id: 12,
-      title: "נוסח עמוד מחיקה עצמית (/delete)",
-      context: "הצהרת השירות העצמי למחיקה מלאה",
-      text: "מחיקת כל הנתונים והשיחות שלך משרתי MESSY לצמיתות. המחיקה בלתי הפיכה."
-    },
-    {
-      id: 13,
-      title: "נוסח אישור וקבלה על מחיקה (Receipt)",
-      context: "האישור שמוצג אחרי ביצוע מחיקה",
-      text: "אישור מחיקה: כל הנתונים, השיחה והאתר נמחקו לצמיתות ממאגרי המערכת."
-    },
-    {
-      id: 14,
-      title: "טקסטים חלופיים (Alt Texts) לאיורים החדשים",
-      context: "איורי המוצר והדיוקן",
-      text: "• משיחה לאתר: המילים שלך הופכות לדף ברור שמביא פניות\n• בחדר מול החוצה: מה שמובן מאליו בפגישה מקבל מקום ברור באתר\n• שלושת השלבים: שיחה, תצוגה מקדימה, ועלייה לאוויר\n• עריכה ודיוק בשיחה: תיקון מילים ושינויים ישירות מתוך הדף\n• מה מקבלים: אתר מלא, טקסטים מדויקים, קבצים ואחסון לשנה\n• לשלוח קישור בביטחון: דף שמדבר בדיוק כמוך\n• הלקוחה מוצאת אותה: פנייה מאדם שמבין בדיוק מה מקבלים\n• ליונל מיטלפונקט, בונה MESSY"
-    }
-  ];
-
-  var container = document.getElementById('items-container');
-  var toast = document.getElementById('toast');
-
-  function showToast(msg) {
-    toast.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(function () { toast.classList.remove('show'); }, 2500);
-  }
-
-  itemsData.forEach(function (item) {
-    var card = document.createElement('div');
-    card.className = 'item-card is-approved';
-    card.id = 'item-card-' + item.id;
-
-    card.innerHTML = 
-      '<div class="item-header">' +
-        '<div class="item-num-title">' +
-          '<span class="item-pill" id="pill-' + item.id + '">#' + item.id + '</span>' +
-          '<div>' +
-            '<div class="item-title">' + item.title + '</div>' +
-            '<div class="item-context">' + item.context + '</div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="status-radios">' +
-          '<label class="radio-approve">' +
-            '<input type="radio" name="status-' + item.id + '" value="approve" checked onchange="toggleItem(' + item.id + ', false)">' +
-            'מאשר ✓' +
-          '</label>' +
-          '<label class="radio-modify">' +
-            '<input type="radio" name="status-' + item.id + '" value="modify" onchange="toggleItem(' + item.id + ', true)">' +
-            'לתקן ✏️' +
-          '</label>' +
-        '</div>' +
-      '</div>' +
-      '<div class="item-quote">' + item.text + '</div>' +
-      '<div class="item-controls">' +
-        '<textarea class="item-edit-area" id="edit-' + item.id + '" placeholder="הקלד כאן את התיקון המדויק לשורה זו...">' + item.text + '</textarea>' +
-        '<div class="item-actions">' +
-          '<button class="btn btn-outline" style="font-size:0.85rem; padding:6px 12px;" onclick="sendMailItem(' + item.id + ')">✉️ שלח הערה זו במייל</button>' +
-        '</div>' +
-      '</div>';
-
-    container.appendChild(card);
-  });
-
-  window.toggleItem = function (id, isModify) {
-    var card = document.getElementById('item-card-' + id);
-    var editArea = document.getElementById('edit-' + id);
-    if (isModify) {
-      card.classList.remove('is-approved');
-      card.classList.add('is-modified');
-      editArea.style.display = 'block';
-    } else {
-      card.classList.remove('is-modified');
-      card.classList.add('is-approved');
-      editArea.style.display = 'none';
-    }
-  };
-
-  window.sendMailItem = function (id) {
-    var item = itemsData.find(function (x) { return x.id === id; });
-    var editArea = document.getElementById('edit-' + id);
-    var isMod = document.querySelector('input[name="status-' + id + '"]:checked').value === 'modify';
-    var textVal = isMod ? editArea.value : 'מאושר כלשונו: ' + item.text;
-    var subject = encodeURIComponent('הערה שורה #' + id + ' · ' + item.title);
-    var body = encodeURIComponent(textVal);
-    window.location.href = 'mailto:lionmit@gmail.com?subject=' + subject + '&body=' + body;
-  };
-
-  function buildAllSummary() {
-    var summary = ['=== אישור עמוד הבית MESSY · 17.10.2026 ===\n'];
-    itemsData.forEach(function (item) {
-      var isMod = document.querySelector('input[name="status-' + item.id + '"]:checked').value === 'modify';
-      var editArea = document.getElementById('edit-' + item.id);
-      if (isMod) {
-        summary.push('❌ שורה #' + item.id + ' (' + item.title + ') — לתקן:');
-        summary.push(editArea.value + '\n');
-      } else {
-        summary.push('✅ שורה #' + item.id + ' (' + item.title + ') — מאושר');
-      }
-    });
-    summary.push('\nסדר מקטעים: מאושר');
-    summary.push('סדר FAQ: מאושר');
-    return summary.join('\n');
-  }
-
-  document.getElementById('btn-copy-all').addEventListener('click', function () {
-    var full = buildAllSummary();
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(full).then(function () {
-        showToast('כל ההערות והאישורים הועתקו ללוח ✓');
-      });
-    } else {
-      var ta = document.createElement('textarea');
-      ta.value = full;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      showToast('כל ההערות והאישורים הועתקו ללוח ✓');
-    }
-  });
-
-  document.getElementById('btn-master-approve').addEventListener('click', function () {
-    var full = buildAllSummary() + '\n\nמאשר הכל, להעלות לאוויר!';
-    var subject = encodeURIComponent('מאשר הכל, להעלות לאוויר · MESSY 17.10.2026');
-    var body = encodeURIComponent(full);
-    window.location.href = 'mailto:lionmit@gmail.com?subject=' + subject + '&body=' + body;
-  });
+const ITEMS = [
+  {where:"פתיח, מתחת לשורת המחיר", line:"השיחה לוקחת 20 עד 40 דקות. אפשר לעצור מתי שרוצים.", src:"חיבור של שורות מאושרות (a_minutes, a_stop) עם המספר שלך"},
+  {where:"למה, שורה 1", line:"אני יודע מה זה להיות עצמאי: הרבה שעות לבד, לעשות הכל לבד. ואפשר אחרת.", src:"מהמילים שלך על עצמאות"},
+  {where:"למה, שורה 2", line:"אנשים לא קונים פה אתר. הם קונים פחות בדידות בדרך להסביר מי הם.", src:"מהמילים שלך"},
+  {where:"למה, שורה 3", line:"הדרך כאן: שיחה · אתר · דיוק.", src:"שמות שלושת השלבים"},
+  {where:"פתיח, שורת הפרטיות", line:"אפשר למחוק הכל בלחיצה, וכתוב מה כן נשאר.", src:"השורה של איתן מישיבת הבורד; \"מה כן נשאר\" הוא קישור לעמוד הפרטיות"},
+  {where:"איך זה עובד, תחנה 2", line:"בסוף מקבלים את המשפטים שלך, מסודרים, במסמך אחד. נשאר שלך גם אם לא ממשיכים.", src:"חיבור של שתי שורות מאושרות (s1_mechanism_line, free2)"},
+  {where:"מה מקבלים, רשימת הכרטיס בתשלום", line:"אחר כך 49 ₪ לשנה כולל מע\"מ, או לקחת את הקבצים.", src:"שורת האחסון המאושרת בלי המשפט הראשון; 49 ₪ כמו בתנאים"},
+  {where:"מי קורא ואיך מוחקים", line:"השיחה והמסמך נשמרים באחסון פרטי של Vercel. השיחה המלאה נמחקת אוטומטית אחרי 90 יום.", src:"שני המשפטים הראשונים של סעיף א.1 בטקסט הפרטיות המאושר"},
+  {where:"שאלות נפוצות 4, תשובה, שורה 1", line:"כן. השינויים נעשים בדף האישי של האתר: אם משהו לא נכון או לא נשמע כמוך, כותבים אותו שם, בתיבה שליד אותו חלק או בצ'אט.", src:"מתוך מייל התצוגה המאושר, בנוסח ניטרלי"},
+  {where:"שאלות נפוצות 4, תשובה, שורה 2", line:"יש שני סבבי הערות. אחרי כל סבב תעלה גרסה מתוקנת, גם אחרי שהאתר כבר באוויר. סבב שלישי לא כלול.", src:"שורות הסבבים מהמייל המאושר, בתוספת \"גם אחרי שהאתר כבר באוויר\""},
+  {where:"שאלות נפוצות 4, תשובה, שורה 3", line:"אם רוצים עוד שינויים אחרי זה, אפשר לעבוד על זה יחד עם ליונל בפגישת דיוק, אחד על אחד.", src:"מתוך מייל ה\"תוקן\" המאושר, עם שם הפגישה"},
+  {where:"שאלות נפוצות 5", line:"יש לי כבר דומיין. אפשר לחבר אותו? · כן. מפנים אותו לכתובת של האתר לפי מדריך קצר, ואם מסתבכים כותבים לליונל והוא מחבר.", src:"לפי התשובה שלך הלילה (\"הפניה או אשף אם זה קל\")"},
+  {where:"סיום, הקישור השקט", line:"ולמי שרוצה לעבוד עם בן אדם: פגישת דיוק עם ליונל, 450 ₪.", src:"שורת הקישור המאושרת, בתוספת המחיר"},
+  {where:"כותרת הלשונית ותיאור לשיתוף", line:"MESSY · שיחה · אתר · דיוק · שיחה בכתב עם כלי AI שבנה ליונל מיטלפונקט. מהמילים שלך נבנים מסמך ותצוגה של אתר.", src:"חדש"},
+  {where:"עמוד המחיקה, מה נשאר", line:"מחוץ לאחסון של MESSY נשארים כמה דברים, וכדאי לדעת מהם. השורה של השיחה בגיליון הפרטי של ליונל, עד שהמחיקה האוטומטית שלה תיבדק. בינתיים הוא מוחק אותה ידנית, בתוך 7 ימים, לבקשה במייל. יומני השליחה של Brevo, שדרכה נשלחו המיילים. מה ש־Anthropic שומרת לפי התנאים שלה. יומני הגישה של Cloudflare ושל Vercel, בלי תוכן השיחה. והמיילים שכבר הגיעו לתיבה שלך.", src:"חדש, לפי החלטת הבורד: לומר מה כן נשאר"},
+  {where:"עמוד המחיקה, הקבלה", line:"מה שהיה שמור ב־MESSY נמחק. תאריך ושעה: [זמן]. אפשר לצלם את המסך הזה כאישור.", src:"חדש"},
+  {where:"עמוד המחיקה, מתחת לקבלה", line:"אם נבנתה מהשיחה תצוגה מקדימה של אתר, גם היא יורדת מהרשת, יחד עם כל הקבצים שלה, בתוך שעה. השורה בגיליון של ליונל, יומני Brevo, Cloudflare ו־Vercel, מה ש־Anthropic שומרת והמיילים שכבר הגיעו אליך לא נמחקים כאן. מה נשאר ולמה כתוב בעמוד הפרטיות.", src:"חדש"},
+  {where:"טקסט הפרטיות, סעיף א.1, המשפט המתוקן", line:"ואת מה שנשמר באחסון הזה אפשר למחוק בכל רגע בעמוד המחיקה, שהקישור אליו מופיע בסוף השיחה ושכתוב בו גם מה נשאר מחוץ לו ולמה.", src:"תיקון של משפט קיים: במקום \"את כל מה שנשמר אפשר למחוק\""},
+  {where:"תיאורי האיורים (לא נראים, לקוראי מסך)", line:"אישה ליד שולחן עם טלפון ביד: בועות השיחה שלה זורמות אל דף אתר אחד במחשב · שני צדדים: בחדר, שיחה פתוחה עם מטופלת. בבית בלילה, לבד מול מסך ריק · מימין לשמאל: שיחה בטלפון, דף מסמך, ואתר במחשב ובטלפון · על הספה עם טאבלט: סימוני עיפרון על דף האתר ובועת צ'אט לידו · מלמעלה: המסמך על השולחן, ולידו טלפון עם האתר · שתי נשים בבית קפה, אחת מראה לשנייה את האתר שלה בטלפון · באוטובוס: לקוחה מביטה באתר בטלפון, אצבע מעל הכפתור, ודלת הקליניקה נראית מהחלון · ליונל, איור", src:"חדש"},
+];
+const APPROVED = "אחרי התשלום ליונל מאשר, ובדרך כלל האתר באוויר תוך שעות. לכל היותר 48 שעות.";
+const MAIL = "lionmit@gmail.com";
+const box = document.getElementById('items');
+ITEMS.forEach((it, i) => {
+  const n = i + 1;
+  const el = document.createElement('div'); el.className = 'item'; el.id = 'item-' + n;
+  el.innerHTML = `<div class="where">${n}. ${it.where}</div><div class="line">${it.line}</div><div class="src">מקור: ${it.src}</div>
+    <div class="row"><label class="opt"><input type="radio" name="s${n}" value="מאשר"> מאשר</label><label class="opt"><input type="radio" name="s${n}" value="לתקן"> לתקן</label>
+    <button class="send" onclick="sendOne(${n})">לשלוח</button></div>
+    <textarea id="t${n}" placeholder="אם לתקן: הנוסח הרצוי, או הערה"></textarea>`;
+  box.appendChild(el);
+});
+const ap = document.createElement('div'); ap.className = 'item';
+ap.innerHTML = `<div class="where">כבר מאושר (מהמילים שלך הלילה), מופיע בכרטיס התשלום ובשאלה 3</div><div class="line">${APPROVED}</div><div class="src ok">מאושר · לא נדרשת תשובה</div>`;
+box.appendChild(ap);
+function status(n){ const r = document.querySelector(`input[name="s${n}"]:checked`); return r ? r.value : '(לא סומן)'; }
+function note(n){ return (document.getElementById('t'+n).value || '').trim(); }
+function text(){
+  let out = ["עמוד הבית של MESSY · תשובות ליונל · " + new Date().toLocaleString('he-IL')];
+  ITEMS.forEach((it,i)=>{ const n=i+1; out.push(`${n}. ${status(n)}${note(n)?' · '+note(n):''} · ${it.line.slice(0,70)}${it.line.length>70?'…':''}`); });
+  const o = document.querySelector('input[name="order"]:checked'); const on = (document.getElementById('order-note').value||'').trim();
+  out.push(`סדר: ${o?o.value:'(לא סומן)'}${on?' · '+on:''}`);
+  return out.join('\n');
+}
+function sendOne(n){ const it = ITEMS[n-1]; const s = `אישור שורה ${n} · עמוד הבית MESSY`; const b = `${n}. ${status(n)}\n${it.line}\n\n${note(n)}`; location.href = `mailto:${MAIL}?subject=${encodeURIComponent(s)}&body=${encodeURIComponent(b)}`; }
+function sendAll(){ const s = `מאשר לפי הסימונים · להעלות לאוויר · עמוד הבית MESSY`; location.href = `mailto:${MAIL}?subject=${encodeURIComponent(s)}&body=${encodeURIComponent(text())}`; return false; }
+function copyAll(){ navigator.clipboard.writeText(text()).then(()=>{ document.getElementById('count').textContent = 'הועתק'; setTimeout(()=>document.getElementById('count').textContent='',1500); }); }
+document.addEventListener('change', ()=>{ const done = ITEMS.filter((_,i)=>status(i+1)!=='(לא סומן)').length; document.getElementById('count').textContent = `${done} מתוך ${ITEMS.length} סומנו`; });
 </script>
-
 </body>
 </html>
