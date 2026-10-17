@@ -24,12 +24,21 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 Set these in `.env.local` (never committed) or in the Vercel project settings.
 
+### "Verify you are human" at the start of an interview
+
+The start form is protected without any third-party account, in this order, after the per-IP rate limits:
+
+1. **Honeypot.** A text field named `website` that people never see (off-screen, hidden from screen readers, skipped by Tab). Anything in it, or a form submitted less than 3 seconds after its challenge was issued, answers `403 {"error":"human_check_failed"}`.
+2. **Proof of work.** `GET /api/challenge` hands out a signed challenge (`{token, difficulty}`, 10-minute validity, 30 per IP per 10 minutes). The browser solves it in a Web Worker while the person reads (a muted "רגע, בודקים שזה לא רובוט" line shows meanwhile) and sends `pow: {token, counter}` with the session request. Missing: `403 pow_required`. Bad signature, expired, already used or wrong solution: `403 pow_failed`. Used nonces are kept in memory per instance; the 10-minute window and the per-IP limits bound a replay on another instance.
+3. **Cloudflare Turnstile**, a second layer that is active only when its keys exist (below).
+
 | Variable | Where | What it does |
 |---|---|---|
-| `TURNSTILE_SECRET_KEY` | server only | Cloudflare Turnstile secret. When set, `POST /api/session` requires a `turnstile` token and verifies it with Cloudflare before an interview starts. Unset: the check is skipped (local dev and previews work as before). |
+| `MESSY_POW_BITS` | server only | Proof-of-work difficulty in leading zero bits. Default `16` (well under a second on a laptop, a second or two on an older phone). `0` turns the check off (the challenge is still issued, with difficulty 0, and a session starts without a solution). Values above 32 are clamped. |
+| `TURNSTILE_SECRET_KEY` | server only | Cloudflare Turnstile secret. When set, `POST /api/session` also requires a `turnstile` token and verifies it with Cloudflare before an interview starts. Unset: that layer is skipped (local dev and previews work as before). |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | public (inlined in the browser bundle) | Cloudflare Turnstile site key. When set, the start form shows the "verify you are human" widget and the start button waits for it. Unset: no widget. |
 
-Set both together in production. Setting only the secret blocks every start (the browser never sends a token); setting only the site key shows a widget whose token is ignored.
+Set both Turnstile variables together, or neither. Setting only the secret blocks every start (the browser never sends a token); setting only the site key shows a widget whose token is ignored. The signing key for challenges is the one the session tokens use (`SESSION_SECRET`, or one derived from `ANTHROPIC_API_KEY`).
 
 ### Storage, deletion and cleanup
 

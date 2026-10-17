@@ -4,7 +4,19 @@ import Link from 'next/link';
 import { useRef, useState } from 'react';
 import { CONSENT, priceLine } from '@/content/copy';
 import Turnstile, { TURNSTILE_SITE_KEY, type TurnstileHandle } from '@/components/Turnstile';
+import { usePowChallenge } from '@/components/usePowChallenge';
 import type { Gender, SessionResponse } from '@/types';
+
+/** Off-screen but still in the layout (display:none fields are skipped by many bots). */
+const HONEYPOT_STYLE: React.CSSProperties = {
+  position: 'absolute',
+  left: '-10000px',
+  top: 'auto',
+  width: '1px',
+  height: '1px',
+  overflow: 'hidden',
+  opacity: 0,
+};
 
 interface Props {
   onStarted: (session: SessionResponse, person: { name: string; gender: Gender }) => void;
@@ -21,10 +33,14 @@ export default function ConsentScreen({ onStarted }: Props) {
   const [agree, setAgree] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  // Honeypot: a field people never see. Anything in it marks the request as a bot.
+  const [website, setWebsite] = useState('');
+  // Invisible proof-of-work challenge, solved in a worker while the person reads.
+  const { solution: pow, solving, refresh: refreshPow } = usePowChallenge();
   // Cloudflare Turnstile ("verify you are human"): only when the public site key is set.
   const [human, setHuman] = useState<string | null>(null);
   const turnstileRef = useRef<TurnstileHandle>(null);
-  const humanOk = !TURNSTILE_SITE_KEY || human !== null;
+  const humanOk = pow !== null && (!TURNSTILE_SITE_KEY || human !== null);
 
   const nameOk = name.trim().length > 0 && name.trim().length <= 40;
   const canStart = nameOk && gender !== '' && agree && humanOk && !busy;
@@ -40,12 +56,21 @@ export default function ConsentScreen({ onStarted }: Props) {
       const res = await fetch('/api/session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ consent: true, name: name.trim(), gender, ...(human ? { turnstile: human } : {}) }),
+        body: JSON.stringify({
+          consent: true,
+          name: name.trim(),
+          gender,
+          website,
+          ...(pow ? { pow } : {}),
+          ...(human ? { turnstile: human } : {}),
+        }),
       });
       const data = await res.json();
       if (res.status === 429) return setError(CONSENT.errors.rate);
-      if (typeof data?.error === 'string' && data.error.startsWith('human_check_')) {
-        // The token is single-use: ask the widget for a fresh one before the next try.
+      const code = typeof data?.error === 'string' ? data.error : '';
+      if (code.startsWith('pow_') || code.startsWith('human_check_')) {
+        // Both tokens are single-use: solve a fresh challenge and ask the widget for a new token.
+        refreshPow();
         turnstileRef.current?.reset();
         return setError(res.status === 503 ? CONSENT.errors.humanUnavailable : CONSENT.errors.humanFailed);
       }
@@ -120,11 +145,30 @@ export default function ConsentScreen({ onStarted }: Props) {
             <span>{CONSENT.agree}</span>
           </label>
 
+          <div style={HONEYPOT_STYLE} aria-hidden="true">
+            <label htmlFor="website">{CONSENT.honeypotLabel}</label>
+            <input
+              id="website"
+              name="website"
+              type="text"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              autoComplete="off"
+              tabIndex={-1}
+            />
+          </div>
+
           <Turnstile ref={turnstileRef} onToken={setHuman} />
 
           <button type="submit" className="btn-cta" disabled={!canStart} aria-disabled={!canStart}>
             {CONSENT.start}
           </button>
+
+          {solving && (
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }} data-testid="pow-solving">
+              {CONSENT.solving}
+            </p>
+          )}
 
           {error && (
             <p role="alert" style={{ color: '#B42318' }}>

@@ -50,11 +50,12 @@ function b64url(buf: Buffer | string): string {
   return Buffer.from(buf).toString('base64url');
 }
 
-function sign(purpose: string, data: string): string {
+/** HMAC over `purpose|data` with the server key. Shared with the proof-of-work challenge (pow.ts). */
+export function sign(purpose: string, data: string): string {
   return createHmac('sha256', getSigningKey()).update(`${purpose}|${data}`).digest('base64url');
 }
 
-function safeEqual(a: string, b: string): boolean {
+export function safeEqual(a: string, b: string): boolean {
   const ab = Buffer.from(a);
   const bb = Buffer.from(b);
   return ab.length === bb.length && timingSafeEqual(ab, bb);

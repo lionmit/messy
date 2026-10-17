@@ -46,6 +46,10 @@ export const CONSENT = {
   /** §ב: one box for the age and the transfer abroad (the legal cover's recommendation). Any gender. */
   agree: 'קראתי את מה שכתוב כאן, כולל ההעברה לשירותים מחוץ לישראל. מלאו לי 18, ואני רוצה להתחיל.',
   start: 'להתחיל',
+  /** Shown in a muted line while the browser solves the invisible proof-of-work challenge. */
+  solving: 'רגע, בודקים שזה לא רובוט',
+  /** The honeypot field. People never see it (hidden from view and from screen readers); bots fill it. */
+  honeypotLabel: 'אל תמלאו שדה זה',
   errors: {
     name: 'צריך לכתוב שם, עד 40 אותיות.',
     gender: 'צריך לבחור לשון פנייה.',

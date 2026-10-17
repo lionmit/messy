@@ -7,8 +7,8 @@ const isDev = process.env.NODE_ENV === 'development';
  * this Next.js version). 'unsafe-inline' for scripts is needed by Next's inline
  * hydration scripts. The page talks to its own /api routes and, for the
  * "verify you are human" widget on the start form, to Cloudflare Turnstile
- * (script, iframe and XHR all on challenges.cloudflare.com). Fonts are
- * self-hosted by next/font.
+ * (script, iframe and XHR all on challenges.cloudflare.com). The proof-of-work
+ * check runs in a blob: worker (worker-src). Fonts are self-hosted by next/font.
  */
 const turnstile = 'https://challenges.cloudflare.com';
 
@@ -19,6 +19,8 @@ const csp = [
   "img-src 'self' blob: data:",
   "font-src 'self'",
   `connect-src 'self' ${turnstile}`,
+  // The start form solves its proof-of-work challenge in an inline (blob:) Web Worker.
+  "worker-src 'self' blob:",
   `frame-src 'self' ${turnstile} https://*.vercel.app https://messy-site-maayan.vercel.app http://localhost:* http://127.0.0.1:*`,
   "object-src 'none'",
   "base-uri 'self'",

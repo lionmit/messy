@@ -3,7 +3,8 @@
  * Dependencies are injectable so tests run with a mocked model, store and webhook.
  *
  * Flow:
- *   POST /api/session  consent + name + form of address (+ turnstile token) -> session token + opening message
+ *   GET  /api/challenge                                      -> signed proof-of-work challenge
+ *   POST /api/session  consent + name + form of address (+ pow solution, + turnstile token) -> session token + opening message
  *   POST /api/chat     signed history + one new message  -> reply (or distress stop)
  *   POST /api/finish   signed history + optional email   -> document, saved server-side
  *   POST /api/delete   delete token                      -> record removed, tombstone "person"
@@ -18,6 +19,7 @@ import { deliver as realDeliver } from './delivery';
 import { verifyHuman, type FetchLike } from './human';
 import { logError, logEvent } from './log';
 import { ModelNotConfiguredError, buildModelRequest, callAnthropic, callModel, type ModelCaller } from './model';
+import { issueChallenge, resetPowForTests, verifyPow } from './pow';
 import { leaksSystemPrompt } from './prompt/guard';
 import { MinIntervalLimiter, SlidingWindowLimiter } from './rate-limit';
 import {
@@ -57,6 +59,7 @@ function defaultDeps(): Deps {
 
 const limiters = {
   sessionPerIp: new SlidingWindowLimiter(RATE.sessionPerIp.limit, RATE.sessionPerIp.windowMs),
+  challengePerIp: new SlidingWindowLimiter(RATE.challengePerIp.limit, RATE.challengePerIp.windowMs),
   chatPerIp: new SlidingWindowLimiter(RATE.chatPerIp.limit, RATE.chatPerIp.windowMs),
   chatPerSession: new SlidingWindowLimiter(RATE.chatPerSession.limit, RATE.chatPerSession.windowMs),
   chatInterval: new MinIntervalLimiter(RATE.chatMinIntervalMs),
@@ -71,6 +74,7 @@ const finished = new Set<string>();
 export function resetForTests(): void {
   Object.values(limiters).forEach((l) => l.reset());
   finished.clear();
+  resetPowForTests();
 }
 
 const tooMany = (retryAfterMs: number): Result => ({
@@ -87,6 +91,16 @@ const invalid = (field: string, reason?: string): Result => ({
 export interface SessionOptions {
   /** Injectable for tests: the fetch used to reach Cloudflare's siteverify. */
   fetch?: FetchLike;
+  /** Injectable clock for the proof-of-work checks. */
+  now?: () => number;
+}
+
+/** GET /api/challenge: a signed proof-of-work challenge, rate-limited per IP. */
+export function issuePowChallenge(ip: string, now?: () => number): Result {
+  const rl = limiters.challengePerIp.hit(ip);
+  if (!rl.ok) return tooMany(rl.retryAfterMs);
+  const { token, difficulty } = issueChallenge({ now });
+  return { status: 200, body: { token, difficulty } };
 }
 
 export async function startSession(body: unknown, ip: string, opts: SessionOptions = {}): Promise<Result> {
@@ -100,7 +114,20 @@ export async function startSession(body: unknown, ip: string, opts: SessionOptio
   const gender = validateGender(body.gender);
   if (!gender.ok) return invalid(gender.field);
 
-  // Human check (Cloudflare Turnstile). A no-op unless TURNSTILE_SECRET_KEY is set.
+  // Human check, layer 1: the honeypot field. People never see it; bots fill it.
+  if (body.website !== undefined && body.website !== null && body.website !== '') {
+    logEvent('honeypot.filled');
+    return { status: 403, body: { error: 'human_check_failed' } };
+  }
+
+  // Human check, layer 2: the proof-of-work solution. A no-op while MESSY_POW_BITS is 0.
+  const pow = verifyPow(body.pow, { now: opts.now });
+  if (!pow.ok) {
+    if (pow.reason === 'too_fast') return { status: 403, body: { error: 'human_check_failed' } };
+    return { status: 403, body: { error: pow.reason === 'required' ? 'pow_required' : 'pow_failed' } };
+  }
+
+  // Human check, layer 3 (Cloudflare Turnstile). A no-op unless TURNSTILE_SECRET_KEY is set.
   const human = await verifyHuman(body.turnstile, ip, opts.fetch);
   if (!human.ok) {
     if (human.reason === 'unavailable') return { status: 503, body: { error: 'human_check_unavailable' } };

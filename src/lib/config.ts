@@ -30,6 +30,8 @@ export const LIMITS = {
 
 export const RATE = {
   sessionPerIp: { limit: 6, windowMs: 60 * 60 * 1000 },
+  /** GET /api/challenge (proof-of-work challenges for the start form). */
+  challengePerIp: { limit: 30, windowMs: 10 * 60 * 1000 },
   chatPerIp: { limit: 60, windowMs: 10 * 60 * 1000 },
   chatPerSession: { limit: 45, windowMs: 60 * 60 * 1000 },
   chatMinIntervalMs: 1500,
