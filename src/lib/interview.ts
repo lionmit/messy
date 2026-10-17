@@ -18,9 +18,10 @@ import { buildInterviewPayload, extractDocumentJson, normalizeDocument } from '.
 import { deliver as realDeliver } from './delivery';
 import { verifyHuman, type FetchLike } from './human';
 import { logError, logEvent } from './log';
-import { ModelNotConfiguredError, buildModelRequest, callAnthropic, callModel, type ModelCaller } from './model';
+import { ModelNotConfiguredError, buildModelRequest, callModel, type ModelCaller } from './model';
 import { issueChallenge, resetPowForTests, verifyPow } from './pow';
 import { leaksSystemPrompt } from './prompt/guard';
+import { PROMPT_VERSION } from './prompt/system';
 import { MinIntervalLimiter, SlidingWindowLimiter } from './rate-limit';
 import {
   cleanForDisplay,
@@ -304,6 +305,7 @@ export async function finishInterview(body: unknown, ip: string, deps: Deps = de
     email: email.value,
     document,
     transcript: history,
+    promptVersion: PROMPT_VERSION,
   });
   finished.add(claims.sid);
   await deps.deliver(

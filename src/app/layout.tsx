@@ -14,13 +14,15 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'Messy — Turn Your Noise Into Clarity',
+  // Hebrew: the page is Hebrew (Shani's smoke, 2026-10-17). The English copy lives only behind the in-page toggle.
+  title: 'MESSY · שיחה · אתר · דיוק',
   description:
-    'A conversational identity extraction tool that interviews professionals and generates structured identity documents. You come in messy. You leave with clarity.',
+    'שיחה בכתב עם כלי AI שבנה ליונל מיטלפונקט. מהמילים שלך נבנים מסמך ותצוגה של אתר, ורואים אותו לפני שמשלמים.',
   openGraph: {
-    title: 'Messy — Turn Your Noise Into Clarity',
-    description: 'You come in messy. You leave with clarity.',
+    title: 'MESSY · שיחה · אתר · דיוק',
+    description: 'שיחה בכתב עם כלי AI שבנה ליונל מיטלפונקט. מהמילים שלך נבנים מסמך ותצוגה של אתר.',
     type: 'website',
+    locale: 'he_IL',
   },
 };
 

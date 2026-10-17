@@ -8,6 +8,8 @@ export const PRICES = {
   document_price: 0,
   golive_founding_price: 99,
   golive_list_price: 149,
+  /** פגישת דיוק, one to one with Lionel (prices.json session_price). */
+  session_price: 450,
   founding_open: true,
   hosting_months_included: 12,
   transcript_retention_days: 90,

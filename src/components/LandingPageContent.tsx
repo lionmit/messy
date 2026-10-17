@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { PRICES } from '@/content/prices';
 
 type Lang = 'he' | 'en';
 
@@ -19,16 +20,24 @@ export default function LandingPageContent() {
         journey: 'לפני ואחרי',
         howItWorks: 'איך זה עובד',
         aboutLionel: 'על ליונל',
-        cta: 'להתחיל את השיחה',
+        cta: 'להתחיל',
       },
       hero: {
         badge: '🌿 למי שיודע בדיוק מה לעשות בתוך החדר — אבל קופא מול עולם השיווק',
         titlePart1: 'בתוך החדר יש לך קסם וביטחון.',
         titlePart2: 'למה כשצריך להסביר את זה בחוץ — הכל נתקע?',
-        desc: 'הפער בין העומק של התהליך שאתה מעביר לבין הניסיון "לשווק את עצמך" הוא הדבר הכי מתסכל בעסק שלך. שיחה קשובה בת 15 דקות מחזיקה לך מראה צלולה — ומחלצת מתוך העשייה האמיתית שלך דף אינטרנט חי, סטוריטלינג אותנטי ומילים שאפשר להעביר הלאה בלי להתבייש.',
-        primaryCta: 'להתחיל שיחת פיצוח (15 דק׳)',
+        desc: 'הפער בין העומק של התהליך שאתה מעביר לבין הניסיון "לשווק את עצמך" הוא הדבר הכי מתסכל בעסק שלך. שיחה בכתב של 20 עד 40 דקות מחזיקה לך מראה צלולה — ומחלצת מתוך העשייה האמיתית שלך דף אינטרנט חי, סטוריטלינג אותנטי ומילים שאפשר להעביר הלאה בלי להתבייש.',
+        primaryCta: 'להתחיל את השיחה (20 עד 40 דקות)',
         secondaryCta: 'לגעת בפער ↓',
         subnote: '🎙️ הקלטה קולית או כתיבה · ללא שאלונים יבשים · מבוסס כולו על המילים שלך',
+        /** Board 2026-10-17: the WHY in three lines, Lionel's voice, from his own words. The stages keep their names: שיחה · אתר · דיוק. */
+        why: [
+          'אני יודע מה זה להיות עצמאי: הרבה שעות לבד, לעשות הכל לבד. ואפשר אחרת.',
+          'אנשים לא קונים פה אתר. הם קונים פחות בדידות בדרך להסביר מי הם.',
+          'הדרך כאן: שיחה · אתר · דיוק.',
+        ],
+        /** Eitan's line, agreed by the board. The link goes to the privacy page, which lists what remains. */
+        privacy: { before: 'אפשר למחוק הכל בלחיצה, וכתוב ', link: 'מה כן נשאר', after: '.' },
       },
       painSection: {
         eyebrow: 'הכאב האמיתי שאיש לא מדבר עליו',
@@ -62,7 +71,7 @@ export default function LandingPageContent() {
         title: 'מה קורה כשמפסיקים לנסות "לשווק" ופשוט מדברים?',
         subtitle: 'המסע מהתסכול והעומס — אל דף חי, אותנטי ונושם שאפשר להעביר בגאווה לכל אדם.',
         tabBefore: '1. לפני השיחה (השיתוק וההר)',
-        tabDuring: '2. בשיחת ה-15 דקות (הליווי והמראה)',
+        tabDuring: '2. בשיחה של 20 עד 40 דקות (הליווי והמראה)',
         tabAfter: '3. בסיום (דברור עצמי ודף חי)',
         before: {
           badge: 'לפני: תסכול, עומס וניכור שיווקי',
@@ -106,7 +115,7 @@ export default function LandingPageContent() {
       },
       steps: {
         title: 'איך זה עובד בפועל?',
-        s1Title: '1. שיחה קשובה (15 דק׳)',
+        s1Title: '1. שיחה קשובה (20 עד 40 דקות)',
         s1Desc: 'אתה יושב במקום שקט, לוחץ על המיקרופון (🎙️) ומדבר או מקליד בקצב שלך. השיחה שואלת, מקשיבה ומפרקת את הסבך.',
         s2Title: '2. החזקת המראה והזיקוק',
         s2Desc: 'המערכת אוספת את המילים המקוריות שלך, מחברת את הסיפור, מאתרת את הקהל ומבנה את השירותים בלי שום קלישאה.',
@@ -120,9 +129,11 @@ export default function LandingPageContent() {
       },
       ctaBox: {
         title: 'מוכן להוציא את מה שקורה בחדר — אל העולם?',
-        desc: 'בלי שאלונים, בלי מאמץ מוקדם ובלי זיוף. 15 דקות שיחה, ואתה מקבל אתר אישי חי שנשמע בדיוק כמוך.',
+        desc: 'בלי שאלונים, בלי מאמץ מוקדם ובלי זיוף. 20 עד 40 דקות של שיחה, ואתה מקבל אתר אישי חי שנשמע בדיוק כמוך.',
         btn: 'להתחלת השיחה עכשיו 🎙️',
       },
+      /** Board C5: the optional session is one quiet text link at the bottom, nothing more. */
+      session: { text: `אפשר גם פגישת דיוק איתי, ${PRICES.session_price} ₪.`, link: 'לשאול במייל', subject: 'פגישת דיוק' },
     },
     en: {
       nav: {
@@ -130,16 +141,22 @@ export default function LandingPageContent() {
         journey: 'Before & After',
         howItWorks: 'How it works',
         aboutLionel: 'About Lionel',
-        cta: 'Start Conversation',
+        cta: 'Start',
       },
       hero: {
         badge: '🌿 For those who know exactly what they do inside the room — but freeze outside it',
         titlePart1: 'Inside the room, you are brilliant and confident.',
         titlePart2: 'Why does it all freeze the moment you have to explain it outside?',
-        desc: 'The gap between the deep, transformative work you do inside the room and the agonizing effort to "market yourself" is the most exhausting part of your work. A calm 15-minute conversation holds up a clear mirror — extracting your genuine voice and turning it into a living, serene personal website you can finally share with pride.',
-        primaryCta: 'Start your clarity session (15 min)',
+        desc: 'The gap between the deep, transformative work you do inside the room and the agonizing effort to "market yourself" is the most exhausting part of your work. A calm 20 to 40 minute written conversation holds up a clear mirror — extracting your genuine voice and turning it into a living, serene personal website you can finally share with pride.',
+        primaryCta: 'Start your clarity session (20 to 40 min)',
         secondaryCta: 'Feel the gap ↓',
         subnote: '🎙️ Speak with your voice or type · Zero dry forms · 100% grounded in your real words',
+        why: [
+          'I know what being independent means: many hours alone, doing everything alone. And it can be different.',
+          'People are not buying a website here. They are buying less loneliness on the way to explaining who they are.',
+          'The way here: conversation · website · precision.',
+        ],
+        privacy: { before: 'One click deletes everything, and ', link: 'what remains', after: ' is written down.' },
       },
       painSection: {
         eyebrow: 'The unspoken tension',
@@ -173,7 +190,7 @@ export default function LandingPageContent() {
         title: 'What happens when you stop trying to "market" and just speak?',
         subtitle: 'The journey from paralysis and dread — to a living, beautiful personal site you can send to anyone with genuine confidence.',
         tabBefore: '1. Before (The Mountain & The Silence)',
-        tabDuring: '2. The 15 Minutes (The Mirror & Attentiveness)',
+        tabDuring: '2. The 20 to 40 Minutes (The Mirror & Attentiveness)',
         tabAfter: '3. After (Self-Articulation & Living Site)',
         before: {
           badge: 'Before: Paralysis, overthinking & marketing fatigue',
@@ -217,7 +234,7 @@ export default function LandingPageContent() {
       },
       steps: {
         title: 'How does it actually work?',
-        s1Title: '1. Attentive Dialogue (15 min)',
+        s1Title: '1. Attentive Dialogue (20 to 40 min)',
         s1Desc: 'You sit in a quiet place, tap the microphone (🎙️), and speak or type at your pace. The system listens, unpacks the knots, and follows your flow.',
         s2Title: '2. Mirroring & Distillation',
         s2Desc: 'The engine gathers your exact spoken words, mapping your story, identifying your audience, and structuring your services without clichés.',
@@ -231,9 +248,10 @@ export default function LandingPageContent() {
       },
       ctaBox: {
         title: 'Ready to bring what happens in the room — out to the world?',
-        desc: 'No forms, no preparation, and no pretension. 15 minutes of dialogue, and you have an authentic living website.',
+        desc: 'No forms, no preparation, and no pretension. 20 to 40 minutes of dialogue, and you have an authentic living website.',
         btn: 'Start your conversation now 🎙️',
       },
+      session: { text: `A one-to-one precision session with me is also available, ${PRICES.session_price} ₪.`, link: 'Ask by email', subject: 'Precision session' },
     },
   };
 
@@ -262,7 +280,7 @@ export default function LandingPageContent() {
               priority
               className="h-11 w-auto"
             />
-            <span className="text-xs uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EAE3D9] text-[#5B6E58] font-medium">
+            <span className="hidden sm:inline text-xs uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EAE3D9] text-[#5B6E58] font-medium">
               In The Room · 2026
             </span>
           </Link>
@@ -311,7 +329,7 @@ export default function LandingPageContent() {
 
             <Link
               href="/interview"
-              className="bg-[#2C332D] text-[#F9F6F0] px-4 py-2 rounded-full text-sm font-medium hover:bg-[#3D473F] transition-all shadow-sm"
+              className="bg-[#2C332D] text-[#F9F6F0] px-4 py-2 rounded-full text-sm font-medium hover:bg-[#3D473F] transition-all shadow-sm whitespace-nowrap"
             >
               {curr.nav.cta}
             </Link>
@@ -332,6 +350,13 @@ export default function LandingPageContent() {
           <br />
           <span className="text-[#C26747]">{curr.hero.titlePart2}</span>
         </h1>
+
+        {/* The WHY, three lines in Lionel's voice (board 2026-10-17) */}
+        <div className="max-w-2xl mx-auto mb-8 space-y-1.5 text-base sm:text-lg text-[#2C332D] leading-relaxed">
+          {curr.hero.why.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+        </div>
 
         {/* Lead description */}
         <p className="text-lg sm:text-xl text-[#525E54] leading-relaxed max-w-2xl mx-auto mb-10 font-normal">
@@ -370,6 +395,15 @@ export default function LandingPageContent() {
               : '“Climbing the mountain alongside them, through the thicket — until the inner path opens.” How MESSY mirrors your work.'}
           </div>
         </div>
+
+        {/* One quiet privacy line (board 2026-10-17, Eitan's wording) */}
+        <p className="mt-6 text-sm text-[#7A877E]">
+          {curr.hero.privacy.before}
+          <Link href="/privacy" className="underline underline-offset-2 hover:text-[#2C332D]">
+            {curr.hero.privacy.link}
+          </Link>
+          {curr.hero.privacy.after}
+        </p>
       </section>
 
       {/* ─── Pain & The Gap Section (#pain) ─── */}
@@ -626,6 +660,17 @@ export default function LandingPageContent() {
             {curr.ctaBox.btn}
           </Link>
         </div>
+
+        {/* The optional session: one quiet text link, nothing more (board C5) */}
+        <p className="mt-8 text-sm text-[#7A877E]">
+          {curr.session.text}{' '}
+          <a
+            href={`mailto:lionmit@gmail.com?subject=${encodeURIComponent(curr.session.subject)}`}
+            className="underline underline-offset-2 hover:text-[#2C332D]"
+          >
+            {curr.session.link}
+          </a>
+        </p>
       </section>
     </div>
   );

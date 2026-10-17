@@ -3,6 +3,7 @@ import { deleteRecord, finishInterview, resetForTests } from '@/lib/interview';
 import { buildInterviewPayload, extractDocumentJson, normalizeDocument } from '@/lib/doc';
 import { deliver } from '@/lib/delivery';
 import { MemoryStore } from '@/lib/storage';
+import { PROMPT_VERSION } from '@/lib/prompt/system';
 import { transcriptMac, type TranscriptMessage } from '@/lib/session';
 import { freshIp, makeDeps, newSession } from './helpers';
 
@@ -123,7 +124,7 @@ describe('finish, storage and delete', () => {
     const store = new MemoryStore();
     const t0 = new Date('2026-10-10T00:00:00Z');
     const rec = await store.save(
-      { sessionId: 's', name: 'א', gender: 'f', email: null, document: normalizeDocument({}, person), transcript: [] },
+      { sessionId: 's', name: 'א', gender: 'f', email: null, document: normalizeDocument({}, person), transcript: [], promptVersion: PROMPT_VERSION },
       t0
     );
     expect(await store.get(rec.id, new Date('2027-01-07T00:00:00Z'))).not.toBeNull();

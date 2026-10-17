@@ -54,7 +54,7 @@ The pipeline (a separate Python system) reads the same store, so the pathnames b
 
 | Pathname | Written by | Content |
 |---|---|---|
-| `interviews/<id>.json` | the bot, on finish | The `InterviewRecord`: `id` (24 hex), `sessionId`, `name`, `gender`, `email` (or `null`), `document`, `transcript`, `createdAt`, `expiresAt` (createdAt + 90 days). |
+| `interviews/<id>.json` | the bot, on finish | The `InterviewRecord`: `id` (24 hex), `sessionId`, `name`, `gender`, `email` (or `null`), `document`, `transcript`, `promptVersion` (the `PROMPT_VERSION` of the system prompt that ran the conversation; absent on records from before 2026-10-17), `createdAt`, `expiresAt` (createdAt + 90 days). |
 | `stopped/<sessionId>.json` | the bot, on a distress stop | `{"at": "<ISO time>"}`. Nothing else is kept from a stopped conversation. |
 | `tombstones/<id>.json` | the bot, on every deletion | `{"id", "deletedAt", "reason": "person" \| "expiry" \| "operator"}`. The pipeline reads these to take the person's site and its own state down, then deletes the tombstone. The tombstone is written before the record is deleted, so a failed delete can be retried. |
 | `pipeline/<slug>/...` | the pipeline | Its own files. The bot never touches them. |

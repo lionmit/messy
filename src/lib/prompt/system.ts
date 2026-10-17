@@ -11,6 +11,15 @@ import type { Gender } from '@/lib/session';
 import { roomQuestion } from '@/content/copy';
 import { LISTENING_MOVES } from './listening-moves';
 
+/**
+ * The frozen version of the prompt (board, 2026-10-17: "הנחיית הבוט מקובעת בגרסה. שינוי רק
+ * בהחלטה של ליונל"). tests/prompt-version.test.ts hashes promptTextForVersion() and compares
+ * it to PROMPT_SHA256 below: any change to the prompt text fails the suite until both the
+ * version and the hash are bumped together, and that bump is Lionel's decision.
+ * Every saved interview record carries this value as `promptVersion`.
+ */
+export const PROMPT_VERSION = '2026-10-17.1';
+
 /** Marker used to spot a leaked prompt in model output. */
 export const PROMPT_CANARY = 'MSY-7F3A-PROMPT';
 
@@ -87,3 +96,16 @@ export function wrapUpNote(turnsLeft: number): string {
 }
 
 export const FINISH_NOTE = '<server_note>FINISH</server_note>';
+
+/**
+ * The prompt text that PROMPT_VERSION names: the static system prompt (which already
+ * includes the listening moves) plus the <person> block in both forms of address with a
+ * placeholder name, so the room question is covered too. Server notes are mechanics, not
+ * wording, and stay out.
+ */
+export function promptTextForVersion(): string {
+  return [STATIC_SYSTEM_PROMPT, personBlock('⟦name⟧', 'f'), personBlock('⟦name⟧', 'm')].join('\n');
+}
+
+/** sha256 of promptTextForVersion() at PROMPT_VERSION. Bump both together, on Lionel's decision. */
+export const PROMPT_SHA256 = '0620a5086a7935387cfbda490b95cae7487a4b919cc63c3627856cd05fa169d9';

@@ -15,6 +15,12 @@ export interface InterviewRecord {
   email: string | null;
   document: InterviewDocument;
   transcript: TranscriptMessage[];
+  /**
+   * PROMPT_VERSION of the system prompt that ran this conversation (src/lib/prompt/system.ts),
+   * so every stored conversation says which prompt produced it. Records saved before
+   * 2026-10-17 have no such field.
+   */
+  promptVersion: string;
   createdAt: string;
   /** Raw transcript expiry: createdAt + 90 days (prices.json transcript_retention_days). */
   expiresAt: string;

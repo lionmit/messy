@@ -55,6 +55,7 @@ const input = () => ({
   email: 'dana@example.com',
   document: normalizeDocument({ before_sentence: 'מעצבת' }, person),
   transcript: [{ role: 'user' as const, content: 'מעצבת פנים' }],
+  promptVersion: '2026-10-17.1',
 });
 const T0 = new Date('2026-10-10T08:00:00Z');
 const T_EXPIRED = new Date('2027-01-08T08:00:01Z');
@@ -90,7 +91,7 @@ describe('BlobStore (private Vercel Blob, mocked SDK)', () => {
     expect([...objects.keys()]).toEqual([`interviews/${rec.id}.json`]);
     const stored = JSON.parse(objects.get(recordPath(rec.id))!);
     expect(Object.keys(stored).sort()).toEqual(
-      ['id', 'sessionId', 'name', 'gender', 'email', 'document', 'transcript', 'createdAt', 'expiresAt'].sort()
+      ['id', 'sessionId', 'name', 'gender', 'email', 'document', 'transcript', 'promptVersion', 'createdAt', 'expiresAt'].sort()
     );
     expect(stored).toEqual(rec);
     expect(await store.get(rec.id)).toEqual(rec);
@@ -227,15 +228,20 @@ describe('/delete page copy (DELETE_PAGE)', () => {
       'כל אלה נמחקים מהאחסון של MESSY. אם נבנתה מהשיחה תצוגה מקדימה של אתר, גם היא יורדת מהרשת, יחד עם כל הקבצים שלה, בתוך שעה.'
     );
     expect(DELETE_PAGE.kept).toBe(
-      'העותק שליונל מקבל על כל שיחה (גיליון שמור אצלו) ומיילים שכבר נשלחו לא נמחקים אוטומטית. אפשר לבקש גם את מחיקתם במייל lionmit@gmail.com, והם יימחקו ידנית בתוך 7 ימים.'
+      'מחוץ לאחסון של MESSY נשארים כמה דברים, וכדאי לדעת מהם. השורה של השיחה בגיליון הפרטי של ליונל, עד שהמחיקה האוטומטית שלה תיבדק. בינתיים הוא מוחק אותה ידנית, בתוך 7 ימים, לבקשה במייל lionmit@gmail.com. יומני השליחה של Brevo, שדרכה נשלחו המיילים. מה ש־Anthropic שומרת לפי התנאים שלה. יומני הגישה של Cloudflare ושל Vercel, בלי תוכן השיחה. והמיילים שכבר הגיעו לתיבה שלך.'
     );
     expect(DELETE_PAGE.irreversible).toContain('אי אפשר לבטל');
     expect(DELETE_PAGE.acknowledge).toBe('הבנתי, ואני רוצה למחוק');
     expect(DELETE_PAGE.confirm).toBe('למחוק את הנתונים שלי');
     expect(DELETE_PAGE.done('17.10.2026, 13:05')).toBe(
-      'הנתונים נמחקו. תאריך ושעה: 17.10.2026, 13:05. אפשר לצלם את המסך הזה כאישור.'
+      'מה שהיה שמור ב־MESSY נמחק. תאריך ושעה: 17.10.2026, 13:05. אפשר לצלם את המסך הזה כאישור.'
     );
     expect(DELETE_PAGE.doneNote).toContain('בתוך שעה');
+    // Board 2026-10-17: nothing on this page claims that everything is deleted.
+    for (const s of Object.values(DELETE_PAGE).map((v) => (typeof v === 'function' ? v('x') : v))) {
+      for (const banned of ['נמחק הכל', 'מחיקה מלאה', 'לצמיתות', 'הכל נמחק', 'הנתונים נמחקו']) expect(s).not.toContain(banned);
+    }
+    for (const stays of ['גיליון', 'Brevo', 'Anthropic', 'Cloudflare', 'Vercel', 'לתיבה שלך']) expect(DELETE_PAGE.kept).toContain(stays);
     expect(DELETE_PAGE.failed).toBeTruthy();
     expect(DELETE_PAGE.retry).toBeTruthy();
   });

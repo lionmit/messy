@@ -1,7 +1,7 @@
 import ChatInterface from '@/components/ChatInterface';
 
 export const metadata = {
-  title: 'Interview — Messy',
+  title: 'השיחה · MESSY',
 };
 
 export default function InterviewPage() {

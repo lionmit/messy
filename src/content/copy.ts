@@ -142,7 +142,11 @@ export const DELETE_PAGE = {
   removes:
     'כל אלה נמחקים מהאחסון של MESSY. אם נבנתה מהשיחה תצוגה מקדימה של אתר, גם היא יורדת מהרשת, יחד עם כל הקבצים שלה, בתוך שעה.',
   keptHeading: 'מה לא נמחק, ולמה',
-  kept: 'העותק שליונל מקבל על כל שיחה (גיליון שמור אצלו) ומיילים שכבר נשלחו לא נמחקים אוטומטית. אפשר לבקש גם את מחיקתם במייל lionmit@gmail.com, והם יימחקו ידנית בתוך 7 ימים.',
+  /**
+   * Board 2026-10-17: no absolute deletion claim anywhere until the sheet-row purge (Make scenario 15) is proven.
+   * This paragraph names what stays outside MESSY's store and why.
+   */
+  kept: 'מחוץ לאחסון של MESSY נשארים כמה דברים, וכדאי לדעת מהם. השורה של השיחה בגיליון הפרטי של ליונל, עד שהמחיקה האוטומטית שלה תיבדק. בינתיים הוא מוחק אותה ידנית, בתוך 7 ימים, לבקשה במייל lionmit@gmail.com. יומני השליחה של Brevo, שדרכה נשלחו המיילים. מה ש־Anthropic שומרת לפי התנאים שלה. יומני הגישה של Cloudflare ושל Vercel, בלי תוכן השיחה. והמיילים שכבר הגיעו לתיבה שלך.',
   keptMail: 'lionmit@gmail.com',
   keptMailHref: `mailto:lionmit@gmail.com?subject=${encodeURIComponent('בקשת מחיקה')}`,
   irreversible: 'אי אפשר לבטל את המחיקה.',
@@ -150,9 +154,10 @@ export const DELETE_PAGE = {
   confirm: 'למחוק את הנתונים שלי',
   working: 'המחיקה מתבצעת.',
   /** The receipt line. `when` is the person's local date and time. */
-  done: (when: string) => `הנתונים נמחקו. תאריך ושעה: ${when}. אפשר לצלם את המסך הזה כאישור.`,
-  /** Shown under the receipt: the same note about what comes down within the hour. */
-  doneNote: 'אם נבנתה מהשיחה תצוגה מקדימה של אתר, גם היא יורדת מהרשת, יחד עם כל הקבצים שלה, בתוך שעה.',
+  done: (when: string) => `מה שהיה שמור ב־MESSY נמחק. תאריך ושעה: ${when}. אפשר לצלם את המסך הזה כאישור.`,
+  /** Shown under the receipt: what comes down within the hour, and what this deletion does not reach. */
+  doneNote:
+    'אם נבנתה מהשיחה תצוגה מקדימה של אתר, גם היא יורדת מהרשת, יחד עם כל הקבצים שלה, בתוך שעה. השורה בגיליון של ליונל, יומני Brevo, Cloudflare ו־Vercel, מה ש־Anthropic שומרת והמיילים שכבר הגיעו אליך לא נמחקים כאן. מה נשאר ולמה כתוב בעמוד הפרטיות.',
   notFound: 'לא נמצא מה למחוק. ייתכן שכבר נמחק.',
   failed: 'המחיקה לא הצליחה.',
   retry: 'לנסות שוב',

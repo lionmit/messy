@@ -5,7 +5,7 @@
  * that reads the same store). Keep it exactly:
  *
  *   interviews/<id>.json        the InterviewRecord as JSON
- *                               (id, sessionId, name, gender, email, document, transcript, createdAt, expiresAt)
+ *                               (id, sessionId, name, gender, email, document, transcript, promptVersion, createdAt, expiresAt)
  *   stopped/<sessionId>.json    distress stop marker {at}
  *   tombstones/<id>.json        written on deletion: {id, deletedAt, reason: "person"|"expiry"|"operator"}
  *                               (the pipeline reads these to take the person's site down, then deletes them)
