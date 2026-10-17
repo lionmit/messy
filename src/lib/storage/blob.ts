@@ -146,7 +146,7 @@ export class BlobStore implements InterviewStore {
     const record = parseRecord(text);
     if (!record) return null;
     if (isExpired(record, now)) {
-      await this.remove(id, 'expiry', now);
+      await this.remove(id, 'expiry', now, record.email ?? null);
       return null;
     }
     return record;
