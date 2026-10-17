@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 type Lang = 'he' | 'en';
@@ -252,10 +253,15 @@ export default function LandingPageContent() {
       <header className="sticky top-0 z-40 bg-[#F9F6F0]/90 backdrop-blur-md border-b border-[#E5DED5]">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <span className="font-bold text-2xl tracking-tight text-[#2C332D]">
-              m<span className="text-[#C26747]">e</span>ssy
-            </span>
+          <Link href="/" className="flex items-center gap-3 group">
+            <Image
+              src="/logo-messy.png"
+              alt="lionelmitelpunkt /messy"
+              width={249}
+              height={227}
+              priority
+              className="h-11 w-auto"
+            />
             <span className="text-xs uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EAE3D9] text-[#5B6E58] font-medium">
               In The Room · 2026
             </span>

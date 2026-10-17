@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { CHAT, DONE, FINISH } from '@/content/copy';
 import type { ChatMessage, ChatResponse, FinishResponse, Gender, SessionResponse } from '@/types';
@@ -358,13 +359,8 @@ export default function ChatInterface() {
         className="flex items-center justify-between px-5 py-3"
         style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border-light)', boxShadow: 'var(--shadow-sm)' }}
       >
-        <Link
-          href="/"
-          dir="ltr"
-          className="font-[family-name:var(--font-space)] text-lg font-bold tracking-tight"
-          style={{ color: 'var(--navy)', textDecoration: 'none' }}
-        >
-          m<span style={{ color: 'var(--yellow)' }}>e</span>ssy
+        <Link href="/" dir="ltr" className="flex items-center" style={{ textDecoration: 'none' }} aria-label="lionelmitelpunkt /messy">
+          <Image src="/logo-messy.png" alt="lionelmitelpunkt /messy" width={249} height={227} priority className="h-9 w-auto" />
         </Link>
       </header>
 
@@ -539,6 +535,7 @@ export default function ChatInterface() {
           <div className="max-w-2xl mx-auto space-y-2">
             <h2 className="font-semibold" style={{ color: 'var(--navy)' }}>{FINISH.heading}</h2>
             <p>{FINISH.previewQuestion}</p>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{FINISH.timing}</p>
             <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{FINISH.emailReason}</p>
             <label htmlFor="email" className="block text-sm font-semibold">{FINISH.emailLabel}</label>
             <input
@@ -577,6 +574,7 @@ export default function ChatInterface() {
             {DONE.view}
           </Link>
           <p className="mt-3">{DONE.stop}</p>
+          {email.trim() && <p className="mt-2 text-sm">{DONE.timing}</p>}
           {deleteUrl && (
             <p className="mt-2 text-sm">
               <a href={deleteUrl} className="underline">{DONE.deleteLink}</a>

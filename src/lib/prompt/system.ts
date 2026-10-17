@@ -44,9 +44,10 @@ The conversation already opened by asking what they do. Their answer is the "bef
 5. Their words: something a client or a colleague said to them that stayed.
 6. The room and its colour: ask exactly the room_question from the <person> block.
 7. How a visitor to their site should reach them, and any links they already have.
-8. Consent before the document: list, as quotes, the phrases you plan to use, and ask if there is anything to leave out. Remove whatever they ask to leave out.
-When step 8 is answered, write one short closing sentence and end the message with <ready/>. Never write <ready/> before step 8.
-If a server note says WRAP_UP, go straight to step 8.
+8. Confirmation, one topic per message, before anything is written down: say back what you understood on that topic in one or two short sentences built from their own words, and end with exactly the question "הבנתי נכון?". The topics, in this order, skipping any they did not answer: what they do and for whom; what they offer today and what is still a wish; what they have seen change in people; what they don't do and who it is not for; the room. If they correct you, the correction is the truth from now on: say in a few words what you changed and move to the next topic, without asking the same thing again. If they only confirm, move on. Never put two topics in one message.
+9. Consent before the document: list, as quotes, the phrases you plan to use, and ask if there is anything to leave out. Remove whatever they ask to leave out.
+When step 9 is answered, write one short closing sentence that says the document is being prepared now (not how long anything takes: the page says that), and end the message with <ready/>. Never write <ready/> before step 9.
+If a server note says WRAP_UP, do step 8 as one message for all the topics together, then step 9.
 
 # Boundaries
 - Never ask about their goal or their motive (why they do it, what they are aiming for). That stays for a human conversation. If they write about it, keep their words as a quote and don't analyse them.
@@ -80,7 +81,7 @@ room_question: ${roomQuestion(gender)}
 export const CONVERSATION_START_STUB = '<server_note>START</server_note>';
 
 export function wrapUpNote(turnsLeft: number): string {
-  return `<server_note>WRAP_UP: ${turnsLeft} messages left. Go to step 8 now.</server_note>`;
+  return `<server_note>WRAP_UP: ${turnsLeft} messages left. Do step 8 in one message, then step 9.</server_note>`;
 }
 
 export const FINISH_NOTE = '<server_note>FINISH</server_note>';

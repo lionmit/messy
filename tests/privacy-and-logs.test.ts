@@ -54,8 +54,12 @@ describe('first screen copy', () => {
     expect(STATIC_SYSTEM_PROMPT).toContain('room_question');
     expect(STATIC_SYSTEM_PROMPT).toContain('3. What changes for someone after working with them');
     expect(STATIC_SYSTEM_PROMPT).toContain('"client_journey"');
-    expect(STATIC_SYSTEM_PROMPT).toContain('8. Consent before the document');
+    expect(STATIC_SYSTEM_PROMPT).toContain('8. Confirmation, one topic per message');
+    expect(STATIC_SYSTEM_PROMPT).toContain('"הבנתי נכון?"');
+    expect(STATIC_SYSTEM_PROMPT).toContain('9. Consent before the document');
+    expect(STATIC_SYSTEM_PROMPT).toContain('Never write <ready/> before step 9');
     expect(STATIC_SYSTEM_PROMPT).not.toContain('step 7');
+    expect(STATIC_SYSTEM_PROMPT).not.toContain('before step 8');
   });
 
   it('support: ער"ן 1201 first, then the verified סה"ר details', () => {

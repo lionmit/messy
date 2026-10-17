@@ -8,7 +8,7 @@
  * listening moves. A test fails if its Hebrew text shows up anywhere in src/.
  */
 import type { Gender } from '@/lib/session';
-import { PRICES, goLivePrice } from './prices';
+import { PRICES, goLivePrice, previewReadyWords } from './prices';
 
 /** Q28, verbatim. */
 export const READING_LINE = 'ליונל קורא כל שיחה שהסתיימה, כדי לשפר את הכלי';
@@ -97,6 +97,8 @@ export const FINISH = {
   emailInvalid: 'הכתובת לא נראית תקינה.',
   create: 'ליצור את המסמך',
   working: 'המסמך בהכנה. זה לוקח עד דקה.',
+  /** Lionel 2026-10-17: say how long each thing takes, before the person decides. Numbers from prices.ts. Any gender. */
+  timing: `המסמך מוכן כאן תוך דקה. תצוגת האתר נשלחת למייל בתוך ${previewReadyWords()}, עם קישור אישי לצפייה ולהערות.`,
 };
 
 export const DONE = {
@@ -105,6 +107,8 @@ export const DONE = {
   view: 'לצפייה במסמך',
   /** s4_stop_line */
   stop: 'אפשר לעצור כאן. המסמך שלם ושלך.',
+  /** Shown only when an address was left. "השארת" reads the same in both forms. */
+  timing: `השארת מייל, אז תצוגת האתר תגיע אליו בתוך ${previewReadyWords()}. אם היא לא הגיעה, שווה לבדוק גם בתיקיית הספאם.`,
   deleteLink: 'למחיקת השיחה והמסמך',
   deleteDemoMarker: '[תצוגה בלבד: המחיקה עוד לא מחוברת לאחסון קבוע]',
 };
