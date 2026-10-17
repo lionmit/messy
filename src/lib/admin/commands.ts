@@ -16,7 +16,7 @@ import type { BlobApi } from '@/lib/storage/blob';
 import { SlidingWindowLimiter } from '@/lib/rate-limit';
 import { PIPELINE } from './paths';
 
-export const COMMAND_ACTIONS = ['release', 'purge', 'paid'] as const;
+export const COMMAND_ACTIONS = ['release', 'purge', 'paid', 'cancel_reminder'] as const;
 export type CommandAction = (typeof COMMAND_ACTIONS)[number];
 
 /** Same shape the pipeline accepts (config.SLUG_RE). */
@@ -58,7 +58,7 @@ export function commandPathname(now: Date, action: CommandAction, slug: string):
 export function parseCommandPathname(pathname: string): { requestedAt: string; action: CommandAction; slug: string } | null {
   if (!pathname.startsWith(PIPELINE.commands)) return null;
   const name = pathname.slice(PIPELINE.commands.length);
-  const m = /^(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}(?:\.\d+)?Z)-(release|purge|paid)-([a-z0-9][a-z0-9-]{0,60})\.json$/.exec(name);
+  const m = /^(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}(?:\.\d+)?Z)-(release|purge|paid|cancel_reminder)-([a-z0-9][a-z0-9-]{0,60})\.json$/.exec(name);
   if (!m) return null;
   const [, stamp, action, slug] = m;
   const iso = stamp.replace(/^(\d{4}-\d{2}-\d{2}T\d{2})-(\d{2})-(\d{2})/, '$1:$2:$3');

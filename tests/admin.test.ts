@@ -293,6 +293,23 @@ describe('POST /api/admin/command', () => {
     expect(o.people[0].pendingCommands.map((c) => c.action)).toEqual(['release', 'paid']);
   });
 
+  it('"cancel_reminder" writes the command file and overview marks it as pending', async () => {
+    const { api, objects } = fixtureStore();
+    setAdminBlobApiForTests(api);
+    const res = await post({ action: 'cancel_reminder', slug: SLUG_A });
+    expect(res.status).toBe(200);
+    const file = `pipeline/_commands/2026-10-17T09-30-00.000Z-cancel_reminder-${SLUG_A}.json`;
+    expect(await res.json()).toEqual({ ok: true, file });
+    expect(JSON.parse(objects.get(file)!)).toEqual({
+      action: 'cancel_reminder',
+      slug: SLUG_A,
+      id: ID_A,
+      requestedAt: '2026-10-17T09:30:00.000Z',
+      by: 'admin',
+    });
+    expect(parseCommandPathname(file)).toEqual({ requestedAt: '2026-10-17T09:30:00.000Z', action: 'cancel_reminder', slug: SLUG_A });
+  });
+
   it('rejects a bad action, a bad slug and a non-object body', async () => {
     const { api, objects } = fixtureStore();
     setAdminBlobApiForTests(api);

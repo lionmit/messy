@@ -20,6 +20,7 @@ export const STAGES = [
   'intake',
   'content',
   'illustrate',
+  'structure',
   'build',
   'deploy_preview',
   'email_preview',
@@ -36,6 +37,13 @@ const READ_CONCURRENCY = 8;
 export interface MailView {
   status: string;
   at: string | null;
+}
+
+export interface StructureView {
+  round: number;
+  passed: string[];
+  warned: string[];
+  failed: string[];
 }
 
 export interface PendingCommand {
@@ -59,6 +67,7 @@ export interface PersonView {
   mail: { preview: MailView | null; reminder: MailView | null; end: MailView | null };
   comments: number;
   paid: boolean;
+  structure?: StructureView | null;
   tombstoned: boolean;
   pendingCommands: PendingCommand[];
 }
@@ -163,6 +172,7 @@ function emptyPerson(slug: string, id: string | null): PersonView {
     mail: { preview: null, reminder: null, end: null },
     comments: 0,
     paid: false,
+    structure: null,
     tombstoned: false,
     pendingCommands: [],
   };
@@ -247,6 +257,15 @@ export async function buildOverview(api: BlobApi, now: Date = new Date()): Promi
     };
     p.comments = Array.isArray(st.comment_inbox) ? st.comment_inbox.length : 0;
     p.paid = !!st.payment && typeof st.payment === 'object';
+    if (st.structure && typeof st.structure === 'object') {
+      const s = st.structure as Json;
+      p.structure = {
+        round: typeof s.round === 'number' ? s.round : 1,
+        passed: Array.isArray(s.passed) ? s.passed.filter((x): x is string => typeof x === 'string') : [],
+        warned: Array.isArray(s.warned) ? s.warned.filter((x): x is string => typeof x === 'string') : [],
+        failed: Array.isArray(s.failed) ? s.failed.filter((x): x is string => typeof x === 'string') : [],
+      };
+    }
     if (!p.createdAt) p.createdAt = str(st.created);
   }
 

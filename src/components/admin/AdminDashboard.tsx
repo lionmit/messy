@@ -201,6 +201,27 @@ function PersonCard({ person }: { person: PersonView }) {
         )}
         {person.tombstoned && <span className="admin-tag">{t.tombstoned}</span>}
         {person.paid && <span className="admin-tag admin-tag-green">{t.paid}</span>}
+        {person.structure && (
+          <span
+            className={`admin-tag ${
+              person.structure.failed.length > 0
+                ? 'admin-tag-red'
+                : person.structure.warned.length > 0
+                ? 'admin-tag-amber'
+                : 'admin-tag-green'
+            }`}
+            title={[
+              ...person.structure.failed.map((f) => `נכשל: ${f}`),
+              ...person.structure.warned.map((w) => `אזהרה: ${w}`),
+            ].join(' | ') || undefined}
+          >
+            {person.structure.failed.length > 0
+              ? `${t.structureTag.fail}: ${person.structure.failed.join(', ')}`
+              : person.structure.warned.length > 0
+              ? `${t.structureTag.warn} (${person.structure.warned.length})`
+              : t.structureTag.ok}
+          </span>
+        )}
         {pending.map((a, i) => (
           <span key={`${a}-${i}`} className="admin-tag admin-tag-amber">
             {t.pendingTag[a]}
@@ -227,6 +248,17 @@ function PersonCard({ person }: { person: PersonView }) {
           <div>
             <b>{t.mail.reminder}</b>
             {mailLabel(person.mail.reminder)}
+            {person.mail.reminder?.status === 'scheduled' && !pending.includes('cancel_reminder') && !person.tombstoned && (
+              <button
+                type="button"
+                className="admin-meta"
+                style={{ marginInlineStart: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
+                onClick={() => void send('cancel_reminder')}
+                disabled={busy}
+              >
+                {t.cancelReminder}
+              </button>
+            )}
           </div>
           <div>
             <b>{t.mail.end}</b>
